@@ -2,20 +2,32 @@
   "name": "collection-tracker",
   "version": "0.1.0",
   "private": true,
+  "main": "./dist/electron.js",
   "scripts": {
+    "electron:compile": "tsc --skipLibCheck --p ./main/tsconfig.json && electron .",
+    "electron:start": "cross-env NODE_ENV=dev nodemon -e ts --exec \"npm run electron:compile\"",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build && tsc --skipLibCheck --p ./main/tsconfig.json",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
+  "author": "Alexander Nedomansky <anedomansky@googlemail.com>",
+  "license": "MIT",
   "dependencies": {
     "core-js": "^3.6.4",
+    "electron": "^8.2.3",
+    "electron-devtools-installer": "^3.0.0",
+    "electron-unhandled": "^3.0.2",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^8.4.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
+    "@types/node": "12.12.6",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
     "@vue/cli-plugin-babel": "~4.3.0",
@@ -26,10 +38,23 @@
     "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/eslint-config-typescript": "^5.0.2",
     "@vue/test-utils": "1.0.0-beta.31",
+    "cross-env": "^7.0.2",
+    "electron-builder": "^22.5.1",
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-vue": "^6.2.2",
+    "nodemon": "^2.0.3",
     "typescript": "~3.8.3",
     "vue-template-compiler": "^2.6.11"
+  },
+  "build": {
+    "appId": "collection-tracker",
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "output": "release"
+    }
   }
 }
