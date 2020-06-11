@@ -18,6 +18,7 @@ module.exports = {
             'warn',
             4
         ],
+        'max-len': 'off',
     },
     overrides: [
         {

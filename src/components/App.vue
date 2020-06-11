@@ -37,7 +37,7 @@ body {
   margin: 0;
   display: grid;
   grid-template-areas: "nav main main main";
-  grid-template-columns: 100px auto;
+  grid-template-columns: 125px auto;
 
   & main {
     grid-area: main;

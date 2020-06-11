@@ -1,7 +1,7 @@
 <template>
     <article class="collection-list-page">
         <div class="collection-list-page__content">
-            <div>CollectionItem1</div>
+            <div>CollectionItem1 {{ name }}</div>
             <div>CollectionItem2</div>
             <div>CollectionItem3</div>
             <div>CollectionItem4</div>
@@ -13,10 +13,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
-export default class CollectionListPage extends Vue {}
+export default class CollectionListPage extends Vue {
+    @Prop() private name!: string;
+}
 </script>
 
 <style lang="scss" scoped>

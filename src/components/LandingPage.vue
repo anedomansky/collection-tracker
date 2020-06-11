@@ -1,15 +1,20 @@
 <template>
     <article class="landing-page">
         <div class="landing-page__content">
-            LandingPage works!
+            <Search />
         </div>
     </article>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import Search from './Search.vue';
 
-@Component
+@Component({
+    components: {
+        Search,
+    },
+})
 export default class LandingPage extends Vue {}
 </script>
 

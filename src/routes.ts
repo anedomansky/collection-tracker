@@ -10,6 +10,7 @@ const routes: RouteConfig[] = [
     {
         component: CollectionListPage,
         path: '/collection/list/:name',
+        props: true,
     },
 ];
 
