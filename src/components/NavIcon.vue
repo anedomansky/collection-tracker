@@ -8,7 +8,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
-export default class Icon extends Vue {
+export default class NavIcon extends Vue {
     @Prop() private icon!: string;
 
     @Prop() private altText!: string;

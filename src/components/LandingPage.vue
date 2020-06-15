@@ -22,10 +22,10 @@ export default class LandingPage extends Vue {}
 .landing-page {
     display: grid;
     grid-template-areas:
-    ". . . ."
-    ". content content ."
-    ". content content ."
-    ". . . .";
+    ". . . . . ."
+    ". content content content content ."
+    ". content content content content ."
+    ". . . . . .";
 
     & .landing-page__content {
         grid-area: content;

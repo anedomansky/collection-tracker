@@ -2,16 +2,16 @@
     <nav>
         <ul>
             <li>
-                <Icon icon="home.svg" altText="Home" to="/" />
+                <NavIcon icon="home.svg" altText="Home" to="/" />
             </li>
             <li>
-                <Icon icon="videos.svg" altText="Videos" to="/collection/list/videos" />
+                <NavIcon icon="videos.svg" altText="Videos" to="/collection/list/videos" />
             </li>
             <li>
-                <Icon icon="games.svg" altText="Games" to="/collection/list/games" />
+                <NavIcon icon="games.svg" altText="Games" to="/collection/list/games" />
             </li>
             <li>
-                <Icon icon="books.svg" altText="Books" to="/collection/list/books" />
+                <NavIcon icon="books.svg" altText="Books" to="/collection/list/books" />
             </li>
         </ul>
     </nav>
@@ -19,11 +19,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Icon from './Icon.vue';
+import NavIcon from './NavIcon.vue';
 
 @Component({
     components: {
-        Icon,
+        NavIcon,
     },
 })
 export default class Nav extends Vue {}

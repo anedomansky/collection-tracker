@@ -1,9 +1,9 @@
 import { shallowMount } from '@vue/test-utils';
-import Icon from '../../src/components/Icon.vue';
+import NavIcon from '../../src/components/NavIcon.vue';
 
-describe('Icon', () => {
+describe('NavIcon', () => {
     test('is a Vue instance', () => {
-        const wrapper = shallowMount(Icon, {
+        const wrapper = shallowMount(NavIcon, {
             propsData: {
                 icon: 'home.svg',
                 altText: 'Home',
