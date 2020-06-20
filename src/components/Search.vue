@@ -3,30 +3,21 @@
         <button type="button" class="search__tab" :class="{ active: activeTab === 0 }" @click="toggleTab(0)">Books</button>
         <button type="button" class="search__tab" :class="{ active: activeTab === 1 }" @click="toggleTab(1)">Games</button>
         <button type="button" class="search__tab" :class="{ active: activeTab === 2 }" @click="toggleTab(2)">Videos</button>
-        <div class="search__panel" v-show="activeTab === 0">
-            <select name="" id="">
-                <option value="">Name</option>
-                <option value="">Genre</option>
-                <option value="">Author</option>
-            </select>
-            <input type="text" />
-            <button type="button">
-                <NavIcon icon="search.svg" altText="Search" to="/result/list/:category/:term" />
-            </button>
-        </div>
-        <div class="search__panel" v-show="activeTab === 1">Games</div>
-        <div class="search__panel" v-show="activeTab === 2">Videos</div>
+        <SearchPanel :typeValues="['Title', 'Genre', 'Author']" :show="activeTab === 0" :category="'books'" />
+        <SearchPanel :typeValues="['Title', 'Genre', 'Developer']" :show="activeTab === 1" :category="'games'" />
+        <SearchPanel :typeValues="['Name', 'Genre', 'Author']" :show="activeTab === 2" :category="'videos'" />
     </article>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import NavIcon from './NavIcon.vue';
+import SearchPanel from './SearchPanel.vue';
 
 // TODO: style component
+// TODO: find API for videos
 @Component({
     components: {
-        NavIcon,
+        SearchPanel,
     },
 })
 export default class Search extends Vue {
