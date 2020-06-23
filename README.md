@@ -58,3 +58,9 @@ Genre:
 
 get the genre id: https://api.rawg.io/api/genres?search=action - results[] - search name === 'action -> "id"
 get the games (ordered by rating): https://api.rawg.io/api/games?ordering=-rating&genres=4
+
+Shows:
+
+http://api.tvmaze.com/search/shows?q=twin - search term "twin" - finds similar shows
+
+http://api.tvmaze.com/search/people?q=lauren - search term "lauren" - finds similar actors

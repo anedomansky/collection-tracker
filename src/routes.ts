@@ -15,7 +15,7 @@ const routes: RouteConfig[] = [
     },
     {
         component: SearchResultPage,
-        path: '/result/list/:category/:term',
+        path: '/result/list/:category/:type/:term',
         props: true,
     },
 ];

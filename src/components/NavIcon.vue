@@ -35,12 +35,16 @@ export default class NavIcon extends Vue {
         }
     }
 
-    & .search, .plus, .minus, .cross, .checkmark {
+    & .plus, .minus, .cross, .checkmark {
         box-shadow: none;
 
         &:hover {
             box-shadow: none;
         }
+    }
+
+    & .search {
+        width: 3.5rem;
     }
 }
 </style>
