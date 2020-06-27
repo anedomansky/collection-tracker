@@ -3,10 +3,10 @@
         <select name="Type" id="type" v-model="currentType">
             <option v-for="type in typeValues" :key="type" :value="type">{{ type }}</option>
         </select>
-        <form @submit.prevent="null">
+        <form @submit.prevent="submit">
             <input type="text" placeholder="Enter a search term..." v-model="term" />
-            <button type="submit">
-                <NavIcon icon="search.svg" altText="Search" :to="'/result/list/' + category + '/' + currentType.toLowerCase() + '/' + term" additionalClassNames="search" />
+            <button type="submit" tabindex="0">
+                <img :src="require('@/assets/icons/search.svg')" alt="Search">
             </button>
         </form>
     </div>
@@ -21,7 +21,7 @@ import NavIcon from './NavIcon.vue';
         NavIcon,
     },
 })
-export default class Search extends Vue {
+export default class SearchPanel extends Vue {
     @Prop() private typeValues!: string[];
 
     @Prop() private show!: boolean;
@@ -37,6 +37,11 @@ export default class Search extends Vue {
         this.term = '';
         this.currentType = this.typeValues[0];
     }
+
+    submit() {
+        if (this.term.length === 0) return;
+        this.$router.push(`/result/list/${this.category}/${this.currentType.toLowerCase()}/${this.term}`);
+    }
 }
 </script>
 
@@ -47,17 +52,21 @@ export default class Search extends Vue {
     display: grid;
     grid-template-areas:
     "select . . ."
-    ". . . ."
+    "search search search search"
     "search search search search"
     ". . . .";
     grid-template-rows: min-content 1fr min-content 1fr;
 
     & select {
         grid-area: select;
-        height: 2.5rem;
+        height: 3rem;
         width: 250px;
         font-size: 1.5rem;
         margin-left: 1rem;
+        border: 5px solid #1E0237;
+        border-radius: 15px;
+        background-color: #ffffff;
+        cursor: pointer;
     }
 
     & form {
@@ -69,13 +78,35 @@ export default class Search extends Vue {
         & input {
             height: 2.5rem;
             font-size: 1.5rem;
+            border: 5px solid #1E0237;
+            border-radius: 15px;
+            margin-right: 2rem;
+            padding: 0.5rem;
+            box-shadow: inset 0 0 10px #808080;
+
+            &:focus {
+                box-shadow: none;
+            }
         }
 
         & button {
             grid-area: search;
             border: none;
-            outline: none;
             background: none;
+
+            & img {
+                height: auto;
+                width: 4rem;
+                border-radius: 1rem;
+                background: #ffffff;
+                box-shadow: -20px 20px 60px #d9d9d9,
+                            20px -20px 60px #ffffff;
+
+                &:hover {
+                    box-shadow: inset -20px 20px 60px #d9d9d9,
+                                inset 20px -20px 60px #ffffff;
+                }
+            }
         }
     }
 }

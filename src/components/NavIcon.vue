@@ -42,9 +42,5 @@ export default class NavIcon extends Vue {
             box-shadow: none;
         }
     }
-
-    & .search {
-        width: 3.5rem;
-    }
 }
 </style>

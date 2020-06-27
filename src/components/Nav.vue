@@ -5,7 +5,7 @@
                 <NavIcon icon="home.svg" altText="Home" to="/" />
             </li>
             <li>
-                <NavIcon icon="videos.svg" altText="Videos" to="/collection/list/videos" />
+                <NavIcon icon="videos.svg" altText="Shows" to="/collection/list/shows" />
             </li>
             <li>
                 <NavIcon icon="games.svg" altText="Games" to="/collection/list/games" />

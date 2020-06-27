@@ -20,9 +20,14 @@ export default class App extends Vue {}
 </script>
 
 <style lang="scss">
+*:focus {
+  outline: none;
+}
+
 body {
   margin: 0;
   box-sizing: border-box;
+  min-width: 500px;
 }
 
 #content {

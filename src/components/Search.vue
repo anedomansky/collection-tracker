@@ -1,8 +1,8 @@
 <template>
     <article class="search">
-        <button type="button" class="search__tab tab-1" :class="{ active: activeTab === 0 }" @click="toggleTab(0)">Books</button>
-        <button type="button" class="search__tab tab-2" :class="{ active: activeTab === 1 }" @click="toggleTab(1)">Games</button>
-        <button type="button" class="search__tab tab-3" :class="{ active: activeTab === 2 }" @click="toggleTab(2)">Videos</button>
+        <button type="button" tabindex="0" class="search__tab tab-1" :class="{ active: activeTab === 0 }" @click="toggleTab(0)">Books</button>
+        <button type="button" tabindex="0" class="search__tab tab-2" :class="{ active: activeTab === 1 }" @click="toggleTab(1)">Games</button>
+        <button type="button" tabindex="0" class="search__tab tab-3" :class="{ active: activeTab === 2 }" @click="toggleTab(2)">Shows</button>
         <div class="search__panels">
             <SearchPanel :typeValues="['Title', 'Genre', 'Author']" :show="activeTab === 0" :category="'books'" />
             <SearchPanel :typeValues="['Title', 'Genre', 'Developer']" :show="activeTab === 1" :category="'games'" />
@@ -15,7 +15,6 @@
 import { Component, Vue } from 'vue-property-decorator';
 import SearchPanel from './SearchPanel.vue';
 
-// TODO: style component
 @Component({
     components: {
         SearchPanel,
@@ -47,16 +46,13 @@ export default class Search extends Vue {
         background-color: inherit;
     }
 
-    & .search__tab:first-of-type {
-        margin-left: 1rem;
-    }
-
     & .search__tab {
         font-size: inherit;
         border: none;
-        outline: none;
         cursor: pointer;
         padding: 1rem 2rem;
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
     }
 
     & .tab-1 {

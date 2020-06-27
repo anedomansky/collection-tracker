@@ -26,6 +26,7 @@ export default class CollectionListPage extends Vue {
     & .collection-list-page__content {
         display: flex;
         flex-wrap: wrap;
+        color: #ffffff;
 
         & div {
             flex: 0 0 21%;
