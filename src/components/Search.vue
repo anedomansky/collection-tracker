@@ -23,7 +23,7 @@ import SearchPanel from './SearchPanel.vue';
 export default class Search extends Vue {
     activeTab = 0;
 
-    toggleTab(tabNumber: number) {
+    toggleTab(tabNumber: number): void {
         this.activeTab = tabNumber;
     }
 }
@@ -35,7 +35,6 @@ export default class Search extends Vue {
     background-color: #ffffff;
     border: 1px solid #ffffff;
     border-radius: 1rem;
-    height: 100%;
     display: grid;
     grid-template-areas:
     "tab-1 tab-2 tab-3 ."
@@ -53,6 +52,10 @@ export default class Search extends Vue {
         padding: 1rem 2rem;
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
+    }
+
+    & button {
+        background-color: #DBD7D7;
     }
 
     & .tab-1 {

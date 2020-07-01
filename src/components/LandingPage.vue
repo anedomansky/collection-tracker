@@ -26,6 +26,7 @@ export default class LandingPage extends Vue {}
     ". content content content content ."
     ". content content content content ."
     ". . . . . .";
+    grid-template-rows: 1fr 1fr 1fr 1fr;
 
     & .landing-page__content {
         grid-area: content;

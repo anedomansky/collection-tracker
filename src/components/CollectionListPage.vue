@@ -29,7 +29,7 @@ export default class CollectionListPage extends Vue {
         color: #ffffff;
 
         & div {
-            flex: 0 0 21%;
+            flex: 0 1 21%;
             margin: 5px;
         }
     }

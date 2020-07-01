@@ -8,14 +8,44 @@
             <div>CollectionItem5</div>
             <div>CollectionItem6</div>
             <div>CollectionItem7</div>
+            <div>CollectionItem4</div>
+            <div>CollectionItem5</div>
+            <div>CollectionItem6</div>
+            <div>CollectionItem7</div>
+            <div>CollectionItem4</div>
+            <div>CollectionItem5</div>
+            <div>CollectionItem6</div>
+            <div>CollectionItem7</div>
+            <div>CollectionItem5</div>
+            <div>CollectionItem6</div>
+            <div>CollectionItem7</div>
+            <div>CollectionItem4</div>
+            <div>CollectionItem5</div>
+            <div>CollectionItem6</div>
+            <div>CollectionItem7</div>
+            <div>CollectionItem5</div>
+            <div>CollectionItem6</div>
+            <div>CollectionItem7</div>
+            <div>CollectionItem4</div>
+            <div>CollectionItem5</div>
+            <div>CollectionItem6</div>
+            <div>CollectionItem7</div>
+        </div>
+        <div class="search-result-page__search">
+            <Search />
         </div>
     </article>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import Search from './Search.vue';
 
-@Component
+@Component({
+    components: {
+        Search,
+    },
+})
 export default class SearchResultPage extends Vue {
     @Prop() private category!: string;
 
@@ -27,15 +57,32 @@ export default class SearchResultPage extends Vue {
 
 <style lang="scss" scoped>
 .search-result-page {
+    display: grid;
+    grid-template-areas:
+    "content content content content"
+    "search search search search";
+    grid-template-rows: auto min-content;
+    height: 100%;
+    position: absolute;
+
     & .search-result-page__content {
+        grid-area: content;
+        max-height: 100%;
+        overflow-y: auto;
         display: flex;
         flex-wrap: wrap;
         color: #ffffff;
 
         & div {
-            flex: 0 0 21%;
-            margin: 5px;
+            flex: 0 1 21%;
+            margin: 1rem;
+            height: 200px;
         }
+    }
+
+    & .search-result-page__search {
+        grid-area: search;
+        padding: 1rem;
     }
 }
 </style>

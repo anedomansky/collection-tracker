@@ -14,13 +14,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import NavIcon from './NavIcon.vue';
 
-@Component({
-    components: {
-        NavIcon,
-    },
-})
+@Component
 export default class SearchPanel extends Vue {
     @Prop() private typeValues!: string[];
 
@@ -38,7 +33,7 @@ export default class SearchPanel extends Vue {
         this.currentType = this.typeValues[0];
     }
 
-    submit() {
+    submit(): void {
         if (this.term.length === 0) return;
         this.$router.push(`/result/list/${this.category}/${this.currentType.toLowerCase()}/${this.term}`);
     }
@@ -48,14 +43,12 @@ export default class SearchPanel extends Vue {
 <style lang="scss" scoped>
 .search__panel {
     padding-top: 1rem;
-    height: 100%;
     display: grid;
     grid-template-areas:
     "select . . ."
     "search search search search"
-    "search search search search"
     ". . . .";
-    grid-template-rows: min-content 1fr min-content 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
 
     & select {
         grid-area: select;
@@ -76,6 +69,7 @@ export default class SearchPanel extends Vue {
         align-items: center;
 
         & input {
+            flex: 0 1 50%;
             height: 2.5rem;
             font-size: 1.5rem;
             border: 5px solid #1E0237;
@@ -93,6 +87,7 @@ export default class SearchPanel extends Vue {
             grid-area: search;
             border: none;
             background: none;
+            cursor: pointer;
 
             & img {
                 height: auto;
