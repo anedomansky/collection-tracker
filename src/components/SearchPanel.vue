@@ -6,7 +6,7 @@
         <form @submit.prevent="submit">
             <input type="text" placeholder="Enter a search term..." v-model="term" />
             <button type="submit" tabindex="0">
-                <img :src="require('@/assets/icons/search.svg')" alt="Search">
+                <img :src="'/assets/icons/search.svg'" alt="Search">
             </button>
         </form>
     </div>

@@ -4,6 +4,6 @@ import CollectionListPage from '../../src/components/CollectionListPage.vue';
 describe('CollectionListPage', () => {
     test('is a Vue instance', () => {
         const wrapper = shallowMount(CollectionListPage);
-        expect(wrapper.isVueInstance()).toBeTruthy();
+        expect(wrapper).toBeTruthy();
     });
 });

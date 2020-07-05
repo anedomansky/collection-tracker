@@ -4,6 +4,6 @@ import Nav from '../../src/components/Nav.vue';
 describe('Nav', () => {
     test('is a Vue instance', () => {
         const wrapper = shallowMount(Nav);
-        expect(wrapper.isVueInstance()).toBeTruthy();
+        expect(wrapper).toBeTruthy();
     });
 });

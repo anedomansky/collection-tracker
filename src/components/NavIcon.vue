@@ -1,6 +1,6 @@
 <template>
     <router-link :to="to" class="nav-icon">
-        <img :class="additionalClassNames" :src="require(`@/assets/icons/${icon}`)" :alt="altText"  />
+        <img :class="additionalClassNames" :src="`/assets/icons/${icon}`" :alt="altText"  />
     </router-link>
 </template>
 
@@ -15,7 +15,7 @@ export default class NavIcon extends Vue {
 
     @Prop() private to!: string;
 
-    @Prop() private additionalClassNames!: string;
+    @Prop() private additionalClassNames?: string;
 }
 </script>
 

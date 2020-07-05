@@ -9,7 +9,8 @@ describe('NavIcon', () => {
                 altText: 'Home',
                 to: '/',
             },
+            stubs: ['router-link'],
         });
-        expect(wrapper.isVueInstance()).toBeTruthy();
+        expect(wrapper).toBeTruthy();
     });
 });

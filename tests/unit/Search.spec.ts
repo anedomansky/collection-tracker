@@ -4,6 +4,6 @@ import Search from '../../src/components/Search.vue';
 describe('Search', () => {
     test('is a Vue instance', () => {
         const wrapper = shallowMount(Search);
-        expect(wrapper.isVueInstance()).toBeTruthy();
+        expect(wrapper).toBeTruthy();
     });
 });
