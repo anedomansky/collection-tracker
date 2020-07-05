@@ -42,6 +42,10 @@ Subject/Genre:
 
 https://openlibrary.org/search.json?subject=horror
 
+Covers:
+
+http://covers.openlibrary.org/b/id/9255566-L.jpg - cover_i + 'M' for list, cover_i + 'L' for details
+
 Games:
 
 Developer:
@@ -56,11 +60,17 @@ get similar games: https://api.rawg.io/api/games/results[0].id/suggested - can b
 
 Genre:
 
-get the genre id: https://api.rawg.io/api/genres?search=action - results[] - search name === 'action -> "id"
+get the genre id: https://api.rawg.io/api/genres?search=action - results[] - search name === 'action' -> "id"
 get the games (ordered by rating): https://api.rawg.io/api/games?ordering=-rating&genres=4
+
+Image:
+
+results[i].background_image
 
 Shows:
 
 http://api.tvmaze.com/search/shows?q=twin - search term "twin" - finds similar shows
 
 http://api.tvmaze.com/search/people?q=lauren - search term "lauren" - finds similar actors
+
+Images: image.medium - for list, image.original - for details
