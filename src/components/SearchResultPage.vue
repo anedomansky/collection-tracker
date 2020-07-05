@@ -52,6 +52,9 @@ export default class SearchResultPage extends Vue {
     @Prop() private type!: string;
 
     @Prop() private term!: string;
+
+    // TODO: create ListItem.vue - thumbnail, add-button, name - whole component clickable and forwards to *DetailsPage.vue
+    // TODO: create SearchDetailsPage.vue
 }
 </script>
 

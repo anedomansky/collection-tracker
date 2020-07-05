@@ -18,11 +18,15 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 @Component
 export default class CollectionListPage extends Vue {
     @Prop() private name!: string;
+    // TODO: create CollectionDetailsPage.vue
 }
 </script>
 
 <style lang="scss" scoped>
 .collection-list-page {
+    height: 100%;
+    position: absolute;
+
     & .collection-list-page__content {
         display: flex;
         flex-wrap: wrap;
@@ -30,7 +34,8 @@ export default class CollectionListPage extends Vue {
 
         & div {
             flex: 0 1 21%;
-            margin: 5px;
+            margin: 1rem;
+            height: 200px;
         }
     }
 }
