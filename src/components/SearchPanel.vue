@@ -35,7 +35,7 @@ export default class SearchPanel extends Vue {
 
     submit(): void {
         if (this.term.length === 0) return;
-        this.$router.push(`/result/list/${this.category}/${this.currentType.toLowerCase()}/${this.term}`);
+        this.$router.replace(`/result/list/${this.category}/${this.currentType.toLowerCase()}/${this.term}`);
     }
 }
 </script>
