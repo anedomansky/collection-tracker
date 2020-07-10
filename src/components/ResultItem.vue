@@ -16,7 +16,7 @@ export default class ResultItem extends Vue {
     @Prop() private title!: string;
 
     toDetailPage(): void {
-        this.$router.replace(`/result/detail/`);
+        this.$router.replace(`/result/details/${this.title}`);
     }
 
     add(): void {

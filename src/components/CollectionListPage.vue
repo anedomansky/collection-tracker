@@ -19,6 +19,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 export default class CollectionListPage extends Vue {
     @Prop() private name!: string;
     // TODO: create CollectionDetailsPage.vue
+    // TODO: create CollectionStore and hydrate it with all database entries - CRUD
 }
 </script>
 

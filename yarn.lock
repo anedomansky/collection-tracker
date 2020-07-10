@@ -7969,6 +7969,13 @@ mkdirp@~1.0.3:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
+mobx-vue@^2.0.10:
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/mobx-vue/-/mobx-vue-2.0.10.tgz#ead1660a8f7a9bd8cd0e306595261a44121f80bb"
+  integrity sha512-+VlHrgNzkOQ5hJA1TRjXahGwDt1mzaQEvipv2ow8sypmMxI+B+9Oo2B5f3uy7dySPF8yhB3jg95Z9BPIbxfhmg==
+  dependencies:
+    tslib "^1.9.0"
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"

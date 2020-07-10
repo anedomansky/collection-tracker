@@ -53,11 +53,11 @@ export default class SearchResultPage extends Vue {
 
     @Prop() private term!: string;
 
-    addToCollection() {
+    addToCollection(item: any) {
         // TODO: implement me - @onAdd="addToCollection" on ResultItem
     }
 
-    // TODO: create SearchDetailsPage.vue
+    // TODO: create ResultStore and add all fetched items
 }
 </script>
 
