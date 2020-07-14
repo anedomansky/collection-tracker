@@ -4,32 +4,6 @@
             <div>CollectionItem1 {{ category }}</div>
             <div>CollectionItem3 {{ type }}</div>
             <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem4</div>
-            <div>CollectionItem5</div>
-            <div>CollectionItem6</div>
-            <div>CollectionItem7</div>
-            <div>CollectionItem4</div>
-            <div>CollectionItem5</div>
-            <div>CollectionItem6</div>
-            <div>CollectionItem7</div>
-            <div>CollectionItem4</div>
-            <div>CollectionItem5</div>
-            <div>CollectionItem6</div>
-            <div>CollectionItem7</div>
-            <div>CollectionItem5</div>
-            <div>CollectionItem6</div>
-            <div>CollectionItem7</div>
-            <div>CollectionItem4</div>
-            <div>CollectionItem5</div>
-            <div>CollectionItem6</div>
-            <div>CollectionItem7</div>
-            <div>CollectionItem5</div>
-            <div>CollectionItem6</div>
-            <div>CollectionItem7</div>
-            <div>CollectionItem4</div>
-            <div>CollectionItem5</div>
-            <div>CollectionItem6</div>
-            <div>CollectionItem7</div>
         </div>
         <div class="search-result-page__search">
             <Search />
@@ -39,8 +13,11 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Observer } from 'mobx-vue';
 import Search from './Search.vue';
+import RootStore from '../stores/RootStore';
 
+@Observer
 @Component({
     components: {
         Search,
@@ -52,6 +29,8 @@ export default class SearchResultPage extends Vue {
     @Prop() private type!: string;
 
     @Prop() private term!: string;
+
+    store = RootStore.resultStore;
 
     addToCollection(item: any) {
         // TODO: implement me - @onAdd="addToCollection" on ResultItem

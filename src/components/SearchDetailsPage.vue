@@ -18,9 +18,9 @@ export default class SearchDetailsPage extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.search-result-page {
+.search-details-page {
     display: grid;
 
-    & .search-result-page__content {}
+    & .search-details-page__content {}
 }
 </style>

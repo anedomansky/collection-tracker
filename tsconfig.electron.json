@@ -3,14 +3,14 @@
         "module": "commonjs",
         "target": "es5",
         "strict": true,
-        "outDir": "../dist",
+        "outDir": "./dist",
         "sourceMap": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "alwaysStrict": true,
     },
     "include": [
-        "electron.ts"
+        "main/**/*"
     ],
     "exclude": [
         "node_modules",
