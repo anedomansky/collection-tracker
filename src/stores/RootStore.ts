@@ -17,7 +17,7 @@ class RootStore {
         this.collectionStore = new CollectionStore(CollectionService.getInstance());
     }
 
-    static getInstance(): RootStore {
+    public static getInstance(): RootStore {
         if (this.instance) {
             return this.instance;
         }

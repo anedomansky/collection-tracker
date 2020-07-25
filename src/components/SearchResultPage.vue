@@ -16,6 +16,14 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Observer } from 'mobx-vue';
 import Search from './Search.vue';
 import RootStore from '../stores/RootStore';
+import { IResultInfo } from '../interfaces/IResultInfo';
+import { IBookResult } from '../interfaces/IBookResult';
+import { IGameResult } from '../interfaces/IGameResult';
+import { IShowResponse } from '../interfaces/IShowResponse';
+import { IPeopleResponse } from '../interfaces/IPeopleResponse';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { ipcRenderer } = require('electron');
 
 @Observer
 @Component({
@@ -31,6 +39,29 @@ export default class SearchResultPage extends Vue {
     @Prop() private term!: string;
 
     store = RootStore.resultStore;
+
+    mounted(): void {
+        const resultInfo: IResultInfo = {
+            type: this.type,
+            term: this.term,
+        };
+        ipcRenderer.on('BOOK_RESULT_DATA', (event: never, results: IBookResult[]) => {
+            console.log('BOOKS:', results);
+        });
+        ipcRenderer.on('SHOW_RESULT_DATA', (event: never, results: IShowResponse[]) => {
+            console.log('SHOWS:', results);
+        });
+        ipcRenderer.on('PEOPLE_RESULT_DATA', (event: never, results: IPeopleResponse[]) => {
+            console.log('PEOPLE: ', results);
+        });
+        ipcRenderer.on('GAME_RESULT_DATA', (event: never, results: IGameResult[]) => {
+            console.log('GAMES:', results);
+        });
+        ipcRenderer.on('NO_DATA', (event: never, message: string) => {
+            console.error(message);
+        });
+        ipcRenderer.send('', resultInfo);
+    }
 
     addToCollection(item: any) {
         // TODO: implement me - @onAdd="addToCollection" on ResultItem

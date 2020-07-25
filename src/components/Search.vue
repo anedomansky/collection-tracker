@@ -4,9 +4,9 @@
         <button type="button" tabindex="0" class="search__tab tab-2" :class="{ active: activeTab === 1 }" @click="toggleTab(1)">Games</button>
         <button type="button" tabindex="0" class="search__tab tab-3" :class="{ active: activeTab === 2 }" @click="toggleTab(2)">Shows</button>
         <div class="search__panels">
-            <SearchPanel :typeValues="['Title', 'Genre', 'Author']" :show="activeTab === 0" :category="'books'" />
-            <SearchPanel :typeValues="['Title', 'Genre', 'Developer']" :show="activeTab === 1" :category="'games'" />
-            <SearchPanel :typeValues="['Title', 'Person']" :show="activeTab === 2" :category="'shows'" />
+            <SearchPanel :typeValues="['Title', 'Genre', 'Author']" :show="activeTab === 0" :category="'Books'" />
+            <SearchPanel :typeValues="['Title', 'Genre', 'Developer']" :show="activeTab === 1" :category="'Games'" />
+            <SearchPanel :typeValues="['Title', 'Person']" :show="activeTab === 2" :category="'Shows'" />
         </div>
     </article>
 </template>

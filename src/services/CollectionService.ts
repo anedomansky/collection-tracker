@@ -3,15 +3,11 @@ import { ICollectionService } from '@/interfaces/ICollectionService';
 class CollectionService implements ICollectionService {
     private static instance: ICollectionService;
 
-    constructor() {
-        CollectionService.instance = this;
-    }
-
-    static getInstance(): CollectionService {
-        if (this.instance) {
-            return this.instance;
+    public static getInstance(): CollectionService {
+        if (!CollectionService.instance) {
+            CollectionService.instance = new CollectionService();
         }
-        return new CollectionService();
+        return CollectionService.instance;
     }
 }
 
