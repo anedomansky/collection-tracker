@@ -1,7 +1,7 @@
 <template>
     <article class="search-details-page">
         <div class="search-details-page__content">
-            
+            TEST
         </div>
     </article>
 </template>

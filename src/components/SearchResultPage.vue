@@ -4,6 +4,59 @@
             <div>CollectionItem1 {{ category }}</div>
             <div>CollectionItem3 {{ type }}</div>
             <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <!-- <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div>
+            <div>CollectionItem2 {{ term }}</div> -->
         </div>
         <div class="search-result-page__search">
             <Search />
@@ -23,7 +76,7 @@ import { IShowResponse } from '../interfaces/IShowResponse';
 import { IPeopleResponse } from '../interfaces/IPeopleResponse';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { ipcRenderer } = require('electron');
+const { ipcRenderer } = window.require('electron');
 
 @Observer
 @Component({
@@ -45,6 +98,8 @@ export default class SearchResultPage extends Vue {
             type: this.type,
             term: this.term,
         };
+        console.log('Mounted: ', resultInfo);
+        console.log(`/get${this.category}`);
         ipcRenderer.on('BOOK_RESULT_DATA', (event: never, results: IBookResult[]) => {
             console.log('BOOKS:', results);
         });
@@ -60,12 +115,24 @@ export default class SearchResultPage extends Vue {
         ipcRenderer.on('NO_DATA', (event: never, message: string) => {
             console.error(message);
         });
-        ipcRenderer.send('', resultInfo);
+        ipcRenderer.send(`/get${this.category}`, resultInfo);
     }
 
-    addToCollection(item: any) {
-        // TODO: implement me - @onAdd="addToCollection" on ResultItem
+    updated(): void {
+        const resultInfo: IResultInfo = {
+            type: this.type,
+            term: this.term,
+        };
+        console.log('Updated: ', resultInfo);
+        console.log(`/get${this.category}`);
+        ipcRenderer.send(`/get${this.category}`, resultInfo);
     }
+
+    // TODO: add beforeDestroy() {} and removeEventListener
+
+    // addToCollection(item: any) {
+    //     // TODO: implement me - @onAdd="addToCollection" on ResultItem
+    // }
 
     // TODO: create ResultStore and add all fetched items
 }
@@ -78,7 +145,9 @@ export default class SearchResultPage extends Vue {
     "content content content content"
     "search search search search";
     grid-template-rows: auto min-content;
+    grid-template-columns: repeat(4, 1fr);
     height: 100%;
+    width: calc(100% - 125px);
     position: absolute;
 
     & .search-result-page__content {
@@ -90,7 +159,6 @@ export default class SearchResultPage extends Vue {
         color: #ffffff;
 
         & div {
-            flex: 0 1 21%;
             margin: 1rem;
             height: 200px;
         }

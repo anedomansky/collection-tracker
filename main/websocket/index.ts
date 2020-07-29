@@ -26,12 +26,12 @@ ipcMain.on('/getShows', async (event, resultInfo: IResultInfo) => {
     try {
         console.log('/getShows');
 
-        if (resultInfo.type === 'Title') {
+        if (resultInfo.type === 'title') {
             const resultsResponse = await fetch(`http://api.tvmaze.com/search/shows?q=${resultInfo.term}`);
             const results: IShowResponse[] = await resultsResponse.json();
             event.sender.send('SHOW_RESULT_DATA', results);
         }
-        if (resultInfo.type === 'Person') {
+        if (resultInfo.type === 'person') {
             const resultsResponse = await fetch(`http://api.tvmaze.com/search/people?q=${resultInfo.term}`);
             const results: IPeopleResponse[] = await resultsResponse.json();
             event.sender.send('PEOPLE_RESULT_DATA', results);
@@ -55,6 +55,7 @@ ipcMain.on('/getGames', async (event, resultInfo: IResultInfo) => {
             const developerId = developerResults.results[0].id;
             const responseRaw = await fetch(`https://api.rawg.io/api/games?ordering=-rating&developers=${developerId}`);
             response = await responseRaw.json();
+            event.sender.send('GAME_RESULT_DATA', response.results);
             break;
         }
         case GameTypes.GENRE: {
@@ -64,6 +65,7 @@ ipcMain.on('/getGames', async (event, resultInfo: IResultInfo) => {
             if (genre) {
                 const responseRaw = await fetch(`https://api.rawg.io/api/games?ordering=-rating&genres=${genre.id}`);
                 response = await responseRaw.json();
+                event.sender.send('GAME_RESULT_DATA', response.results);
             }
             break;
         }
@@ -73,13 +75,12 @@ ipcMain.on('/getGames', async (event, resultInfo: IResultInfo) => {
             const titleId = titleResults.results[0].id;
             const responseRaw = await fetch(`https://api.rawg.io/api/games/${titleId}/suggested`);
             response = await responseRaw.json();
+            event.sender.send('GAME_RESULT_DATA', response.results);
             break;
         }
         default:
             break;
         }
-
-        event.sender.send('GAME_RESULT_DATA', response.results);
     } catch (error) {
         console.trace(error);
         event.sender.send('NO_DATA', `No data available: ${error}`);

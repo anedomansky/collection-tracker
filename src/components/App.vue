@@ -37,7 +37,7 @@ body {
   text-align: center;
   color: #1E0237;
   width: 100vw;
-  min-width: 525px;
+  min-width: 650px;
   height: 100vh;
   margin: 0;
   display: grid;

@@ -2,6 +2,7 @@ import electron, { BrowserWindow } from 'electron';
 import path from 'path';
 import url from 'url';
 import unhandled from 'electron-unhandled';
+import './websocket';
 
 unhandled();
 
