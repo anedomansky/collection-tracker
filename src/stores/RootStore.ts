@@ -1,4 +1,3 @@
-import ResultService from '@/services/ResultService';
 import CollectionService from '@/services/CollectionService';
 import { IRootStore } from '@/interfaces/IRootStore';
 import ResultStore from './ResultStore';
@@ -13,7 +12,7 @@ class RootStore {
 
     constructor() {
         RootStore.instance = this;
-        this.resultStore = new ResultStore(ResultService.getInstance());
+        this.resultStore = new ResultStore();
         this.collectionStore = new CollectionStore(CollectionService.getInstance());
     }
 

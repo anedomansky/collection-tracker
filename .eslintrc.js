@@ -12,14 +12,12 @@ module.exports = {
         ecmaVersion: 2020,
     },
     rules: {
-        'prefer-destructuring': ['error', {'object': true, 'array': false}],
+        'prefer-destructuring': ['error', { object: true, array: false }],
         'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-        'indent': [
-            'warn',
-            4
-        ],
+        indent: ['warn', 4],
         'max-len': 'off',
+        'class-methods-use-this': 'off',
     },
     overrides: [
         {

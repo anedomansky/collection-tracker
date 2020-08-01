@@ -4,10 +4,7 @@
             <div>CollectionItem1 {{ category }}</div>
             <div>CollectionItem3 {{ type }}</div>
             <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
+            <div v-for="book in store.currentBooks" :key="book.cover_i">{{ book.title }}</div>
             <!-- <div>CollectionItem2 {{ term }}</div>
             <div>CollectionItem2 {{ term }}</div>
             <div>CollectionItem2 {{ term }}</div>
@@ -91,9 +88,12 @@ export default class SearchResultPage extends Vue {
 
     @Prop() private term!: string;
 
-    store = RootStore.resultStore;
+    private store = RootStore.resultStore;
+
+    private noData = false;
 
     mounted(): void {
+        this.noData = false;
         const resultInfo: IResultInfo = {
             type: this.type,
             term: this.term,
@@ -101,24 +101,35 @@ export default class SearchResultPage extends Vue {
         console.log('Mounted: ', resultInfo);
         console.log(`/get${this.category}`);
         ipcRenderer.on('BOOK_RESULT_DATA', (event: never, results: IBookResult[]) => {
-            console.log('BOOKS:', results);
+            // TODO: set updatingData = false
+            this.store.setBooks(results);
+            console.log('BOOKS:', this.store.currentBooks);
         });
         ipcRenderer.on('SHOW_RESULT_DATA', (event: never, results: IShowResponse[]) => {
-            console.log('SHOWS:', results);
+            // TODO: set updatingData = false
+            this.store.setShows(results);
+            console.log('SHOWS:', this.store.currentShows);
         });
         ipcRenderer.on('PEOPLE_RESULT_DATA', (event: never, results: IPeopleResponse[]) => {
-            console.log('PEOPLE: ', results);
+            // TODO: set updatingData = false
+            this.store.setPeople(results);
+            console.log('PEOPLE: ', this.store.currentPeople);
         });
         ipcRenderer.on('GAME_RESULT_DATA', (event: never, results: IGameResult[]) => {
-            console.log('GAMES:', results);
+            // TODO: set updatingData = false
+            this.store.setGames(results);
+            console.log('GAMES:', this.store.currentGames);
         });
         ipcRenderer.on('NO_DATA', (event: never, message: string) => {
+            // TODO: set updatingData = false
+            // TODO: set noData = true
             console.error(message);
         });
         ipcRenderer.send(`/get${this.category}`, resultInfo);
     }
 
     updated(): void {
+        this.noData = false;
         const resultInfo: IResultInfo = {
             type: this.type,
             term: this.term,
@@ -128,7 +139,13 @@ export default class SearchResultPage extends Vue {
         ipcRenderer.send(`/get${this.category}`, resultInfo);
     }
 
-    // TODO: add beforeDestroy() {} and removeEventListener
+    beforeDestroy(): void {
+        ipcRenderer.removeAllListeners('BOOK_RESULT_DATA');
+        ipcRenderer.removeAllListeners('SHOW_RESULT_DATA');
+        ipcRenderer.removeAllListeners('PEOPLE_RESULT_DATA');
+        ipcRenderer.removeAllListeners('GAME_RESULT_DATA');
+        ipcRenderer.removeAllListeners('NO_DATA');
+    }
 
     // addToCollection(item: any) {
     //     // TODO: implement me - @onAdd="addToCollection" on ResultItem
