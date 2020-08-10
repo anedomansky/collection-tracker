@@ -1,59 +1,7 @@
 <template>
     <article class="search-result-page">
         <div class="search-result-page__content">
-            <div>CollectionItem1 {{ category }}</div>
-            <div>CollectionItem3 {{ type }}</div>
-            <div>CollectionItem2 {{ term }}</div>
             <div v-for="book in store.currentBooks" :key="book.cover_i">{{ book.title }}</div>
-            <!-- <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div>
-            <div>CollectionItem2 {{ term }}</div> -->
         </div>
         <div class="search-result-page__search">
             <Search />

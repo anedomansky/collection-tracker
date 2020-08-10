@@ -6,6 +6,9 @@ import { IGameResult } from '@/interfaces/IGameResult';
 
 class ResultStore {
     @observable
+    private updatingData = false;
+
+    @observable
     private books: IBookResult[] | null;
 
     @observable
@@ -22,6 +25,11 @@ class ResultStore {
         this.shows = null;
         this.people = null;
         this.games = null;
+    }
+
+    @computed
+    public get currentUpdatingData(): boolean {
+        return this.updatingData;
     }
 
     @computed
@@ -45,6 +53,11 @@ class ResultStore {
     }
 
     @action
+    public setUpdatingData(updating: boolean): void {
+        this.updatingData = updating;
+    }
+
+    @action
     public setBooks(books: IBookResult[]): void {
         this.books = books;
     }
@@ -62,6 +75,14 @@ class ResultStore {
     @action
     public setGames(games: IGameResult[]): void {
         this.games = games;
+    }
+
+    @action
+    public reset(): void {
+        this.books = null;
+        this.games = null;
+        this.people = null;
+        this.shows = null;
     }
 }
 
