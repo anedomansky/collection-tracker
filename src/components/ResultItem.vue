@@ -27,18 +27,39 @@ export default class ResultItem extends Vue {
 
 <style lang="scss" scoped>
 .result-item {
+    height: 300px;
+    width: 250px;
     display: grid;
     grid-template-areas:
-    "thumbnail thumbnail add"
-    "thumbnail thumbnail ."
+    ". thumbnail add"
+    ". thumbnail ."
     ". title .";
 
     & .result-item__thumbnail {
         grid-area: thumbnail;
+        cursor: pointer;
+        height: 260px;
+        width: 180px;
     }
 
     & .result-item__add {
         grid-area: add;
+        cursor: pointer;
+        background: none;
+        border-radius: 1rem;
+        border: none;
+        box-shadow:  15px 15px 30px #1a022f,
+                    -15px -15px 30px #23023f;
+
+        &:hover {
+            box-shadow: inset 15px 15px 30px #1a022f,
+                        inset -15px -15px 30px #23023f;
+        }
+
+        & img {
+            height: auto;
+            width: 50px;
+        }
     }
 
     & .result-item__title {

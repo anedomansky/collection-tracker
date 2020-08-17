@@ -1,7 +1,7 @@
 <template>
     <article class="search-details-page">
         <div class="search-details-page__content">
-            TEST
+            {{ title }}
         </div>
     </article>
 </template>
@@ -19,6 +19,7 @@ export default class SearchDetailsPage extends Vue {
 
 <style lang="scss" scoped>
 .search-details-page {
+    color: white;
     display: grid;
 
     & .search-details-page__content {}

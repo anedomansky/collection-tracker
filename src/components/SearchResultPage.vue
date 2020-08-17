@@ -3,7 +3,10 @@
         <div class="search-result-page__content">
             <div v-if="store.currentUpdatingData">Loading...</div>
             <div v-if="noResults">No Results</div>
-            <div v-for="book in store.currentBooks" :key="book.cover_i">{{ book.title }}</div>
+            <ResultItem v-for="book in store.currentBooks" :key="book.cover_i" :imageSrc="`http://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`" :title="book.title" />
+            <div v-for="game in store.currentGames" :key="game.id">{{ game.name }}</div>
+            <div v-for="show in store.currentShows" :key="show.show.name">{{ show.show.name }}</div>
+            <div v-for="person in store.currentPeople" :key="person.person.name">{{ person.person.name }}</div>
         </div>
         <div class="search-result-page__search">
             <Search />
@@ -23,6 +26,7 @@ import { IGameResult } from '../interfaces/IGameResult';
 import { IShowResponse } from '../interfaces/IShowResponse';
 import { IPeopleResponse } from '../interfaces/IPeopleResponse';
 import Categories from '../enums/Categories';
+import ResultItem from './ResultItem.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ipcRenderer } = window.require('electron');
@@ -31,6 +35,7 @@ const { ipcRenderer } = window.require('electron');
 @Component({
     components: {
         Search,
+        ResultItem,
     },
 })
 export default class SearchResultPage extends Vue {
@@ -140,7 +145,6 @@ export default class SearchResultPage extends Vue {
 
         & div {
             margin: 1rem;
-            height: 200px;
         }
     }
 
