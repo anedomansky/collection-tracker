@@ -4,6 +4,7 @@ interface ShowImage {
 }
 
 interface ShowResult {
+    id: number;
     name: string;
     premiered: Date;
     officialSite: string;

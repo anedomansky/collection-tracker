@@ -3,10 +3,38 @@
         <div class="search-result-page__content">
             <div v-if="store.currentUpdatingData">Loading...</div>
             <div v-if="noResults">No Results</div>
-            <ResultItem v-for="book in store.currentBooks" :key="book.cover_i" :imageSrc="`http://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`" :title="book.title" />
-            <div v-for="game in store.currentGames" :key="game.id">{{ game.name }}</div>
-            <div v-for="show in store.currentShows" :key="show.show.name">{{ show.show.name }}</div>
-            <div v-for="person in store.currentPeople" :key="person.person.name">{{ person.person.name }}</div>
+            <ResultItem
+                v-for="book in store.currentBooks"
+                :key="book.cover_i"
+                :imageSrc="`http://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`"
+                category="Books"
+                :title="book.title"
+                @onAdd="addToCollection"
+            />
+            <ResultItem
+                v-for="game in store.currentGames"
+                :key="game.id"
+                :imageSrc="game.background_image"
+                category="Games"
+                :title="game.name"
+                @onAdd="addToCollection"
+            />
+            <ResultItem
+                v-for="show in store.currentShows"
+                :key="show.show.id"
+                imageSrc=""
+                category="Shows"
+                :title="show.show.name"
+                @onAdd="addToCollection"
+            />
+            <ResultItem
+                v-for="person in store.currentPeople"
+                :key="person.person.name"
+                :imageSrc="person.person.image.medium"
+                category="People"
+                :title="person.person.name"
+                @onAdd="addToCollection"
+            />
         </div>
         <div class="search-result-page__search">
             <Search />
@@ -92,9 +120,11 @@ export default class SearchResultPage extends Vue {
                 });
         }
         if (category === Categories.SHOWS) {
+            // TODO: show.show.image.medium is always null????
             if (type === 'title') {
                 ipcRenderer.invoke(`/get${category}`, resultInfo)
                     .then((results: IShowResponse[]) => {
+                        console.log(results);
                         this.store.setUpdatingData(false);
                         this.store.setShows(results);
                     })
@@ -103,23 +133,25 @@ export default class SearchResultPage extends Vue {
                         this.noResults = true;
                         console.error(error);
                     });
+            } else {
+                // TODO: person.person.image.medium is always null????
+                ipcRenderer.invoke('/getPersons', resultInfo)
+                    .then((results: IPeopleResponse[]) => {
+                        this.store.setUpdatingData(false);
+                        this.store.setPeople(results);
+                    })
+                    .catch((error: Error) => {
+                        this.store.setUpdatingData(false);
+                        this.noResults = true;
+                        console.error(error);
+                    });
             }
-            ipcRenderer.invoke('/getPersons', resultInfo)
-                .then((results: IPeopleResponse[]) => {
-                    this.store.setUpdatingData(false);
-                    this.store.setPeople(results);
-                })
-                .catch((error: Error) => {
-                    this.store.setUpdatingData(false);
-                    this.noResults = true;
-                    console.error(error);
-                });
         }
     }
 
-    // addToCollection(item: any) {
-    // TODO: implement me - @onAdd="addToCollection" on ResultItem
-    // }
+    addToCollection(): void {
+        console.log('Added item');
+    }
 }
 </script>
 

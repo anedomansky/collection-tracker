@@ -21,7 +21,7 @@ const routes: RouteConfig[] = [
     },
     {
         component: SearchDetailsPage,
-        path: '/result/details/:title',
+        path: '/result/details/:category/:title',
         props: true,
     },
 ];
