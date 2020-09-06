@@ -3,6 +3,8 @@ import { IBookResult } from '@/interfaces/IBookResult';
 import { IShowResponse } from '@/interfaces/IShowResponse';
 import { IPeopleResponse } from '@/interfaces/IPeopleResponse';
 import { IGameResult } from '@/interfaces/IGameResult';
+import Categories from '../enums/Categories';
+import { Result } from '../types/Result';
 
 class ResultStore {
     @observable
@@ -83,6 +85,24 @@ class ResultStore {
         this.games = null;
         this.people = null;
         this.shows = null;
+    }
+
+    @action
+    public getResultByTitle(category: string, title: string): Result {
+        let result;
+        if (category === Categories.BOOKS) {
+            result = this.books?.find((book) => book.title === title);
+        }
+        if (category === Categories.GAMES) {
+            result = this.games?.find((game) => game.name === title);
+        }
+        if (category === Categories.SHOWS) {
+            result = this.shows?.find((show) => show.show.name === title);
+        }
+        if (category === Categories.PEOPLE) {
+            result = this.people?.find((person) => person.person.name === title);
+        }
+        return result ?? null;
     }
 }
 

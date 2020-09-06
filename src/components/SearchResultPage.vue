@@ -22,7 +22,7 @@
             <ResultItem
                 v-for="show in store.currentShows"
                 :key="show.show.id"
-                imageSrc=""
+                :imageSrc="show.show.image && show.show.image.medium"
                 category="Shows"
                 :title="show.show.name"
                 @onAdd="addToCollection"
@@ -30,7 +30,7 @@
             <ResultItem
                 v-for="person in store.currentPeople"
                 :key="person.person.name"
-                :imageSrc="person.person.image.medium"
+                :imageSrc="person.person.image && person.person.image.medium"
                 category="People"
                 :title="person.person.name"
                 @onAdd="addToCollection"
@@ -120,7 +120,6 @@ export default class SearchResultPage extends Vue {
                 });
         }
         if (category === Categories.SHOWS) {
-            // TODO: show.show.image.medium is always null????
             if (type === 'title') {
                 ipcRenderer.invoke(`/get${category}`, resultInfo)
                     .then((results: IShowResponse[]) => {
@@ -134,7 +133,6 @@ export default class SearchResultPage extends Vue {
                         console.error(error);
                     });
             } else {
-                // TODO: person.person.image.medium is always null????
                 ipcRenderer.invoke('/getPersons', resultInfo)
                     .then((results: IPeopleResponse[]) => {
                         this.store.setUpdatingData(false);
