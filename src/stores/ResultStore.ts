@@ -4,7 +4,7 @@ import { IShowResponse } from '@/interfaces/IShowResponse';
 import { IPeopleResponse } from '@/interfaces/IPeopleResponse';
 import { IGameResult } from '@/interfaces/IGameResult';
 import Categories from '../enums/Categories';
-import { Result } from '../types/Result';
+import { Item } from '../types/Item';
 
 class ResultStore {
     @observable
@@ -88,7 +88,7 @@ class ResultStore {
     }
 
     @action
-    public getResultByTitle(category: string, title: string): Result {
+    public getResultByTitle(category: string, title: string): Item {
         let result;
         if (category === Categories.BOOKS) {
             result = this.books?.find((book) => book.title === title);

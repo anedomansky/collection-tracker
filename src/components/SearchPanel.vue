@@ -5,17 +5,22 @@
         </select>
         <form @submit.prevent="submit">
             <input type="text" placeholder="Enter a search term..." v-model="term" />
-            <button type="submit" tabindex="0">
+            <Button type="submit">
                 <img :src="'/assets/icons/search.svg'" alt="Search">
-            </button>
+            </Button>
         </form>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import Button from './Button.vue';
 
-@Component
+@Component({
+    components: {
+        Button,
+    },
+})
 export default class SearchPanel extends Vue {
     @Prop() private typeValues!: string[];
 
@@ -86,9 +91,6 @@ export default class SearchPanel extends Vue {
 
         & button {
             grid-area: search;
-            border: none;
-            background: none;
-            cursor: pointer;
 
             & img {
                 height: auto;

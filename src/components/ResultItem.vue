@@ -1,15 +1,22 @@
 <template>
     <div class="result-item" @click="toDetailPage">
         <img :src="imageSrc" :alt="title" class="result-item__thumbnail">
-        <button type="button" class="result-item__add"><img src="/assets/icons/plus.svg" alt="Add" @click.stop="add"></button>
+        <Button additionalClass="result-item__add" @onClick="add">
+            <img src="/assets/icons/plus.svg" alt="Add">
+        </Button>
         <span class="result-item__title">{{ title }}</span>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import Button from './Button.vue';
 
-@Component
+@Component({
+    components: {
+        Button,
+    },
+})
 export default class ResultItem extends Vue {
     @Prop() private imageSrc!: string;
 
@@ -47,10 +54,6 @@ export default class ResultItem extends Vue {
     & .result-item__add {
         grid-area: add;
         margin-left: 1rem;
-        cursor: pointer;
-        background: none;
-        border-radius: 1rem;
-        border: none;
         box-shadow:  5px 5px 15px #1a022f,
                     -5px -5px 15px #23023f;
 
@@ -61,7 +64,7 @@ export default class ResultItem extends Vue {
 
         & img {
             height: auto;
-            width: 50px;
+            width: 4rem;
         }
     }
 

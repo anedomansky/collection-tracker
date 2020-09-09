@@ -1,15 +1,22 @@
 <template>
     <div class="collection-item" @click="toDetailPage">
         <img :src="imageSrc" :alt="title" class="collection-item__thumbnail">
-        <button type="button" class="collection-item__add"><img src="/assets/icons/minus.svg" alt="Remove" @click="remove"></button>
+        <Button additionalClass="collection-item__add" @onClick="remove">
+            <img src="/assets/icons/minus.svg" alt="Remove">
+        </Button>
         <span class="collection-item__title">{{ title }}</span>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import Button from './Button.vue';
 
-@Component
+@Component({
+    components: {
+        Button,
+    },
+})
 export default class CollectionItem extends Vue {
     @Prop() private imageSrc!: string;
 
