@@ -5,7 +5,7 @@
   "main": "./dist/electron.js",
   "scripts": {
     "electron:compile": "tsc --skipLibCheck --p ./tsconfig.electron.json && electron .",
-    "electron:start": "cross-env NODE_ENV=dev nodemon -e ts --exec \"npm run electron:compile\"",
+    "electron:start": "cross-env NODE_ENV=dev nodemon",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "postinstall": "electron-builder install-app-deps",

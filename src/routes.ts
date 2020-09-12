@@ -1,8 +1,9 @@
-import { RouteConfig } from 'vue-router';
+import { Route, RouteConfig } from 'vue-router';
 import LandingPage from './components/LandingPage.vue';
 import CollectionListPage from './components/CollectionListPage.vue';
 import SearchResultPage from './components/SearchResultPage.vue';
-import SearchDetailsPage from './components/SearchDetailsPage.vue';
+import DetailsPage from './components/DetailsPage.vue';
+import { IDetailsPageProps } from './interfaces/IDetailsPageProps';
 
 const routes: RouteConfig[] = [
     {
@@ -20,9 +21,26 @@ const routes: RouteConfig[] = [
         props: true,
     },
     {
-        component: SearchDetailsPage,
+        component: DetailsPage,
         path: '/result/details/:category/:title',
-        props: true,
+        props: (route: Route): IDetailsPageProps => (
+            {
+                category: route.params.category,
+                title: route.params.title,
+                result: true,
+            }
+        ),
+    },
+    {
+        component: DetailsPage,
+        path: '/collection/details/:category/:title',
+        props: (route: Route): IDetailsPageProps => (
+            {
+                category: route.params.category,
+                title: route.params.title,
+                result: false,
+            }
+        ),
     },
 ];
 

@@ -3,37 +3,41 @@
         <div class="search-result-page__content">
             <div v-if="store.currentUpdatingData">Loading...</div>
             <div v-if="noResults">No Results</div>
-            <ResultItem
+            <Item
                 v-for="book in store.currentBooks"
                 :key="book.cover_i"
                 :imageSrc="`http://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`"
                 category="Books"
                 :title="book.title"
                 @onAdd="addToCollection"
+                :result="true"
             />
-            <ResultItem
+            <Item
                 v-for="game in store.currentGames"
                 :key="game.id"
                 :imageSrc="game.background_image"
                 category="Games"
                 :title="game.name"
                 @onAdd="addToCollection"
+                :result="true"
             />
-            <ResultItem
+            <Item
                 v-for="show in store.currentShows"
                 :key="show.show.id"
                 :imageSrc="show.show.image && show.show.image.medium"
                 category="Shows"
                 :title="show.show.name"
                 @onAdd="addToCollection"
+                :result="true"
             />
-            <ResultItem
+            <Item
                 v-for="person in store.currentPeople"
                 :key="person.person.name"
                 :imageSrc="person.person.image && person.person.image.medium"
                 category="People"
                 :title="person.person.name"
                 @onAdd="addToCollection"
+                :result="true"
             />
         </div>
         <div class="search-result-page__search">
@@ -54,7 +58,7 @@ import { IGameResult } from '../interfaces/IGameResult';
 import { IShowResponse } from '../interfaces/IShowResponse';
 import { IPeopleResponse } from '../interfaces/IPeopleResponse';
 import Categories from '../enums/Categories';
-import ResultItem from './ResultItem.vue';
+import Item from './Item.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ipcRenderer } = window.require('electron');
@@ -63,7 +67,7 @@ const { ipcRenderer } = window.require('electron');
 @Component({
     components: {
         Search,
-        ResultItem,
+        Item,
     },
 })
 export default class SearchResultPage extends Vue {

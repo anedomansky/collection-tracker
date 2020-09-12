@@ -1,13 +1,14 @@
 import { shallowMount } from '@vue/test-utils';
-import Details from '../../src/components/Details.vue';
+import Item from '../../src/components/Item.vue';
 
-describe('Details', () => {
+describe('Item', () => {
     test('is a Vue instance', () => {
-        const wrapper = shallowMount(Details, {
+        const wrapper = shallowMount(Item, {
             propsData: {
-                item: null,
+                category: '',
+                imageSrc: '',
+                title: '',
                 result: true,
-                imgSrc: '',
             },
         });
         expect(wrapper).toBeTruthy();

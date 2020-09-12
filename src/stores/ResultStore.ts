@@ -88,7 +88,7 @@ class ResultStore {
     }
 
     @action
-    public getResultByTitle(category: string, title: string): Item {
+    public getResult(category: string, title: string): Item {
         let result;
         if (category === Categories.BOOKS) {
             result = this.books?.find((book) => book.title === title);
