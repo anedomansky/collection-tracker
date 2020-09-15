@@ -4,7 +4,6 @@ import { IResultInfo } from '../interfaces/IResultInfo';
 import { IBookResponse } from '../interfaces/IBookResponse';
 import { IShowResponse } from '../interfaces/IShowResponse';
 import GameTypes from '../enums/GameTypes';
-import { IPeopleResponse } from '../interfaces/IPeopleResponse';
 import { IDeveloperResponse, IGenreResponse } from '../interfaces/IResponse';
 import { IGameResponse } from '../interfaces/IGameResponse';
 
@@ -27,19 +26,6 @@ ipcMain.handle('/getShows', async (event, resultInfo: IResultInfo) => {
 
         const resultsResponse = await fetch(`http://api.tvmaze.com/search/shows?q=${resultInfo.term}`);
         const results: IShowResponse[] = await resultsResponse.json();
-        return results;
-    } catch (error) {
-        console.trace(error);
-        throw new Error(error);
-    }
-});
-
-ipcMain.handle('/getPersons', async (event, resultInfo: IResultInfo) => {
-    try {
-        console.log('/getPersons');
-
-        const resultsResponse = await fetch(`http://api.tvmaze.com/search/people?q=${resultInfo.term}`);
-        const results: IPeopleResponse[] = await resultsResponse.json();
         return results;
     } catch (error) {
         console.trace(error);

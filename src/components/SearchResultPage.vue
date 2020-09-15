@@ -1,7 +1,9 @@
 <template>
     <article class="search-result-page">
         <div class="search-result-page__content">
-            <div v-if="store.currentUpdatingData">Loading...</div>
+            <div class="loading" v-if="store.currentUpdatingData">
+                <BeatLoader color="#ffffff" :size="loadingSpinnerSize" />
+            </div>
             <div v-if="noResults">No Results</div>
             <Item
                 v-for="book in store.currentBooks"
@@ -30,15 +32,6 @@
                 @onAdd="addToCollection"
                 :result="true"
             />
-            <Item
-                v-for="person in store.currentPeople"
-                :key="person.person.name"
-                :imageSrc="person.person.image && person.person.image.medium"
-                category="People"
-                :title="person.person.name"
-                @onAdd="addToCollection"
-                :result="true"
-            />
         </div>
         <div class="search-result-page__search">
             <Search />
@@ -50,13 +43,13 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Observer } from 'mobx-vue';
 import { Route, NavigationGuardNext } from 'vue-router';
+import { BeatLoader } from '@saeris/vue-spinners';
 import Search from './Search.vue';
 import RootStore from '../stores/RootStore';
 import { IResultInfo } from '../interfaces/IResultInfo';
 import { IBookResult } from '../interfaces/IBookResult';
 import { IGameResult } from '../interfaces/IGameResult';
 import { IShowResponse } from '../interfaces/IShowResponse';
-import { IPeopleResponse } from '../interfaces/IPeopleResponse';
 import Categories from '../enums/Categories';
 import Item from './Item.vue';
 
@@ -68,6 +61,7 @@ const { ipcRenderer } = window.require('electron');
     components: {
         Search,
         Item,
+        BeatLoader,
     },
 })
 export default class SearchResultPage extends Vue {
@@ -80,6 +74,8 @@ export default class SearchResultPage extends Vue {
     private store = RootStore.resultStore;
 
     private noResults = false;
+
+    private loadingSpinnerSize = 32;
 
     mounted(): void {
         this.getResults(this.category, this.type, this.term);
@@ -124,30 +120,17 @@ export default class SearchResultPage extends Vue {
                 });
         }
         if (category === Categories.SHOWS) {
-            if (type === 'title') {
-                ipcRenderer.invoke(`/get${category}`, resultInfo)
-                    .then((results: IShowResponse[]) => {
-                        console.log(results);
-                        this.store.setUpdatingData(false);
-                        this.store.setShows(results);
-                    })
-                    .catch((error: Error) => {
-                        this.store.setUpdatingData(false);
-                        this.noResults = true;
-                        console.error(error);
-                    });
-            } else {
-                ipcRenderer.invoke('/getPersons', resultInfo)
-                    .then((results: IPeopleResponse[]) => {
-                        this.store.setUpdatingData(false);
-                        this.store.setPeople(results);
-                    })
-                    .catch((error: Error) => {
-                        this.store.setUpdatingData(false);
-                        this.noResults = true;
-                        console.error(error);
-                    });
-            }
+            ipcRenderer.invoke(`/get${category}`, resultInfo)
+                .then((results: IShowResponse[]) => {
+                    console.log(results);
+                    this.store.setUpdatingData(false);
+                    this.store.setShows(results);
+                })
+                .catch((error: Error) => {
+                    this.store.setUpdatingData(false);
+                    this.noResults = true;
+                    console.error(error);
+                });
         }
     }
 
@@ -161,15 +144,15 @@ export default class SearchResultPage extends Vue {
 .search-result-page {
     display: grid;
     grid-template-areas:
-    "content content content content"
-    "search search search search";
-    grid-template-rows: auto min-content;
-    grid-template-columns: repeat(4, 1fr);
+    "content"
+    "search";
+    grid-template-rows: 1fr auto;
+    grid-template-columns: 1fr;
     height: 100%;
     width: calc(100% - 125px);
     position: absolute;
 
-    & .search-result-page__content {
+    .search-result-page__content {
         grid-area: content;
         max-height: 100%;
         overflow-y: auto;
@@ -177,12 +160,16 @@ export default class SearchResultPage extends Vue {
         flex-wrap: wrap;
         color: #ffffff;
 
-        & div {
+        .loading {
+            margin: auto;
+        }
+
+        div {
             margin: 1rem;
         }
     }
 
-    & .search-result-page__search {
+    .search-result-page__search {
         grid-area: search;
         padding: 1rem;
     }

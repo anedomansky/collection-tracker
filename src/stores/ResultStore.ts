@@ -1,7 +1,6 @@
 import { observable, computed, action } from 'mobx';
 import { IBookResult } from '@/interfaces/IBookResult';
 import { IShowResponse } from '@/interfaces/IShowResponse';
-import { IPeopleResponse } from '@/interfaces/IPeopleResponse';
 import { IGameResult } from '@/interfaces/IGameResult';
 import Categories from '../enums/Categories';
 import { Item } from '../types/Item';
@@ -17,15 +16,11 @@ class ResultStore {
     private shows: IShowResponse[] | null;
 
     @observable
-    private people: IPeopleResponse[] | null;
-
-    @observable
     private games: IGameResult[] | null;
 
     public constructor() {
         this.books = null;
         this.shows = null;
-        this.people = null;
         this.games = null;
     }
 
@@ -42,11 +37,6 @@ class ResultStore {
     @computed
     public get currentShows(): IShowResponse[] | null {
         return this.shows;
-    }
-
-    @computed
-    public get currentPeople(): IPeopleResponse[] | null {
-        return this.people;
     }
 
     @computed
@@ -70,11 +60,6 @@ class ResultStore {
     }
 
     @action
-    public setPeople(people: IPeopleResponse[]): void {
-        this.people = people;
-    }
-
-    @action
     public setGames(games: IGameResult[]): void {
         this.games = games;
     }
@@ -83,7 +68,6 @@ class ResultStore {
     public reset(): void {
         this.books = null;
         this.games = null;
-        this.people = null;
         this.shows = null;
     }
 
@@ -98,9 +82,6 @@ class ResultStore {
         }
         if (category === Categories.SHOWS) {
             result = this.shows?.find((show) => show.show.name === title);
-        }
-        if (category === Categories.PEOPLE) {
-            result = this.people?.find((person) => person.person.name === title);
         }
         return result ?? null;
     }

@@ -6,7 +6,7 @@
         <div class="search__panels">
             <SearchPanel :typeValues="['Title', 'Genre', 'Author']" :show="activeTab === 0" :category="'Books'" />
             <SearchPanel :typeValues="['Title', 'Genre', 'Developer']" :show="activeTab === 1" :category="'Games'" />
-            <SearchPanel :typeValues="['Title', 'Person']" :show="activeTab === 2" :category="'Shows'" />
+            <SearchPanel :typeValues="['Title']" :show="activeTab === 2" :category="'Shows'" />
         </div>
     </article>
 </template>
