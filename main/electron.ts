@@ -3,6 +3,7 @@ import path from 'path';
 import url from 'url';
 import unhandled from 'electron-unhandled';
 import './websocket';
+import './db';
 
 unhandled();
 
