@@ -1,4 +1,4 @@
-interface BookResult {
+export interface IBookResult {
     author_name: string[];
     cover_i: number;
     title: string;
@@ -6,5 +6,5 @@ interface BookResult {
 }
 
 export interface IBookResponse {
-    docs: BookResult[];
+    docs: IBookResult[];
 }

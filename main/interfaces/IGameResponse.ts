@@ -1,4 +1,4 @@
-interface GameResult {
+export interface IGameResult {
     id: number;
     name: string;
     background_image: string;
@@ -8,5 +8,5 @@ interface GameResult {
 }
 
 export interface IGameResponse {
-    results: GameResult[];
+    results: IGameResult[];
 }

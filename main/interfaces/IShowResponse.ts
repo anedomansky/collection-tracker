@@ -3,7 +3,7 @@ interface ShowImage {
     original: string;
 }
 
-interface ShowResult {
+export interface IShowResult {
     id: number;
     name: string;
     premiered: Date;
@@ -14,5 +14,5 @@ interface ShowResult {
 }
 
 export interface IShowResponse {
-    show: ShowResult;
+    show: IShowResult;
 }

@@ -6,6 +6,7 @@ import { IShowResponse } from '../interfaces/IShowResponse';
 import { IGameResponse } from '../interfaces/IGameResponse';
 import Colors from '../config/Colors';
 import ApiService from '../services/ApiService';
+import { IEntryRequest } from '../interfaces/IEntryRequest';
 
 ipcMain.handle('/getBooks', async (event, resultInfo: IResultInfo) => {
     try {
@@ -43,11 +44,11 @@ ipcMain.handle('/getGames', async (event, resultInfo: IResultInfo) => {
     }
 });
 
-ipcMain.handle('/addEntry', (event, message: string) => {
+ipcMain.handle('/addEntry', (event, request: IEntryRequest) => {
 });
 
-ipcMain.handle('/getEntries', (event, message: string) => {
+ipcMain.handle('/getEntries', (event, type: string) => {
 });
 
-ipcMain.handle('/removeEntry', (event, message: string) => {
+ipcMain.handle('/removeEntry', (event, request: IEntryRequest) => {
 });
