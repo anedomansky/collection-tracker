@@ -7,6 +7,7 @@ import { IGameResponse } from '../interfaces/IGameResponse';
 import Colors from '../config/Colors';
 import ApiService from '../services/ApiService';
 import { IEntryRequest } from '../interfaces/IEntryRequest';
+import DbService from '../services/DbService';
 
 ipcMain.handle('/getBooks', async (event, resultInfo: IResultInfo) => {
     try {
@@ -45,10 +46,31 @@ ipcMain.handle('/getGames', async (event, resultInfo: IResultInfo) => {
 });
 
 ipcMain.handle('/addEntry', (event, request: IEntryRequest) => {
+    try {
+        DbService.getInstance().addEntry(request);
+        return 'SUCCESS';
+    } catch (error) {
+        console.trace(Colors.fgRed, error, Colors.fgReset);
+        throw new Error(error);
+    }
 });
 
 ipcMain.handle('/getEntries', (event, type: string) => {
+    try {
+        const results = DbService.getInstance().getEntries(type);
+        return results;
+    } catch (error) {
+        console.trace(Colors.fgRed, error, Colors.fgReset);
+        throw new Error(error);
+    }
 });
 
 ipcMain.handle('/removeEntry', (event, request: IEntryRequest) => {
+    try {
+        DbService.getInstance().removeEntry(request);
+        return 'SUCCESS';
+    } catch (error) {
+        console.trace(Colors.fgRed, error, Colors.fgReset);
+        throw new Error(error);
+    }
 });
