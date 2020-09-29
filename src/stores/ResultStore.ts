@@ -3,7 +3,7 @@ import { IBookResult } from '@/interfaces/IBookResult';
 import { IShowResponse } from '@/interfaces/IShowResponse';
 import { IGameResult } from '@/interfaces/IGameResult';
 import Categories from '../enums/Categories';
-import { Item } from '../types/Item';
+import { ResultItem } from '../types/ResultItem';
 
 class ResultStore {
     @observable
@@ -72,7 +72,7 @@ class ResultStore {
     }
 
     @action
-    public getResult(category: string, title: string): Item {
+    public getResult(category: string, title: string): ResultItem {
         let result;
         if (category === Categories.BOOKS) {
             result = this.books?.find((book) => book.title === title);

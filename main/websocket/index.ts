@@ -8,6 +8,7 @@ import Colors from '../config/Colors';
 import ApiService from '../services/ApiService';
 import { IEntryRequest } from '../interfaces/IEntryRequest';
 import DbService from '../services/DbService';
+import { IRemoveRequest } from '../interfaces/IRemoveRequest';
 
 ipcMain.handle('/getBooks', async (event, resultInfo: IResultInfo) => {
     try {
@@ -65,7 +66,7 @@ ipcMain.handle('/getEntries', (event, type: string) => {
     }
 });
 
-ipcMain.handle('/removeEntry', (event, request: IEntryRequest) => {
+ipcMain.handle('/removeEntry', (event, request: IRemoveRequest) => {
     try {
         DbService.getInstance().removeEntry(request);
         return 'SUCCESS';

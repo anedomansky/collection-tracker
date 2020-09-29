@@ -2,7 +2,8 @@ import sqlite3 from 'sqlite3';
 import { dbFilename } from '../db';
 import { IDbService } from '../interfaces/IDbService';
 import { IEntryRequest } from '../interfaces/IEntryRequest';
-import { Item } from '../types/Item';
+import { IRemoveRequest } from '../interfaces/IRemoveRequest';
+import { CollectionItem } from '../types/CollectionItem';
 
 class DbService implements IDbService {
     private static instance: DbService;
@@ -33,11 +34,11 @@ class DbService implements IDbService {
         db.close();
     }
 
-    public getEntries(type: string): Item[] {
+    public getEntries(type: string): CollectionItem[] {
         const db = new sqlite3.Database(dbFilename, sqlite3.OPEN_READONLY);
         const sql = 'SELECT * from ?';
-        let items: Item[];
-        db.all(sql, type, (error, rows: Item[]) => {
+        let items: CollectionItem[];
+        db.all(sql, type, (error, rows: CollectionItem[]) => {
             console.table(rows);
             items = rows;
         })
@@ -45,10 +46,13 @@ class DbService implements IDbService {
         return items;
     }
 
-    public removeEntry(request: IEntryRequest): void {
+    public removeEntry(request: IRemoveRequest): void {
         const db = new sqlite3.Database(dbFilename, sqlite3.OPEN_READWRITE);
+        const values: unknown = Object.values(request);
         const sql = db.prepare('DELETE from ? WHERE id = ?');
-
+        sql.run(values);
+        sql.finalize();
+        db.close();
     }
 }
 

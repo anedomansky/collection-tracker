@@ -1,35 +1,35 @@
 <template>
     <article class="search-result-page">
         <div class="search-result-page__content">
-            <div class="loading" v-if="store.currentUpdatingData">
+            <div class="loading" v-if="resultStore.currentUpdatingData">
                 <BeatLoader color="#ffffff" :size="loadingSpinnerSize" />
             </div>
             <div v-if="noResults">No Results</div>
             <Item
-                v-for="book in store.currentBooks"
+                v-for="book in resultStore.currentBooks"
                 :key="book.cover_i"
                 :imageSrc="`http://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`"
                 category="Books"
                 :title="book.title"
-                @onAdd="addToCollection"
+                @onAdd="addToCollection(book)"
                 :result="true"
             />
             <Item
-                v-for="game in store.currentGames"
+                v-for="game in resultStore.currentGames"
                 :key="game.id"
                 :imageSrc="game.background_image"
                 category="Games"
                 :title="game.name"
-                @onAdd="addToCollection"
+                @onAdd="addToCollection(game)"
                 :result="true"
             />
             <Item
-                v-for="show in store.currentShows"
+                v-for="show in resultStore.currentShows"
                 :key="show.show.id"
                 :imageSrc="show.show.image && show.show.image.medium"
                 category="Shows"
                 :title="show.show.name"
-                @onAdd="addToCollection"
+                @onAdd="addToCollection(show)"
                 :result="true"
             />
         </div>
@@ -44,6 +44,9 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Observer } from 'mobx-vue';
 import { Route, NavigationGuardNext } from 'vue-router';
 import { BeatLoader } from '@saeris/vue-spinners';
+import { ResultItem } from '@/types/ResultItem';
+import { IBookCollectionItem } from '@/interfaces/IBookCollectionItem';
+import { CollectionItem } from '@/types/CollectionItem';
 import Search from './Search.vue';
 import RootStore from '../stores/RootStore';
 import { IResultInfo } from '../interfaces/IResultInfo';
@@ -71,7 +74,9 @@ export default class SearchResultPage extends Vue {
 
     @Prop() private term!: string;
 
-    private store = RootStore.resultStore;
+    private resultStore = RootStore.resultStore;
+
+    private collectionStore = RootStore.collectionStore;
 
     private noResults = false;
 
@@ -88,8 +93,8 @@ export default class SearchResultPage extends Vue {
 
     getResults(category: string, type: string, term: string): void {
         console.log(category, type, term);
-        this.store.reset();
-        this.store.setUpdatingData(true);
+        this.resultStore.reset();
+        this.resultStore.setUpdatingData(true);
         this.noResults = false;
         const resultInfo: IResultInfo = {
             type,
@@ -98,11 +103,11 @@ export default class SearchResultPage extends Vue {
         if (category === Categories.BOOKS) {
             ipcRenderer.invoke(`/get${category}`, resultInfo)
                 .then((results: IBookResult[]) => {
-                    this.store.setUpdatingData(false);
-                    this.store.setBooks(results);
+                    this.resultStore.setUpdatingData(false);
+                    this.resultStore.setBooks(results);
                 })
                 .catch((error: Error) => {
-                    this.store.setUpdatingData(false);
+                    this.resultStore.setUpdatingData(false);
                     this.noResults = true;
                     console.error(error);
                 });
@@ -110,11 +115,11 @@ export default class SearchResultPage extends Vue {
         if (category === Categories.GAMES) {
             ipcRenderer.invoke(`/get${category}`, resultInfo)
                 .then((results: IGameResult[]) => {
-                    this.store.setUpdatingData(false);
-                    this.store.setGames(results);
+                    this.resultStore.setUpdatingData(false);
+                    this.resultStore.setGames(results);
                 })
                 .catch((error: Error) => {
-                    this.store.setUpdatingData(false);
+                    this.resultStore.setUpdatingData(false);
                     this.noResults = true;
                     console.error(error);
                 });
@@ -123,19 +128,36 @@ export default class SearchResultPage extends Vue {
             ipcRenderer.invoke(`/get${category}`, resultInfo)
                 .then((results: IShowResponse[]) => {
                     console.log(results);
-                    this.store.setUpdatingData(false);
-                    this.store.setShows(results);
+                    this.resultStore.setUpdatingData(false);
+                    this.resultStore.setShows(results);
                 })
                 .catch((error: Error) => {
-                    this.store.setUpdatingData(false);
+                    this.resultStore.setUpdatingData(false);
                     this.noResults = true;
                     console.error(error);
                 });
         }
     }
 
-    addToCollection(): void {
+    addToCollection(resultItem: ResultItem): void {
         console.log('Added item');
+        let entry: CollectionItem;
+        if (this.type === 'books') {
+            const bookEntry = resultItem as IBookResult;
+            entry = {
+                author_name: bookEntry.author_name[0],
+                cover_i: bookEntry.cover_i,
+                title: bookEntry.title,
+                first_publish_year: bookEntry.first_publish_year,
+            } as IBookCollectionItem;
+            this.collectionStore.addEntry(this.type, entry);
+        }
+        if (this.type === 'shows') {
+            // TODO
+        }
+        if (this.type === 'games') {
+            // TODO
+        }
     }
 }
 </script>

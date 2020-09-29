@@ -12,7 +12,7 @@ const routes: RouteConfig[] = [
     },
     {
         component: CollectionListPage,
-        path: '/collection/list/:name',
+        path: '/collection/list/:type',
         props: true,
     },
     {
