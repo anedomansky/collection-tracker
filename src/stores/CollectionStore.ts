@@ -57,6 +57,21 @@ class CollectionStore {
     }
 
     @action
+    public getCollectionItem(category: string, title: string): CollectionItem {
+        let result;
+        if (category.toLowerCase() === 'books') {
+            result = this.books?.find((book) => book.title === title);
+        }
+        if (category.toLowerCase() === 'games') {
+            result = this.games?.find((game) => game.name === title);
+        }
+        if (category.toLowerCase() === 'shows') {
+            result = this.shows?.find((show) => show.name === title);
+        }
+        return result ?? null;
+    }
+
+    @action
     public async getEntries(type: string): Promise<void> {
         try {
             this.errorOccurred = false;
@@ -83,7 +98,7 @@ class CollectionStore {
     public async addEntry(type: string, entry: CollectionItem): Promise<void> {
         try {
             this.errorOccurred = false;
-            let entryRequest: IEntryRequest = {
+            const entryRequest: IEntryRequest = {
                 type,
                 entry,
             };

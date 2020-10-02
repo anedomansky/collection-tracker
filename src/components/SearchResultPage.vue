@@ -44,6 +44,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Observer } from 'mobx-vue';
 import { Route, NavigationGuardNext } from 'vue-router';
 import { BeatLoader } from '@saeris/vue-spinners';
+import { ipcRenderer } from 'electron';
 import { ResultItem } from '@/types/ResultItem';
 import { IBookCollectionItem } from '@/interfaces/IBookCollectionItem';
 import { CollectionItem } from '@/types/CollectionItem';
@@ -55,9 +56,6 @@ import { IGameResult } from '../interfaces/IGameResult';
 import { IShowResponse } from '../interfaces/IShowResponse';
 import Categories from '../enums/Categories';
 import Item from './Item.vue';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { ipcRenderer } = window.require('electron');
 
 @Observer
 @Component({
@@ -153,10 +151,26 @@ export default class SearchResultPage extends Vue {
             this.collectionStore.addEntry(this.type, entry);
         }
         if (this.type === 'shows') {
-            // TODO
+            const showEntry = resultItem as IShowResponse;
+            entry = {
+                name: showEntry.show.name,
+                premiered: showEntry.show.premiered.toLocaleDateString(),
+                officialSite: showEntry.show.officialSite,
+                status: showEntry.show.status,
+                summary: showEntry.show.summary,
+                image_medium: showEntry.show.image.medium || '',
+                image_original: showEntry.show.image.original || '',
+            };
         }
         if (this.type === 'games') {
-            // TODO
+            const gameEntry = resultItem as IGameResult;
+            entry = {
+                name: gameEntry.name,
+                background_image: gameEntry.background_image,
+                released: gameEntry.released.toLocaleDateString(),
+                rating: gameEntry.rating,
+                rating_top: gameEntry.rating_top,
+            };
         }
     }
 }

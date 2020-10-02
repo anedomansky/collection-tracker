@@ -1,59 +1,101 @@
 <template>
     <article class="details-page">
-        <Details
-            v-if="item !== null && category === 'Books'"
-            :result="result"
-            :imgSrc="`http://covers.openlibrary.org/b/id/${item.cover_i}-L.jpg`"
-            :item="item"
-        >
-            <p>{{ item.title }}</p>
-            <p>{{ item.author_name[0] }}</p>
-            <p>{{ item.first_publish_year }}</p>
-        </Details>
-        <Details
-            v-if="item !== null && category === 'Games'"
-            :result="result"
-            :imgSrc="item.background_image"
-            :item="item"
-        >
-            <p>{{ item.name }}</p>
-            <p>
-                <span v-for="(genre, index) in item.genres" :key="index">
-                    {{ genre.name }}
-                </span>
-            </p>
-            <p>{{ item.released }}</p>
-        </Details>
-        <Details
-            v-if="item !== null && category === 'Shows'"
-            :result="result"
-            :imgSrc="item.show.image && item.show.image.original"
-            :item="item"
-        >
-            <p>{{ item.show.name }}</p>
-            <p>
-                <span v-for="(genre, index) in item.show.genres" :key="index">
-                    {{ genre }}
-                </span>
-            </p>
-            <p>{{ item.show.premiered }}</p>
-        </Details>
-        <Details
-            v-if="item !== null && category === 'People'"
-            :result="result"
-            :imgSrc="item.person.image && item.person.image.original"
-            :item="item"
-        >
-            <p>{{ item.person.name }}</p>
-            <p>{{ item.person.birthday }}</p>
-            <p>{{ item.person.country.name }}</p>
-        </Details>
+        <template v-if="result">
+            <Details
+                v-if="resultItem !== null && category === 'Books'"
+                :result="result"
+                :imgSrc="`http://covers.openlibrary.org/b/id/${resultItem.cover_i}-L.jpg`"
+                :item="resultItem"
+            >
+                <p>{{ resultItem.title }}</p>
+                <p>{{ resultItem.author_name[0] }}</p>
+                <p>{{ resultItem.first_publish_year }}</p>
+            </Details>
+            <Details
+                v-if="resultItem !== null && category === 'Games'"
+                :result="result"
+                :imgSrc="resultItem.background_image"
+                :item="resultItem"
+            >
+                <p>{{ resultItem.name }}</p>
+                <p>
+                    <span
+                        v-for="(genre, index) in resultItem.genres"
+                        :key="index"
+                    >
+                        {{ genre.name }}
+                    </span>
+                </p>
+                <p>{{ resultItem.released }}</p>
+            </Details>
+            <Details
+                v-if="resultItem !== null && category === 'Shows'"
+                :result="result"
+                :imgSrc="resultItem.show.image && resultItem.show.image.original"
+                :item="resultItem"
+            >
+                <p>{{ resultItem.show.name }}</p>
+                <p>
+                    <span
+                        v-for="(genre, index) in resultItem.show.genres"
+                        :key="index"
+                    >
+                        {{ genre }}
+                    </span>
+                </p>
+                <p>{{ resultItem.show.premiered }}</p>
+            </Details>
+        </template>
+        <template v-else>
+            <Details
+                v-if="collectionItem !== null && category === 'Books'"
+                :result="result"
+                :imgSrc="`http://covers.openlibrary.org/b/id/${collectionItem.cover_i}-L.jpg`"
+                :item="collectionItem"
+            >
+                <p>{{ collectionItem.title }}</p>
+                <p>{{ collectionItem.author_name }}</p>
+                <p>{{ collectionItem.first_publish_year }}</p>
+            </Details>
+            <Details
+                v-if="collectionItem !== null && category === 'Games'"
+                :result="result"
+                :imgSrc="collectionItem.background_image"
+                :item="collectionItem"
+            >
+                <p>{{ collectionItem.name }}</p>
+                <p>
+                    <span
+                        v-for="(genre, index) in collectionItem.genres"
+                        :key="index"
+                    >
+                        {{ genre.name }}
+                    </span>
+                </p>
+                <p>{{ collectionItem.released }}</p>
+            </Details>
+            <Details
+                v-if="collectionItem !== null && category === 'Shows'"
+                :result="result"
+                :imgSrc="collectionItem.image_original"
+                :item="collectionItem"
+            >
+                <p>{{ collectionItem.name }}</p>
+                <!-- <p>
+                    <span v-for="(genre, index) in collectionItem.genres" :key="index">
+                        {{ genre }}
+                    </span>
+                </p> -->
+                <p>{{ collectionItem.premiered }}</p>
+            </Details>
+        </template>
     </article>
 </template>
 
 <script lang="ts">
 import RootStore from '@/stores/RootStore';
-import { Item } from '@/types/Item';
+import { CollectionItem } from '@/types/CollectionItem';
+import { ResultItem } from '@/types/ResultItem';
 import { Observer } from 'mobx-vue';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Details from './Details.vue';
@@ -75,15 +117,17 @@ export default class DetailsPage extends Vue {
 
     private collectionStore = RootStore.collectionStore;
 
-    private item: Item = null;
+    private resultItem: ResultItem = null;
+
+    private collectionItem: CollectionItem = null;
 
     mounted(): void {
         if (this.result) {
-            this.item = this.resultStore.getResult(this.category, this.title);
+            this.resultItem = this.resultStore.getResult(this.category, this.title);
         } else {
-            console.log('Get item from collectionStore');
+            this.collectionItem = this.collectionStore.getCollectionItem(this.category, this.title);
         }
-        console.log(this.item);
+        console.log(this.resultItem);
     }
 
     backToResults(): void {

@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import RootStore from '@/stores/RootStore';
-import { Item } from '@/types/Item';
+import { CollectionItem } from '@/types/CollectionItem';
 import { Observer } from 'mobx-vue';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Button from './Button.vue';
@@ -30,13 +30,11 @@ import Button from './Button.vue';
     },
 })
 export default class Details extends Vue {
-    @Prop() private item!: Item;
+    @Prop() private item!: CollectionItem;
 
     @Prop() private result!: boolean;
 
     @Prop() private imgSrc!: string;
-
-    private resultStore = RootStore.resultStore;
 
     private collectionStore = RootStore.collectionStore;
 
@@ -45,7 +43,7 @@ export default class Details extends Vue {
     }
 
     add(): void {
-        console.log('Added to the ResultStore!', this.item);
+        console.log('Added to the CollectionStore!', this.item);
     }
 
     remove(): void {

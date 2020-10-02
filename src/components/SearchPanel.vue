@@ -40,7 +40,6 @@ export default class SearchPanel extends Vue {
 
     submit(): void {
         if (this.term.length === 0) return;
-        // TODO: set updatingData = true
         this.$router.replace(`/result/list/${this.category}/${this.currentType.toLowerCase()}/${this.term}`);
     }
 }

@@ -5,6 +5,7 @@ module.exports = {
     },
     extends: [
         'plugin:vue/essential',
+        'plugin:vue/strongly-recommended',
         '@vue/airbnb',
         '@vue/typescript/recommended',
     ],
@@ -18,6 +19,9 @@ module.exports = {
         indent: ['warn', 4],
         'max-len': 'off',
         'class-methods-use-this': 'off',
+        'vue/html-indent': ['warn', 4],
+        'vue/attribute-hyphenation': ['error', 'never'],
+        'vue/experimental-script-setup-vars': 'off',
     },
     overrides: [
         {
