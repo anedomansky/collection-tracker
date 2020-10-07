@@ -1,12 +1,32 @@
 <template>
-    <div class="search__panel" v-show="show">
-        <select name="Type" id="type" v-model="currentType">
-            <option v-for="type in typeValues" :key="type" :value="type">{{ type }}</option>
+    <div
+        class="search__panel"
+        v-show="show"
+    >
+        <select
+            name="Type"
+            id="type"
+            v-model="currentType"
+        >
+            <option
+                v-for="type in typeValues"
+                :key="type"
+                :value="type"
+            >
+                {{ type }}
+            </option>
         </select>
         <form @submit.prevent="submit">
-            <input type="text" placeholder="Enter a search term..." v-model="term" />
+            <input
+                type="text"
+                placeholder="Enter a search term..."
+                v-model="term"
+            >
             <Button type="submit">
-                <img :src="'/assets/icons/search.svg'" alt="Search">
+                <img
+                    :src="'/assets/icons/search.svg'"
+                    alt="Search"
+                >
             </Button>
         </form>
     </div>

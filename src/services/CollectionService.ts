@@ -1,3 +1,4 @@
+// import { ipcRenderer } from 'electron';
 import { ICollectionService } from '@/interfaces/ICollectionService';
 import { IEntryRequest } from '../interfaces/IEntryRequest';
 import { CollectionItem } from '../types/CollectionItem';
@@ -19,7 +20,7 @@ class CollectionService implements ICollectionService {
         const entries = await ipcRenderer.invoke('/getEntries', type);
         return entries;
     }
-    
+
     public async addEntry(request: IEntryRequest): Promise<void> {
         await ipcRenderer.invoke('/addEntry', request);
     }

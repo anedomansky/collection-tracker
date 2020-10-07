@@ -32,6 +32,7 @@ const createWindow = async (): Promise<void> => {
         height: 1000,
         webPreferences: {
             nodeIntegration: true,
+            worldSafeExecuteJavaScript: true,
         },
     });
 

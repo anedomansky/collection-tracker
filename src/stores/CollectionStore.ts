@@ -1,5 +1,7 @@
 import { ICollectionService } from '@/interfaces/ICollectionService';
-import { action, computed, observable } from 'mobx';
+import {
+    action, computed, observable, makeObservable,
+} from 'mobx';
 import { IBookCollectionItem } from '../interfaces/IBookCollectionItem';
 import { IEntryRequest } from '../interfaces/IEntryRequest';
 import { IGameCollectionItem } from '../interfaces/IGameCollectionItem';
@@ -9,54 +11,60 @@ import { CollectionItem } from '../types/CollectionItem';
 class CollectionStore {
     private collectionService: ICollectionService;
 
-    @observable
-    private updatingData = false;
+    private updatingData: boolean;
 
-    @observable
-    private errorOccurred = false;
+    private errorOccurred: boolean;
 
-    @observable
     private books: IBookCollectionItem[] | null;
 
-    @observable
     private shows: IShowCollectionItem[] | null;
 
-    @observable
     private games: IGameCollectionItem[] | null;
 
     constructor(collectionService: ICollectionService) {
+        makeObservable<this, 'updatingData' | 'errorOccurred' | 'books' | 'shows' | 'games'>(this, {
+            updatingData: observable,
+            errorOccurred: observable,
+            books: observable,
+            shows: observable,
+            games: observable,
+            currentUpdatingData: computed,
+            currentErrorOccurred: computed,
+            currentBooks: computed,
+            currentShows: computed,
+            currentGames: computed,
+            getCollectionItem: action,
+            getEntries: action,
+            addEntry: action,
+        });
         this.collectionService = collectionService;
+        this.updatingData = false;
+        this.errorOccurred = false;
         this.books = null;
         this.shows = null;
         this.games = null;
     }
 
-    @computed
     public get currentUpdatingData(): boolean {
         return this.updatingData;
     }
 
-    @computed
     public get currentErrorOccurred(): boolean {
         return this.errorOccurred;
     }
 
-    @computed
     public get currentBooks(): IBookCollectionItem[] | null {
         return this.books;
     }
 
-    @computed
     public get currentShows(): IShowCollectionItem[] | null {
         return this.shows;
     }
 
-    @computed
     public get currentGames(): IGameCollectionItem[] | null {
         return this.games;
     }
 
-    @action
     public getCollectionItem(category: string, title: string): CollectionItem {
         let result;
         if (category.toLowerCase() === 'books') {
@@ -71,7 +79,6 @@ class CollectionStore {
         return result ?? null;
     }
 
-    @action
     public async getEntries(type: string): Promise<void> {
         try {
             this.errorOccurred = false;
@@ -94,7 +101,6 @@ class CollectionStore {
         }
     }
 
-    @action
     public async addEntry(type: string, entry: CollectionItem): Promise<void> {
         try {
             this.errorOccurred = false;

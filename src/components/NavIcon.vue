@@ -1,6 +1,13 @@
 <template>
-    <router-link :to="to" class="nav-icon">
-        <img :class="additionalClassNames" :src="`/assets/icons/${icon}`" :alt="altText"  />
+    <router-link
+        :to="to"
+        class="nav-icon"
+    >
+        <img
+            :class="additionalClassNames"
+            :src="`/assets/icons/${icon}`"
+            :alt="altText"
+        >
     </router-link>
 </template>
 

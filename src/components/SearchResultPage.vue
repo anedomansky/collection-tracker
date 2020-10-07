@@ -1,10 +1,18 @@
 <template>
     <article class="search-result-page">
         <div class="search-result-page__content">
-            <div class="loading" v-if="resultStore.currentUpdatingData">
-                <BeatLoader color="#ffffff" :size="loadingSpinnerSize" />
+            <div
+                class="loading"
+                v-if="resultStore.currentUpdatingData"
+            >
+                <BeatLoader
+                    color="#ffffff"
+                    :size="loadingSpinnerSize"
+                />
             </div>
-            <div v-if="noResults">No Results</div>
+            <div v-if="noResults">
+                No Results
+            </div>
             <Item
                 v-for="book in resultStore.currentBooks"
                 :key="book.cover_i"

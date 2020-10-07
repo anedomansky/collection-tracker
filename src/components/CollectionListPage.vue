@@ -1,10 +1,18 @@
 <template>
     <article class="collection-list-page">
         <div class="collection-list-page__content">
-            <div class="loading" v-if="store.currentUpdatingData">
-                <BeatLoader color="#ffffff" :size="loadingSpinnerSize" />
+            <div
+                class="loading"
+                v-if="store.currentUpdatingData"
+            >
+                <BeatLoader
+                    color="#ffffff"
+                    :size="loadingSpinnerSize"
+                />
             </div>
-            <div v-if="store.currentErrorOccurred">No Collection Items found!</div>
+            <div v-if="store.currentErrorOccurred">
+                No Collection Items found!
+            </div>
             <Item
                 v-for="book in store.currentBooks"
                 :key="book.cover_i"

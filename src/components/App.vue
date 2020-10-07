@@ -1,10 +1,13 @@
 <template>
-  <div id="content" role="application">
-    <Nav />
-    <main>
-      <router-view></router-view>
-    </main>
-  </div>
+    <div
+        id="content"
+        role="application"
+    >
+        <Nav />
+        <main>
+            <router-view />
+        </main>
+    </div>
 </template>
 
 <script lang="ts">

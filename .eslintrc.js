@@ -11,6 +11,7 @@ module.exports = {
     ],
     parserOptions: {
         ecmaVersion: 2020,
+        parser: '@typescript-eslint/parser',
     },
     rules: {
         'prefer-destructuring': ['error', { object: true, array: false }],
@@ -19,9 +20,12 @@ module.exports = {
         indent: ['warn', 4],
         'max-len': 'off',
         'class-methods-use-this': 'off',
+        'no-shadow': 'off',
+        '@typescript-eslint/no-shadow': ['error'],
         'vue/html-indent': ['warn', 4],
         'vue/attribute-hyphenation': ['error', 'never'],
         'vue/experimental-script-setup-vars': 'off',
+        'vue/custom-event-name-casing': 'off',
     },
     overrides: [
         {

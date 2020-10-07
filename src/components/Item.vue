@@ -1,11 +1,32 @@
 <template>
-    <div class="item" @click="toDetailPage">
-        <img :src="imageSrc" :alt="title" class="item__thumbnail">
-        <Button v-if="result" additionalClass="item__btn" @onClick="add">
-            <img src="/assets/icons/plus.svg" alt="Add">
+    <div
+        class="item"
+        @click="toDetailPage"
+    >
+        <img
+            :src="imageSrc"
+            :alt="title"
+            class="item__thumbnail"
+        >
+        <Button
+            v-if="result"
+            additionalClass="item__btn"
+            @onClick="add"
+        >
+            <img
+                src="/assets/icons/plus.svg"
+                alt="Add"
+            >
         </Button>
-        <Button v-else additionalClass="item__btn" @onClick="remove">
-            <img src="/assets/icons/minus.svg" alt="Remove">
+        <Button
+            v-else
+            additionalClass="item__btn"
+            @onClick="remove"
+        >
+            <img
+                src="/assets/icons/minus.svg"
+                alt="Remove"
+            >
         </Button>
         <span class="item__title">{{ title }}</span>
     </div>

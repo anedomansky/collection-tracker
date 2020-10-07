@@ -1,14 +1,38 @@
 <template>
     <section class="details">
-        <Button additionalClass="details__back-btn" @onClick="back">
-            <img src="/assets/icons/back-arrow.svg" alt="Back" />
+        <Button
+            additionalClass="details__back-btn"
+            @onClick="back"
+        >
+            <img
+                src="/assets/icons/back-arrow.svg"
+                alt="Back"
+            >
         </Button>
-        <img class="details__cover" :src="imgSrc" alt="Cover" />
-        <Button v-if="result" additionalClass="details__add-btn" @onClick="add">
-            <img src="/assets/icons/plus.svg" alt="Add">
+        <img
+            class="details__cover"
+            :src="imgSrc"
+            alt="Cover"
+        >
+        <Button
+            v-if="result"
+            additionalClass="details__add-btn"
+            @onClick="add"
+        >
+            <img
+                src="/assets/icons/plus.svg"
+                alt="Add"
+            >
         </Button>
-        <Button v-else additionalClass="details__remove-btn" @onClick="remove">
-            <img src="/assets/icons/minus.svg" alt="Remove">
+        <Button
+            v-else
+            additionalClass="details__remove-btn"
+            @onClick="remove"
+        >
+            <img
+                src="/assets/icons/minus.svg"
+                alt="Remove"
+            >
         </Button>
         <div class="details__info">
             <slot />

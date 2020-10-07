@@ -1,12 +1,39 @@
 <template>
     <article class="search">
-        <Button :additionalClass="`search__tab tab-1 ${activeTab === 0 ? 'active': '' }`" @onClick="toggleTab(0)">Books</button>
-        <Button :additionalClass="`search__tab tab-2 ${activeTab === 1 ? 'active' : ''}`" @onClick="toggleTab(1)">Games</button>
-        <Button :additionalClass="`search__tab tab-3 ${activeTab === 2 ? 'active' : ''}`" @onClick="toggleTab(2)">Shows</button>
+        <Button
+            :additionalClass="`search__tab tab-1 ${activeTab === 0 ? 'active': '' }`"
+            @onClick="toggleTab(0)"
+        >
+            Books
+        </button>
+        <Button
+            :additionalClass="`search__tab tab-2 ${activeTab === 1 ? 'active' : ''}`"
+            @onClick="toggleTab(1)"
+        >
+            Games
+        </button>
+        <Button
+            :additionalClass="`search__tab tab-3 ${activeTab === 2 ? 'active' : ''}`"
+            @onClick="toggleTab(2)"
+        >
+            Shows
+        </button>
         <div class="search__panels">
-            <SearchPanel :typeValues="['Title', 'Genre', 'Author']" :show="activeTab === 0" :category="'Books'" />
-            <SearchPanel :typeValues="['Title', 'Genre', 'Developer']" :show="activeTab === 1" :category="'Games'" />
-            <SearchPanel :typeValues="['Title']" :show="activeTab === 2" :category="'Shows'" />
+            <SearchPanel
+                :typeValues="['Title', 'Genre', 'Author']"
+                :show="activeTab === 0"
+                :category="'Books'"
+            />
+            <SearchPanel
+                :typeValues="['Title', 'Genre', 'Developer']"
+                :show="activeTab === 1"
+                :category="'Games'"
+            />
+            <SearchPanel
+                :typeValues="['Title']"
+                :show="activeTab === 2"
+                :category="'Shows'"
+            />
         </div>
     </article>
 </template>

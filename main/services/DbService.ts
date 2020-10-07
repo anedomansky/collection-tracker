@@ -23,10 +23,10 @@ class DbService implements IDbService {
         if (request.type === 'books') {
             sql = db.prepare('INSERT INTO books(id, author_name, cover_i, title, first_publish_year) VALUES(NULL, ?, ?, ?, ?)');
         }
-        if (request.type === 'games') {
+        else if (request.type === 'games') {
             sql = db.prepare('INSERT INTO games(id, name, background_image, released, rating, rating_top) VALUES(NULL, ?, ?, ?, ?, ?)');
         }
-        if (request.type === 'shows') {
+        else {
             sql = db.prepare('INSERT INTO shows(id, name, premiered, officialSite, status, summary, image_medium, image_original) VALUES(NULL, ?, ?, ?, ?, ?, ?, ?)');
         }
         sql.run(values);
@@ -37,7 +37,7 @@ class DbService implements IDbService {
     public getEntries(type: string): CollectionItem[] {
         const db = new sqlite3.Database(dbFilename, sqlite3.OPEN_READONLY);
         const sql = 'SELECT * from ?';
-        let items: CollectionItem[];
+        let items: CollectionItem[] = [];
         db.all(sql, type, (error, rows: CollectionItem[]) => {
             console.table(rows);
             items = rows;
