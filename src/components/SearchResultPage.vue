@@ -56,6 +56,7 @@ import { ipcRenderer } from 'electron';
 import { ResultItem } from '@/types/ResultItem';
 import { IBookCollectionItem } from '@/interfaces/IBookCollectionItem';
 import { CollectionItem } from '@/types/CollectionItem';
+import { IEntryRequest } from '@/interfaces/IEntryRequest';
 import Search from './Search.vue';
 import RootStore from '../stores/RootStore';
 import { IResultInfo } from '../interfaces/IResultInfo';
@@ -98,7 +99,6 @@ export default class SearchResultPage extends Vue {
     }
 
     getResults(category: string, type: string, term: string): void {
-        console.log(category, type, term);
         this.resultStore.reset();
         this.resultStore.setUpdatingData(true);
         this.noResults = false;
@@ -133,7 +133,6 @@ export default class SearchResultPage extends Vue {
         if (category === Categories.SHOWS) {
             ipcRenderer.invoke(`/get${category}`, resultInfo)
                 .then((results: IShowResponse[]) => {
-                    console.log(results);
                     this.resultStore.setUpdatingData(false);
                     this.resultStore.setShows(results);
                 })
@@ -156,7 +155,18 @@ export default class SearchResultPage extends Vue {
                 title: bookEntry.title,
                 first_publish_year: bookEntry.first_publish_year,
             } as IBookCollectionItem;
-            this.collectionStore.addEntry(this.type, entry);
+            ipcRenderer.invoke('/addEntry', {
+                type: this.type,
+                entry,
+            } as IEntryRequest)
+                .then((message: string) => {
+                    console.log(message);
+                    this.collectionStore.setUpdatingData(false);
+                })
+                .catch((error: Error) => {
+                    this.collectionStore.setUpdatingData(false);
+                    console.error(error);
+                });
         }
         if (this.type === 'shows') {
             const showEntry = resultItem as IShowResponse;
@@ -169,6 +179,18 @@ export default class SearchResultPage extends Vue {
                 image_medium: showEntry.show.image.medium || '',
                 image_original: showEntry.show.image.original || '',
             };
+            ipcRenderer.invoke('/addEntry', {
+                type: this.type,
+                entry,
+            } as IEntryRequest)
+                .then((message: string) => {
+                    console.log(message);
+                    this.collectionStore.setUpdatingData(false);
+                })
+                .catch((error: Error) => {
+                    this.collectionStore.setUpdatingData(false);
+                    console.error(error);
+                });
         }
         if (this.type === 'games') {
             const gameEntry = resultItem as IGameResult;
@@ -179,6 +201,18 @@ export default class SearchResultPage extends Vue {
                 rating: gameEntry.rating,
                 rating_top: gameEntry.rating_top,
             };
+            ipcRenderer.invoke('/addEntry', {
+                type: this.type,
+                entry,
+            } as IEntryRequest)
+                .then((message: string) => {
+                    console.log(message);
+                    this.collectionStore.setUpdatingData(false);
+                })
+                .catch((error: Error) => {
+                    this.collectionStore.setUpdatingData(false);
+                    console.error(error);
+                });
         }
     }
 }

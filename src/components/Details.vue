@@ -62,16 +62,18 @@ export default class Details extends Vue {
 
     private collectionStore = RootStore.collectionStore;
 
+    private errorOccurred = false;
+
     back(): void {
         this.$router.back();
     }
 
     add(): void {
-        console.log('Added to the CollectionStore!', this.item);
+        this.$emit('onAdd');
     }
 
     remove(): void {
-        console.log('Removed from the CollectionStore!', this.item);
+        this.$emit('onRemove');
     }
 }
 </script>

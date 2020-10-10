@@ -6,6 +6,7 @@
                 :result="result"
                 :imgSrc="`http://covers.openlibrary.org/b/id/${resultItem.cover_i}-L.jpg`"
                 :item="resultItem"
+                @onAdd="addToCollection(resultItem)"
             >
                 <p>{{ resultItem.title }}</p>
                 <p>{{ resultItem.author_name[0] }}</p>
@@ -16,6 +17,7 @@
                 :result="result"
                 :imgSrc="resultItem.background_image"
                 :item="resultItem"
+                @onAdd="addToCollection(resultItem)"
             >
                 <p>{{ resultItem.name }}</p>
                 <p>
@@ -33,6 +35,7 @@
                 :result="result"
                 :imgSrc="resultItem.show.image && resultItem.show.image.original"
                 :item="resultItem"
+                @onAdd="addToCollection(resultItem)"
             >
                 <p>{{ resultItem.show.name }}</p>
                 <p>
@@ -52,6 +55,7 @@
                 :result="result"
                 :imgSrc="`http://covers.openlibrary.org/b/id/${collectionItem.cover_i}-L.jpg`"
                 :item="collectionItem"
+                @onRemove="removeFromCollection(collectionItem)"
             >
                 <p>{{ collectionItem.title }}</p>
                 <p>{{ collectionItem.author_name }}</p>
@@ -62,6 +66,7 @@
                 :result="result"
                 :imgSrc="collectionItem.background_image"
                 :item="collectionItem"
+                @onRemove="removeFromCollection(collectionItem)"
             >
                 <p>{{ collectionItem.name }}</p>
                 <p>
@@ -79,6 +84,7 @@
                 :result="result"
                 :imgSrc="collectionItem.image_original"
                 :item="collectionItem"
+                @onRemove="removeFromCollection(collectionItem)"
             >
                 <p>{{ collectionItem.name }}</p>
                 <!-- <p>
@@ -93,11 +99,17 @@
 </template>
 
 <script lang="ts">
+import { ipcRenderer } from 'electron';
+import { Observer } from 'mobx-vue';
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { IBookCollectionItem } from '@/interfaces/IBookCollectionItem';
+import { IBookResult } from '@/interfaces/IBookResult';
+import { IEntryRequest } from '@/interfaces/IEntryRequest';
+import { IGameResult } from '@/interfaces/IGameResult';
+import { IShowResponse } from '@/interfaces/IShowResponse';
 import RootStore from '@/stores/RootStore';
 import { CollectionItem } from '@/types/CollectionItem';
 import { ResultItem } from '@/types/ResultItem';
-import { Observer } from 'mobx-vue';
-import { Component, Vue, Prop } from 'vue-property-decorator';
 import Details from './Details.vue';
 
 @Observer
@@ -127,11 +139,85 @@ export default class DetailsPage extends Vue {
         } else {
             this.collectionItem = this.collectionStore.getCollectionItem(this.category, this.title);
         }
-        console.log(this.resultItem);
     }
 
     backToResults(): void {
         this.$router.back();
+    }
+
+    addToCollection(resultItem: ResultItem): void {
+        let entry: CollectionItem;
+        if (this.category.toLowerCase() === 'books') {
+            const bookEntry = resultItem as IBookResult;
+            entry = {
+                author_name: bookEntry.author_name[0],
+                cover_i: bookEntry.cover_i,
+                title: bookEntry.title,
+                first_publish_year: bookEntry.first_publish_year,
+            } as IBookCollectionItem;
+            ipcRenderer.invoke('/addEntry', {
+                type: this.category.toLowerCase(),
+                entry,
+            } as IEntryRequest)
+                .then((message: string) => {
+                    console.log(message);
+                    this.collectionStore.setUpdatingData(false);
+                })
+                .catch((error: Error) => {
+                    this.collectionStore.setUpdatingData(false);
+                    console.error(error);
+                });
+        }
+        if (this.category.toLowerCase() === 'shows') {
+            const showEntry = resultItem as IShowResponse;
+            entry = {
+                name: showEntry.show.name,
+                premiered: showEntry.show.premiered.toLocaleDateString(),
+                officialSite: showEntry.show.officialSite,
+                status: showEntry.show.status,
+                summary: showEntry.show.summary,
+                image_medium: showEntry.show.image.medium || '',
+                image_original: showEntry.show.image.original || '',
+            };
+            ipcRenderer.invoke('/addEntry', {
+                type: this.category.toLowerCase(),
+                entry,
+            } as IEntryRequest)
+                .then((message: string) => {
+                    console.log(message);
+                    this.collectionStore.setUpdatingData(false);
+                })
+                .catch((error: Error) => {
+                    this.collectionStore.setUpdatingData(false);
+                    console.error(error);
+                });
+        }
+        if (this.category.toLowerCase() === 'games') {
+            const gameEntry = resultItem as IGameResult;
+            entry = {
+                name: gameEntry.name,
+                background_image: gameEntry.background_image,
+                released: gameEntry.released.toLocaleDateString(),
+                rating: gameEntry.rating,
+                rating_top: gameEntry.rating_top,
+            };
+            ipcRenderer.invoke('/addEntry', {
+                type: this.category.toLowerCase(),
+                entry,
+            } as IEntryRequest)
+                .then((message: string) => {
+                    console.log(message);
+                    this.collectionStore.setUpdatingData(false);
+                })
+                .catch((error: Error) => {
+                    this.collectionStore.setUpdatingData(false);
+                    console.error(error);
+                });
+        }
+    }
+
+    removeFromCollection(item: CollectionItem): void {
+        console.log(item);
     }
 }
 </script>

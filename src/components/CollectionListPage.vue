@@ -10,7 +10,7 @@
                     :size="loadingSpinnerSize"
                 />
             </div>
-            <div v-if="store.currentErrorOccurred">
+            <div v-if="noResults">
                 No Collection Items found!
             </div>
             <Item
@@ -49,7 +49,11 @@ import RootStore from '@/stores/RootStore';
 import { Observer } from 'mobx-vue';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { BeatLoader } from '@saeris/vue-spinners';
+import { ipcRenderer } from 'electron';
 import { CollectionItem } from '@/types/CollectionItem';
+import { IBookCollectionItem } from '@/interfaces/IBookCollectionItem';
+import { IShowCollectionItem } from '@/interfaces/IShowCollectionItem';
+import { IGameCollectionItem } from '@/interfaces/IGameCollectionItem';
 import Item from './Item.vue';
 
 @Observer
@@ -64,12 +68,35 @@ export default class CollectionListPage extends Vue {
 
     private store = RootStore.collectionStore;
 
+    private noResults = false;
+
     mounted(): void {
         this.getEntries();
     }
 
-    async getEntries(): Promise<void> {
-        await this.store.getEntries(this.type);
+    getEntries(): void {
+        this.noResults = false;
+        this.store.setUpdatingData(true);
+        ipcRenderer.invoke('/getEntries', this.type)
+        .then((entries: CollectionItem[]) => {
+            if (this.type === 'books') {
+                const books = entries as IBookCollectionItem[];
+                this.store.setBooks(books);
+            }
+            if (this.type === 'shows') {
+                const shows = entries as IShowCollectionItem[];
+                this.store.setShows(shows);
+            }
+            if (this.type === 'games') {
+                const games = entries as IGameCollectionItem[];
+                this.store.setGames(games);
+            }
+        }).catch((error: Error) => {
+            this.noResults = true;
+            console.error(error);
+        }).finally(() => {
+            this.store.setUpdatingData(false);
+        });
     }
 
     async removeFromCollection(item: CollectionItem): Promise<void> {

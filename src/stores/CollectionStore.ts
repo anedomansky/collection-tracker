@@ -1,19 +1,13 @@
-import { ICollectionService } from '@/interfaces/ICollectionService';
 import {
     action, computed, observable, makeObservable,
 } from 'mobx';
 import { IBookCollectionItem } from '../interfaces/IBookCollectionItem';
-import { IEntryRequest } from '../interfaces/IEntryRequest';
 import { IGameCollectionItem } from '../interfaces/IGameCollectionItem';
 import { IShowCollectionItem } from '../interfaces/IShowCollectionItem';
 import { CollectionItem } from '../types/CollectionItem';
 
 class CollectionStore {
-    private collectionService: ICollectionService;
-
     private updatingData: boolean;
-
-    private errorOccurred: boolean;
 
     private books: IBookCollectionItem[] | null;
 
@@ -21,25 +15,19 @@ class CollectionStore {
 
     private games: IGameCollectionItem[] | null;
 
-    constructor(collectionService: ICollectionService) {
-        makeObservable<this, 'updatingData' | 'errorOccurred' | 'books' | 'shows' | 'games'>(this, {
+    constructor() {
+        makeObservable<this, 'updatingData' | 'books' | 'shows' | 'games'>(this, {
             updatingData: observable,
-            errorOccurred: observable,
             books: observable,
             shows: observable,
             games: observable,
             currentUpdatingData: computed,
-            currentErrorOccurred: computed,
             currentBooks: computed,
             currentShows: computed,
             currentGames: computed,
             getCollectionItem: action,
-            getEntries: action,
-            addEntry: action,
         });
-        this.collectionService = collectionService;
         this.updatingData = false;
-        this.errorOccurred = false;
         this.books = null;
         this.shows = null;
         this.games = null;
@@ -47,10 +35,6 @@ class CollectionStore {
 
     public get currentUpdatingData(): boolean {
         return this.updatingData;
-    }
-
-    public get currentErrorOccurred(): boolean {
-        return this.errorOccurred;
     }
 
     public get currentBooks(): IBookCollectionItem[] | null {
@@ -65,6 +49,22 @@ class CollectionStore {
         return this.games;
     }
 
+    public setUpdatingData(updating: boolean): void {
+        this.updatingData = updating;
+    }
+
+    public setBooks(books: IBookCollectionItem[]): void {
+        this.books = books;
+    }
+
+    public setShows(shows: IShowCollectionItem[]): void {
+        this.shows = shows;
+    }
+
+    public setGames(games: IGameCollectionItem[]): void {
+        this.games = games;
+    }
+
     public getCollectionItem(category: string, title: string): CollectionItem {
         let result;
         if (category.toLowerCase() === 'books') {
@@ -77,42 +77,6 @@ class CollectionStore {
             result = this.shows?.find((show) => show.name === title);
         }
         return result ?? null;
-    }
-
-    public async getEntries(type: string): Promise<void> {
-        try {
-            this.errorOccurred = false;
-            this.updatingData = true;
-            const entries = await this.collectionService.getEntries(type);
-            if (type === 'books') {
-                this.books = entries as IBookCollectionItem[];
-            }
-            if (type === 'shows') {
-                this.shows = entries as IShowCollectionItem[];
-            }
-            if (type === 'games') {
-                this.games = entries as IGameCollectionItem[];
-            }
-        } catch (error) {
-            console.error(error);
-            this.errorOccurred = true;
-        } finally {
-            this.updatingData = false;
-        }
-    }
-
-    public async addEntry(type: string, entry: CollectionItem): Promise<void> {
-        try {
-            this.errorOccurred = false;
-            const entryRequest: IEntryRequest = {
-                type,
-                entry,
-            };
-            await this.collectionService.addEntry(entryRequest);
-        } catch (error) {
-            console.error(error);
-            this.errorOccurred = true;
-        }
     }
 }
 
