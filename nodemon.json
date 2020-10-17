@@ -1,8 +1,0 @@
-{
-    "watch": [
-        "main"
-    ],
-    "ext": ".ts",
-    "ignore": [],
-    "exec": "npm run electron:compile"
-}
