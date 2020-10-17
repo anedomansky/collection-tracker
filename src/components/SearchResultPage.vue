@@ -52,7 +52,6 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Observer } from 'mobx-vue';
 import { Route, NavigationGuardNext } from 'vue-router';
 import { BeatLoader } from '@saeris/vue-spinners';
-import { ipcRenderer } from 'electron';
 import { ResultItem } from '@/types/ResultItem';
 import { IBookCollectionItem } from '@/interfaces/IBookCollectionItem';
 import { CollectionItem } from '@/types/CollectionItem';
@@ -65,6 +64,9 @@ import { IGameResult } from '../interfaces/IGameResult';
 import { IShowResponse } from '../interfaces/IShowResponse';
 import Categories from '../enums/Categories';
 import Item from './Item.vue';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { ipcRenderer } = window.require('electron');
 
 @Observer
 @Component({

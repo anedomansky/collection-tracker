@@ -78,6 +78,33 @@ class CollectionStore {
         }
         return result ?? null;
     }
+
+    public removeCollectionItem(category: string, item: CollectionItem): void {
+        if (category.toLowerCase() === 'books') {
+            const newBooks = this.books?.filter((book) => book.id !== item?.id);
+            if (newBooks) {
+                this.books = newBooks;
+            }
+        }
+        if (category.toLowerCase() === 'games') {
+            const newGames = this.games?.filter((game) => game.id !== item?.id);
+            if (newGames) {
+                this.games = newGames;
+            }
+        }
+        if (category.toLowerCase() === 'shows') {
+            const newShows = this.shows?.filter((show) => show.id !== item?.id);
+            if (newShows) {
+                this.shows = newShows;
+            }
+        }
+    }
+
+    public reset(): void {
+        this.books = null;
+        this.games = null;
+        this.shows = null;
+    }
 }
 
 export default CollectionStore;

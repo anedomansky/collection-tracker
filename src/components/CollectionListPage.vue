@@ -13,33 +13,39 @@
             <div v-if="noResults">
                 No Collection Items found!
             </div>
-            <Item
-                v-for="book in store.currentBooks"
-                :key="book.cover_i"
-                :imageSrc="`http://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`"
-                category="Books"
-                :title="book.title"
-                @onRemove="removeFromCollection(book)"
-                :result="false"
-            />
-            <Item
-                v-for="game in store.currentGames"
-                :key="game.id"
-                :imageSrc="game.background_image"
-                category="Games"
-                :title="game.name"
-                @onRemove="removeFromCollection(game)"
-                :result="false"
-            />
-            <Item
-                v-for="show in store.currentShows"
-                :key="show.id"
-                :imageSrc="show.image && show.image.medium"
-                category="Shows"
-                :title="show.name"
-                @onRemove="removeFromCollection(show)"
-                :result="false"
-            />
+            <template v-if="type === 'books'">
+                <Item
+                    v-for="book in store.currentBooks"
+                    :key="book.cover_i"
+                    :imageSrc="`http://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`"
+                    category="Books"
+                    :title="book.title"
+                    @onRemove="removeFromCollection(book)"
+                    :result="false"
+                />
+            </template>
+            <template v-if="type === 'games'">
+                <Item
+                    v-for="game in store.currentGames"
+                    :key="game.id"
+                    :imageSrc="game.background_image"
+                    category="Games"
+                    :title="game.name"
+                    @onRemove="removeFromCollection(game)"
+                    :result="false"
+                />
+            </template>
+            <template v-if="type === 'shows'">
+                <Item
+                    v-for="show in store.currentShows"
+                    :key="show.id"
+                    :imageSrc="show.image && show.image.medium"
+                    category="Shows"
+                    :title="show.name"
+                    @onRemove="removeFromCollection(show)"
+                    :result="false"
+                />
+            </template>
         </div>
     </article>
 </template>
@@ -49,12 +55,15 @@ import RootStore from '@/stores/RootStore';
 import { Observer } from 'mobx-vue';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { BeatLoader } from '@saeris/vue-spinners';
-import { ipcRenderer } from 'electron';
 import { CollectionItem } from '@/types/CollectionItem';
 import { IBookCollectionItem } from '@/interfaces/IBookCollectionItem';
 import { IShowCollectionItem } from '@/interfaces/IShowCollectionItem';
 import { IGameCollectionItem } from '@/interfaces/IGameCollectionItem';
+import { IRemoveRequest } from '@/interfaces/IRemoveRequest';
 import Item from './Item.vue';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { ipcRenderer } = window.require('electron');
 
 @Observer
 @Component({
@@ -75,32 +84,46 @@ export default class CollectionListPage extends Vue {
     }
 
     getEntries(): void {
+        this.store.reset();
         this.noResults = false;
         this.store.setUpdatingData(true);
         ipcRenderer.invoke('/getEntries', this.type)
-        .then((entries: CollectionItem[]) => {
-            if (this.type === 'books') {
-                const books = entries as IBookCollectionItem[];
-                this.store.setBooks(books);
-            }
-            if (this.type === 'shows') {
-                const shows = entries as IShowCollectionItem[];
-                this.store.setShows(shows);
-            }
-            if (this.type === 'games') {
-                const games = entries as IGameCollectionItem[];
-                this.store.setGames(games);
-            }
-        }).catch((error: Error) => {
-            this.noResults = true;
-            console.error(error);
-        }).finally(() => {
-            this.store.setUpdatingData(false);
-        });
+            .then((entries: CollectionItem[]) => {
+                if (this.type === 'books') {
+                    const books = entries as IBookCollectionItem[];
+                    this.store.setBooks(books);
+                }
+                if (this.type === 'shows') {
+                    const shows = entries as IShowCollectionItem[];
+                    this.store.setShows(shows);
+                }
+                if (this.type === 'games') {
+                    const games = entries as IGameCollectionItem[];
+                    this.store.setGames(games);
+                }
+            }).catch((error: Error) => {
+                this.noResults = true;
+                console.error(error);
+            }).finally(() => {
+                this.store.setUpdatingData(false);
+            });
     }
 
-    async removeFromCollection(item: CollectionItem): Promise<void> {
-        console.log('Removed item', item);
+    removeFromCollection(item: CollectionItem): void {
+        this.store.setUpdatingData(true);
+        ipcRenderer.invoke('/removeEntry', {
+            type: this.type,
+            id: item?.id,
+        } as IRemoveRequest)
+            .then((message: string) => {
+                console.log(message);
+                this.store.removeCollectionItem(this.type, item);
+                this.store.setUpdatingData(false);
+            })
+            .catch((error: Error) => {
+                console.error(error);
+                this.store.setUpdatingData(false);
+            });
     }
 }
 </script>

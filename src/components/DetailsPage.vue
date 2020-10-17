@@ -99,7 +99,6 @@
 </template>
 
 <script lang="ts">
-import { ipcRenderer } from 'electron';
 import { Observer } from 'mobx-vue';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { IBookCollectionItem } from '@/interfaces/IBookCollectionItem';
@@ -110,7 +109,11 @@ import { IShowResponse } from '@/interfaces/IShowResponse';
 import RootStore from '@/stores/RootStore';
 import { CollectionItem } from '@/types/CollectionItem';
 import { ResultItem } from '@/types/ResultItem';
+import { IRemoveRequest } from '@/interfaces/IRemoveRequest';
 import Details from './Details.vue';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { ipcRenderer } = window.require('electron');
 
 @Observer
 @Component({
@@ -217,7 +220,20 @@ export default class DetailsPage extends Vue {
     }
 
     removeFromCollection(item: CollectionItem): void {
-        console.log(item);
+        this.collectionStore.setUpdatingData(true);
+        ipcRenderer.invoke('/removeEntry', {
+            type: this.category.toLowerCase(),
+            id: item?.id,
+        } as IRemoveRequest)
+            .then((message: string) => {
+                console.log(message);
+                this.collectionStore.removeCollectionItem(this.category.toLowerCase(), item);
+                this.collectionStore.setUpdatingData(false);
+            })
+            .catch((error: Error) => {
+                console.error(error);
+                this.collectionStore.setUpdatingData(false);
+            });
     }
 }
 </script>

@@ -1,5 +1,5 @@
 import sqlite3 from 'sqlite3';
-import { dbFilename } from '../db';
+import dbFilename from '../db';
 import { IDbService } from '../interfaces/IDbService';
 import { IEntryRequest } from '../interfaces/IEntryRequest';
 import { IRemoveRequest } from '../interfaces/IRemoveRequest';
@@ -22,11 +22,9 @@ class DbService implements IDbService {
         let sql: sqlite3.Statement;
         if (request.type === 'books') {
             sql = db.prepare('INSERT INTO books(id, author_name, cover_i, title, first_publish_year) VALUES(NULL, ?, ?, ?, ?)');
-        }
-        else if (request.type === 'games') {
+        } else if (request.type === 'games') {
             sql = db.prepare('INSERT INTO games(id, name, background_image, released, rating, rating_top) VALUES(NULL, ?, ?, ?, ?, ?)');
-        }
-        else {
+        } else {
             sql = db.prepare('INSERT INTO shows(id, name, premiered, officialSite, status, summary, image_medium, image_original) VALUES(NULL, ?, ?, ?, ?, ?, ?, ?)');
         }
         sql.run(values);
@@ -41,7 +39,7 @@ class DbService implements IDbService {
         db.all(sql, type, (error, rows: CollectionItem[]) => {
             console.table(rows);
             items = rows;
-        })
+        });
         db.close();
         return items;
     }

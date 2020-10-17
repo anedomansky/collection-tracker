@@ -48,9 +48,9 @@ export default class SearchPanel extends Vue {
 
     @Prop() private category!: string;
 
-    term: string;
+    private term: string;
 
-    currentType: string;
+    private currentType: string;
 
     constructor() {
         super();
@@ -60,7 +60,7 @@ export default class SearchPanel extends Vue {
 
     submit(): void {
         if (this.term.length === 0) return;
-        this.$router.replace(`/result/list/${this.category}/${this.currentType.toLowerCase()}/${this.term}`);
+        this.$router.push(`/result/list/${this.category}/${this.currentType.toLowerCase()}/${this.term}`);
     }
 }
 </script>
