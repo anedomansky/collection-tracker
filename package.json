@@ -2,20 +2,19 @@
   "name": "collection-tracker",
   "version": "0.1.0",
   "private": true,
-  "main": "./dist/electron.js",
   "author": "Alexander Nedomansky <anedomansky@googlemail.com>",
-  "license": "MIT",
   "scripts": {
-    "electron:compile": "tsc --skipLibCheck --p ./tsconfig.electron.json && electron .",
-    "electron:start": "cross-env NODE_ENV=dev nodemon",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "postinstall": "electron-builder install-app-deps",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && tsc --skipLibCheck --p ./tsconfig.electron.json",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "dist": "electron-builder",
+    "electron:compile": "tsc --skipLibCheck --p ./tsconfig.electron.json && electron .",
+    "electron:start": "cross-env NODE_ENV=dev nodemon",
+    "pack": "electron-builder --dir",
+    "postinstall": "electron-builder install-app-deps"
   },
+  "main": "./dist/electron.js",
   "dependencies": {
     "@saeris/vue-spinners": "^1.0.8",
     "@types/sqlite3": "^3.1.6",
@@ -24,11 +23,10 @@
     "electron-devtools-installer": "^3.1.1",
     "electron-unhandled": "^3.0.2",
     "isomorphic-fetch": "^3.0.0",
-    "mobx": "^6.0.1",
-    "mobx-vue": "^2.0.11",
     "sqlite3": "^5.0.0",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0-0"
+    "vue-router": "^4.0.0-0",
+    "vuex": "^4.0.0-0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
@@ -40,6 +38,7 @@
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-plugin-unit-jest": "~4.5.0",
+    "@vue/cli-plugin-vuex": "^4.5.8",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-airbnb": "^5.0.2",
@@ -65,5 +64,6 @@
     "directories": {
       "output": "release"
     }
-  }
+  },
+  "license": "MIT"
 }
