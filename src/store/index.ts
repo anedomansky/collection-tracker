@@ -4,7 +4,6 @@ import ResultStore from './ResultStore';
 
 export default createStore({
     state: {
-        updatingData: false,
     },
     mutations: {
     },
