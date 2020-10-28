@@ -1,9 +1,9 @@
 import { ActionContext } from 'vuex';
 import Categories from '../enums/Categories';
-import { IBookResult } from '../interfaces/IBookResult';
-import { IGameResult } from '../interfaces/IGameResult';
-import { IResultStoreState } from '../interfaces/IResultStoreState';
-import { IShowResponse } from '../interfaces/IShowResponse';
+import { BookResult } from '../interfaces/BookResult';
+import { GameResult } from '../interfaces/GameResult';
+import { ResultStoreState } from '../interfaces/ResultStoreState';
+import { ShowResponse } from '../interfaces/ShowResponse';
 import { ResultItem } from '../types/ResultItem';
 
 interface ResultPayload {
@@ -18,31 +18,31 @@ const ResultStore = {
         shows: null,
         games: null,
         resultItem: null,
-    } as IResultStoreState),
+    } as ResultStoreState),
     mutations: {
-        setUpdatingData(state: IResultStoreState, payload: boolean) {
+        setUpdatingData(state: ResultStoreState, payload: boolean) {
             state.updatingData = payload;
         },
-        setBooks(state: IResultStoreState, payload: IBookResult[] | null) {
+        setBooks(state: ResultStoreState, payload: BookResult[] | null) {
             state.books = payload;
         },
-        setShows(state: IResultStoreState, payload: IShowResponse[] | null) {
+        setShows(state: ResultStoreState, payload: ShowResponse[] | null) {
             state.shows = payload;
         },
-        setGames(state: IResultStoreState, payload: IGameResult[] | null) {
+        setGames(state: ResultStoreState, payload: GameResult[] | null) {
             state.games = payload;
         },
-        setResultItem(state: IResultStoreState, payload: ResultItem) {
+        setResultItem(state: ResultStoreState, payload: ResultItem) {
             state.resultItem = payload;
         },
     },
     actions: {
-        reset({ commit }: ActionContext<IResultStoreState, {}>) {
+        reset({ commit }: ActionContext<ResultStoreState, {}>) {
             commit('setBooks', null);
             commit('setShows', null);
             commit('setGames', null);
         },
-        getResult({ commit, state }: ActionContext<IResultStoreState, {}>, payload: ResultPayload) {
+        getResult({ commit, state }: ActionContext<ResultStoreState, {}>, payload: ResultPayload) {
             const { category, title } = payload;
             let result;
             if (category === Categories.BOOKS) {
@@ -58,17 +58,20 @@ const ResultStore = {
         },
     },
     getters: {
-        currentUpdatingData(state: IResultStoreState) {
+        currentUpdatingData(state: ResultStoreState) {
             return state.updatingData;
         },
-        currentBooks(state: IResultStoreState) {
+        currentBooks(state: ResultStoreState) {
             return state.books;
         },
-        currentShows(state: IResultStoreState) {
+        currentShows(state: ResultStoreState) {
             return state.shows;
         },
-        currentGames(state: IResultStoreState) {
+        currentGames(state: ResultStoreState) {
             return state.games;
+        },
+        currentResultItem(state: ResultStoreState) {
+            return state.resultItem;
         },
     },
 };

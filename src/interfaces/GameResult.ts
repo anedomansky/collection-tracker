@@ -1,8 +1,8 @@
-export interface IGameCollectionItem {
-    id?: number;
+export interface GameResult {
+    id: number;
     name: string;
     background_image: string;
-    released: string;
+    released: Date;
     rating: number;
     rating_top: number;
 }

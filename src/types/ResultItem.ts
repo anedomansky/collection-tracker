@@ -1,5 +1,5 @@
-import { IBookResult } from '../interfaces/IBookResult';
-import { IShowResponse } from '../interfaces/IShowResponse';
-import { IGameResult } from '../interfaces/IGameResult';
+import { BookResult } from '../interfaces/BookResult';
+import { ShowResponse } from '../interfaces/ShowResponse';
+import { GameResult } from '../interfaces/GameResult';
 
-export type ResultItem = IBookResult | IShowResponse | IGameResult | null;
+export type ResultItem = BookResult | ShowResponse | GameResult | null;

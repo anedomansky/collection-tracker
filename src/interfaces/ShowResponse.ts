@@ -13,6 +13,6 @@ interface ShowResult {
     image: ShowImage;
 }
 
-export interface IShowResponse {
+export interface ShowResponse {
     show: ShowResult;
 }

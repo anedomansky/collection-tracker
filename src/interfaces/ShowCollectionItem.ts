@@ -1,4 +1,4 @@
-export interface IShowCollectionItem {
+export interface ShowCollectionItem {
     id?: number;
     name: string;
     premiered: string;
