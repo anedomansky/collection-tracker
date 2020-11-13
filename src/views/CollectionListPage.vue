@@ -91,45 +91,46 @@ export default defineComponent({
     },
     methods: {
         getEntries(): void {
-            this.store.reset();
-            this.noResults = false;
-            this.store.setUpdatingData(true);
-            ipcRenderer.invoke('/getEntries', this.params.type)
-                .then((entries: CollectionItem[]) => {
-                    if (this.params.type === 'books') {
-                        const books = entries as BookCollectionItem[];
-                        this.store.setBooks(books);
-                    }
-                    if (this.params.type === 'shows') {
-                        const shows = entries as ShowCollectionItem[];
-                        this.store.setShows(shows);
-                    }
-                    if (this.params.type === 'games') {
-                        const games = entries as GameCollectionItem[];
-                        this.store.setGames(games);
-                    }
-                }).catch((error: Error) => {
-                    this.noResults = true;
-                    console.error(error);
-                }).finally(() => {
-                    this.store.setUpdatingData(false);
-                });
+            console.log(this.$store);
+            // this.$store.reset();
+            // this.noResults = false;
+            // this.$store.setUpdatingData(true);
+            // ipcRenderer.invoke('/getEntries', this.params.type)
+            //     .then((entries: CollectionItem[]) => {
+            //         if (this.params.type === 'books') {
+            //             const books = entries as BookCollectionItem[];
+            //             this.$store.setBooks(books);
+            //         }
+            //         if (this.params.type === 'shows') {
+            //             const shows = entries as ShowCollectionItem[];
+            //             this.store.setShows(shows);
+            //         }
+            //         if (this.params.type === 'games') {
+            //             const games = entries as GameCollectionItem[];
+            //             this.store.setGames(games);
+            //         }
+            //     }).catch((error: Error) => {
+            //         this.noResults = true;
+            //         console.error(error);
+            //     }).finally(() => {
+            //         this.store.setUpdatingData(false);
+            //     });
         },
         removeFromCollection(item: CollectionItem): void {
-            this.store.setUpdatingData(true);
-            ipcRenderer.invoke('/removeEntry', {
-                type: this.params.type,
-                id: item?.id,
-            } as RemoveRequest)
-                .then((message: string) => {
-                    console.log(message);
-                    this.store.removeCollectionItem(this.params.type, item);
-                    this.store.setUpdatingData(false);
-                })
-                .catch((error: Error) => {
-                    console.error(error);
-                    this.store.setUpdatingData(false);
-                });
+            // this.store.setUpdatingData(true);
+            // ipcRenderer.invoke('/removeEntry', {
+            //     type: this.params.type,
+            //     id: item?.id,
+            // } as RemoveRequest)
+            //     .then((message: string) => {
+            //         console.log(message);
+            //         this.store.removeCollectionItem(this.params.type, item);
+            //         this.store.setUpdatingData(false);
+            //     })
+            //     .catch((error: Error) => {
+            //         console.error(error);
+            //         this.store.setUpdatingData(false);
+            //     });
         },
     },
 });

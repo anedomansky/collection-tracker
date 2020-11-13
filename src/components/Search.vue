@@ -1,24 +1,25 @@
 <template>
     <article class="search">
         <Button
-            :additionalClass="`search__tab tab-1 ${activeTab === 0 ? 'active': '' }`"
+            :params="{ additionalClass: `search__tab tab-1 ${activeTab === 0 ? 'active': '' }` }"
             @onClick="toggleTab(0)"
         >
             Books
         </button>
         <Button
-            :additionalClass="`search__tab tab-2 ${activeTab === 1 ? 'active' : ''}`"
+            :params="{ additionalClass: `search__tab tab-2 ${activeTab === 1 ? 'active' : ''}` }"
             @onClick="toggleTab(1)"
         >
             Games
         </button>
         <Button
-            :additionalClass="`search__tab tab-3 ${activeTab === 2 ? 'active' : ''}`"
+            :params="{ additionalClass: `search__tab tab-3 ${activeTab === 2 ? 'active' : ''}` }"
             @onClick="toggleTab(2)"
         >
             Shows
         </button>
         <div class="search__panels">
+            // TODO: add params - Props
             <SearchPanel
                 :typeValues="['Title', 'Genre', 'Author']"
                 :show="activeTab === 0"
