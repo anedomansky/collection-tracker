@@ -10,7 +10,7 @@
         >
         <Button
             v-if="params.result"
-            additionalClass="item__btn"
+            :params="{ additionalClass: 'item__btn' }"
             @onClick="add"
         >
             <img
@@ -20,7 +20,7 @@
         </Button>
         <Button
             v-else
-            additionalClass="item__btn"
+            :params="{ additionalClass: 'item__btn' }"
             @onClick="remove"
         >
             <img
@@ -73,6 +73,9 @@ export default defineComponent({
         remove(): void {
             this.$emit('onRemove');
         },
+    },
+    setup(props) {
+        console.log('Item:', props.params); // TODO: fix props
     },
 });
 </script>

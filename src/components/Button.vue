@@ -1,7 +1,7 @@
 <template>
     <button
-        :type="`${params.type ? params.type : 'button'}`"
-        :class="`btn ${params.additionalClass}`"
+        :type="`${type ? type : 'button'}`"
+        :class="`btn ${additionalClass}`"
         tabindex="0"
         @click.stop="onClick"
     >
@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, toRef } from 'vue';
 
 interface Props {
     additionalClass?: string;
@@ -28,6 +28,16 @@ export default defineComponent({
         onClick(): void {
             this.$emit('onClick');
         },
+    },
+    setup(props) {
+        const type = props.params && toRef(props.params, 'type');
+        const additionalClass = props.params && toRef(props.params, 'additionalClass');
+
+        // expose to template
+        return {
+            type,
+            additionalClass,
+        };
     },
 });
 </script>

@@ -12,6 +12,7 @@ interface ResultPayload {
 }
 
 const ResultStore = {
+    namespaced: true, // disables global scope
     state: () => ({
         updatingData: false,
         books: null,

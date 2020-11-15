@@ -16,6 +16,7 @@ interface RemoveCollectionItemPayload {
 }
 
 const CollectionStore = {
+    namespaced: true, // disables global scope
     state: () => ({
         updatingData: false,
         books: null,

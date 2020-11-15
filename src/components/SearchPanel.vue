@@ -22,9 +22,9 @@
                 placeholder="Enter a search term..."
                 v-model="term"
             >
-            <Button type="submit">
+            <Button :params="{ type: 'submit' }">
                 <img
-                    :src="'/assets/icons/search.svg'"
+                    :src="require('@/assets/icons/search.svg')"
                     alt="Search"
                 >
             </Button>
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, toRef } from 'vue';
 import Button from '@/components/Button.vue';
 
 interface Props {
@@ -67,6 +67,18 @@ export default defineComponent({
             if (this.term.length === 0) return;
             this.$router.push(`/result/list/${this.params.category}/${this.currentType.toLowerCase()}/${this.term}`);
         },
+    },
+    setup(props) {
+        const show = toRef(props.params, 'show');
+        const typeValues = toRef(props.params, 'typeValues');
+        const category = toRef(props.params, 'category');
+
+        // expose to template
+        return {
+            show,
+            typeValues,
+            category,
+        };
     },
 });
 </script>

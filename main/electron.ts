@@ -2,8 +2,10 @@ import electron, { BrowserWindow } from 'electron';
 import path from 'path';
 import url from 'url';
 import unhandled from 'electron-unhandled';
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import './websocket';
 import './db';
+import Colors from './config/Colors';
 
 unhandled();
 
@@ -12,19 +14,11 @@ const PORT = process.env.PORT || 8080;
 
 let window: BrowserWindow | null;
 
-const installExtensions = async () => {
-    const installer = require('electron-devtools-installer');
-    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-    const extensions = ['VUEJS_DEVTOOLS', 'MOBX_DEVTOOLS'];
-
-    return Promise.all(
-        extensions.map((name) => installer.default(installer[name], forceDownload)),
-    ).catch(console.log);
-};
-
 const createWindow = async (): Promise<void> => {
     if (process.env.NODE_ENV === 'dev') {
-        await installExtensions();
+        installExtension(VUEJS_DEVTOOLS)
+            .then((name) => console.log(Colors.fgGreen, `> Added Extension:  ${name}`, Colors.fgReset))
+            .catch((error) => console.trace(Colors.fgRed, '> An error occurred: ', error, Colors.fgReset));
     }
 
     window = new BrowserWindow({

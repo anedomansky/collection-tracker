@@ -19,21 +19,14 @@
             Shows
         </button>
         <div class="search__panels">
-            // TODO: add params - Props
             <SearchPanel
-                :typeValues="['Title', 'Genre', 'Author']"
-                :show="activeTab === 0"
-                :category="'Books'"
+                :params="{ typeValues: ['Title', 'Genre', 'Author'], show: activeTab === 0, category: 'Books' }"
             />
             <SearchPanel
-                :typeValues="['Title', 'Genre', 'Developer']"
-                :show="activeTab === 1"
-                :category="'Games'"
+                :params="{ typeValues: ['Title', 'Genre', 'Developer'], show: activeTab === 1, category: 'Games' }"
             />
             <SearchPanel
-                :typeValues="['Title']"
-                :show="activeTab === 2"
-                :category="'Shows'"
+                :params="{ typeValues: ['Title'], show: activeTab === 2, category: 'Shows' }"
             />
         </div>
     </article>

@@ -1,18 +1,18 @@
 <template>
     <router-link
-        :to="params.to"
+        :to="to"
         class="nav-icon"
     >
         <img
-            :class="params.additionalClassNames"
-            :src="`/assets/icons/${params.icon}`"
-            :alt="params.altText"
+            :class="additionalClassNames"
+            :src="require(`@/assets/icons/${icon}`)"
+            :alt="altText"
         >
     </router-link>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, toRef } from 'vue';
 
 interface Props {
     icon: string;
@@ -28,6 +28,20 @@ export default defineComponent({
             type: Object as PropType<Props>,
             required: true,
         },
+    },
+    setup(props) {
+        const icon = toRef(props.params, 'icon');
+        const altText = toRef(props.params, 'altText');
+        const to = toRef(props.params, 'to');
+        const additionalClassNames = toRef(props.params, 'additionalClassNames');
+
+        // expose to template
+        return {
+            icon,
+            altText,
+            to,
+            additionalClassNames,
+        };
     },
 });
 </script>
