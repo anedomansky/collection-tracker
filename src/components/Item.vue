@@ -4,12 +4,12 @@
         @click="toDetailPage"
     >
         <img
-            :src="params.imageSrc"
-            :alt="params.title"
+            :src="imageSrc"
+            :alt="title"
             class="item__thumbnail"
         >
         <Button
-            v-if="params.result"
+            v-if="result"
             :params="{ additionalClass: 'item__btn' }"
             @onClick="add"
         >
@@ -28,12 +28,12 @@
                 alt="Remove"
             >
         </Button>
-        <span class="item__title">{{ params.title }}</span>
+        <span class="item__title">{{ title }}</span>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, toRef } from 'vue';
 import Button from '@/components/Button.vue';
 
 interface Props {
@@ -41,11 +41,6 @@ interface Props {
     category: string;
     title: string;
     result: boolean;
-}
-
-interface State {
-    term: string;
-    currentType: string;
 }
 
 export default defineComponent({
@@ -75,7 +70,18 @@ export default defineComponent({
         },
     },
     setup(props) {
-        console.log('Item:', props.params); // TODO: fix props
+        const imageSrc = toRef(props.params, 'imageSrc');
+        const category = toRef(props.params, 'category');
+        const title = toRef(props.params, 'title');
+        const result = toRef(props.params, 'result');
+
+        // expose to template
+        return {
+            imageSrc,
+            category,
+            title,
+            result,
+        };
     },
 });
 </script>

@@ -19,6 +19,7 @@ const CollectionStore = {
     namespaced: true, // disables global scope
     state: () => ({
         updatingData: false,
+        errorOccurred: false,
         books: null,
         shows: null,
         games: null,
@@ -27,6 +28,9 @@ const CollectionStore = {
     mutations: {
         setUpdatingData(state: CollectionStoreState, payload: boolean) {
             state.updatingData = payload;
+        },
+        setErrorOccurred(state: CollectionStoreState, payload: boolean) {
+            state.errorOccurred = payload;
         },
         setBooks(state: CollectionStoreState, payload: BookCollectionItem[] | null) {
             state.books = payload;
@@ -86,6 +90,9 @@ const CollectionStore = {
     getters: {
         currentUpdatingData(state: CollectionStoreState) {
             return state.updatingData;
+        },
+        currentErrorOccurred(state: CollectionStoreState) {
+            return state.errorOccurred;
         },
         currentBooks(state: CollectionStoreState) {
             return state.books;

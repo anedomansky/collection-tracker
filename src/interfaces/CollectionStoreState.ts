@@ -5,6 +5,7 @@ import { ShowCollectionItem } from './ShowCollectionItem';
 
 export interface CollectionStoreState {
     updatingData: boolean;
+    errorOccurred: boolean;
     books: BookCollectionItem[] | null;
     shows: ShowCollectionItem[] | null;
     games: GameCollectionItem[] | null;
