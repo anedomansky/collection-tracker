@@ -4,44 +4,37 @@
         @click="toDetailPage"
     >
         <img
-            :src="imageSrc"
-            :alt="title"
+            :src="imageSrcRef"
+            :alt="titleRef"
             class="item__thumbnail"
         >
         <Button
-            v-if="result"
-            :params="{ additionalClass: 'item__btn' }"
-            @onClick="add"
+            v-if="resultRef"
+            additionalClass="item__btn"
+            @on-click="add"
         >
             <img
-                src="/assets/icons/plus.svg"
+                :src="require('@/assets/icons/plus.svg')"
                 alt="Add"
             >
         </Button>
         <Button
             v-else
-            :params="{ additionalClass: 'item__btn' }"
-            @onClick="remove"
+            additionalClass="item__btn"
+            @on-click="remove"
         >
             <img
-                src="/assets/icons/minus.svg"
+                :src="require('@/assets/icons/minus.svg')"
                 alt="Remove"
             >
         </Button>
-        <span class="item__title">{{ title }}</span>
+        <span class="item__title">{{ titleRef }}</span>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRef } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 import Button from '@/components/Button.vue';
-
-interface Props {
-    imageSrc: string;
-    category: string;
-    title: string;
-    result: boolean;
-}
 
 export default defineComponent({
     name: 'Item',
@@ -49,38 +42,50 @@ export default defineComponent({
         Button,
     },
     props: {
-        params: {
-            type: Object as PropType<Props>,
+        imageSrc: {
+            type: String,
+            required: true,
+        },
+        category: {
+            type: String,
+            required: true,
+        },
+        title: {
+            type: String,
+            required: true,
+        },
+        result: {
+            type: Boolean,
             required: true,
         },
     },
     methods: {
         toDetailPage(): void {
-            if (this.params.result) {
-                this.$router.push(`/result/details/${this.params.category}/${this.params.title}`);
+            if (this.$props.result) {
+                this.$router.push(`/result/details/${this.$props.category}/${this.$props.title}`);
             } else {
-                this.$router.push(`/collection/details/${this.params.category}/${this.params.title}`);
+                this.$router.push(`/collection/details/${this.$props.category}/${this.$props.title}`);
             }
         },
         add(): void {
-            this.$emit('onAdd');
+            this.$emit('on-add');
         },
         remove(): void {
-            this.$emit('onRemove');
+            this.$emit('on-remove');
         },
     },
     setup(props) {
-        const imageSrc = toRef(props.params, 'imageSrc');
-        const category = toRef(props.params, 'category');
-        const title = toRef(props.params, 'title');
-        const result = toRef(props.params, 'result');
+        const imageSrcRef = toRefs(props).imageSrc;
+        const categoryRef = toRefs(props).category;
+        const titleRef = toRefs(props).title;
+        const resultRef = toRefs(props).result;
 
         // expose to template
         return {
-            imageSrc,
-            category,
-            title,
-            result,
+            imageSrcRef,
+            categoryRef,
+            titleRef,
+            resultRef,
         };
     },
 });

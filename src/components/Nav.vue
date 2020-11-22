@@ -2,16 +2,32 @@
     <nav>
         <ul>
             <li>
-                <NavIcon :params="{ icon: 'home.svg', altText: 'Home', to: '/', additionalClassNames: '' }" />
+                <NavIcon
+                    icon="home.svg"
+                    altText="Home"
+                    to="/"
+                />
             </li>
             <li>
-                <NavIcon :params="{ icon: 'videos.svg', altText: 'Shows', to: '/collection/list/shows', additionalClassNames: '' }" />
+                <NavIcon
+                    icon="videos.svg"
+                    altText="Shows"
+                    to="/collection/list/shows"
+                />
             </li>
             <li>
-                <NavIcon :params="{ icon: 'games.svg', altText: 'Games', to: '/collection/list/games', additionalClassNames: '' }" />
+                <NavIcon
+                    icon="games.svg"
+                    altText="Games"
+                    to="/collection/list/games"
+                />
             </li>
             <li>
-                <NavIcon :params="{ icon: 'books.svg', altText: 'Books', to: '/collection/list/books', additionalClassNames: '' }" />
+                <NavIcon
+                    icon="books.svg"
+                    altText="Books"
+                    to="/collection/list/books"
+                />
             </li>
         </ul>
     </nav>

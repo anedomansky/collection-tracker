@@ -11,11 +11,11 @@
         </Button>
         <img
             class="details__cover"
-            :src="imgSrc"
+            :src="imgSrcRef"
             alt="Cover"
         >
         <Button
-            v-if="result"
+            v-if="resultRef"
             additionalClass="details__add-btn"
             @onClick="add"
         >
@@ -41,15 +41,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRef } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 import Button from '@/components/Button.vue';
-import { CollectionItem } from '../types/CollectionItem';
-
-interface Props {
-    item: CollectionItem;
-    imgSrc: string;
-    result: boolean;
-}
 
 export default defineComponent({
     name: 'Details',
@@ -57,8 +50,12 @@ export default defineComponent({
         Button,
     },
     props: {
-        params: {
-            type: Object as PropType<Props>,
+        imgSrc: {
+            type: String,
+            required: true,
+        },
+        result: {
+            type: Boolean,
             required: true,
         },
     },
@@ -67,22 +64,20 @@ export default defineComponent({
             this.$router.back();
         },
         add(): void {
-            this.$emit('onAdd');
+            this.$emit('on-add');
         },
         remove(): void {
-            this.$emit('onRemove');
+            this.$emit('on-remove');
         },
     },
     setup(props) {
-        const item = toRef(props.params, 'item');
-        const imgSrc = toRef(props.params, 'imgSrc');
-        const result = toRef(props.params, 'result');
+        const imgSrcRef = toRefs(props).imgSrc;
+        const resultRef = toRefs(props).result;
 
         // expose to template
         return {
-            item,
-            imgSrc,
-            result,
+            imgSrcRef,
+            resultRef,
         };
     },
 });

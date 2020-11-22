@@ -1,7 +1,7 @@
 <template>
     <div
         class="search__panel"
-        v-show="show"
+        v-show="showRef"
     >
         <select
             name="Type"
@@ -9,7 +9,7 @@
             v-model="currentType"
         >
             <option
-                v-for="type in typeValues"
+                v-for="type in typeValuesRef"
                 :key="type"
                 :value="type"
             >
@@ -22,7 +22,7 @@
                 placeholder="Enter a search term..."
                 v-model="term"
             >
-            <Button :params="{ type: 'submit' }">
+            <Button type="submit">
                 <img
                     :src="require('@/assets/icons/search.svg')"
                     alt="Search"
@@ -33,14 +33,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRef } from 'vue';
+import { defineComponent, PropType, toRefs } from 'vue';
 import Button from '@/components/Button.vue';
-
-interface Props {
-    typeValues: string[];
-    show: boolean;
-    category: string;
-}
 
 interface State {
     term: string;
@@ -53,31 +47,39 @@ export default defineComponent({
         Button,
     },
     props: {
-        params: {
-            type: Object as PropType<Props>,
+        typeValues: {
+            type: Array as PropType<string[]>,
+            required: true,
+        },
+        show: {
+            type: Boolean,
+            required: true,
+        },
+        category: {
+            type: String,
             required: true,
         },
     },
     data: (props): State => ({
         term: '',
-        currentType: props.params.typeValues[0],
+        currentType: props.typeValues[0],
     }),
     methods: {
         submit(): void {
             if (this.term.length === 0) return;
-            this.$router.push(`/result/list/${this.params.category}/${this.currentType.toLowerCase()}/${this.term}`);
+            this.$router.push(`/result/list/${this.$props.category}/${this.currentType.toLowerCase()}/${this.term}`);
         },
     },
     setup(props) {
-        const show = toRef(props.params, 'show');
-        const typeValues = toRef(props.params, 'typeValues');
-        const category = toRef(props.params, 'category');
+        const showRef = toRefs(props).show;
+        const typeValuesRef = toRefs(props).typeValues;
+        const categoryRef = toRefs(props).category;
 
         // expose to template
         return {
-            show,
-            typeValues,
-            category,
+            showRef,
+            typeValuesRef,
+            categoryRef,
         };
     },
 });

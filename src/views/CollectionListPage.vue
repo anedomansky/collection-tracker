@@ -20,7 +20,7 @@
                     :imageSrc="`http://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`"
                     category="Books"
                     :title="book.title"
-                    @onRemove="removeFromCollection(book)"
+                    @on-remove="removeFromCollection(book)"
                     :result="false"
                 />
             </template>
@@ -31,7 +31,7 @@
                     :imageSrc="game.background_image"
                     category="Games"
                     :title="game.name"
-                    @onRemove="removeFromCollection(game)"
+                    @on-remove="removeFromCollection(game)"
                     :result="false"
                 />
             </template>
@@ -42,7 +42,7 @@
                     :imageSrc="show.image && show.image.medium"
                     category="Shows"
                     :title="show.name"
-                    @onRemove="removeFromCollection(show)"
+                    @on-remove="removeFromCollection(show)"
                     :result="false"
                 />
             </template>

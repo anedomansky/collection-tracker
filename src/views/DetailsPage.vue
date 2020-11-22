@@ -5,8 +5,7 @@
                 v-if="resultItem !== null && category === 'Books'"
                 :result="result"
                 :imgSrc="`http://covers.openlibrary.org/b/id/${resultItem.cover_i}-L.jpg`"
-                :item="resultItem"
-                @onAdd="addToCollection(resultItem)"
+                @on-add="addToCollection(resultItem)"
             >
                 <p>{{ resultItem.title }}</p>
                 <p>{{ resultItem.author_name[0] }}</p>
@@ -16,8 +15,7 @@
                 v-if="resultItem !== null && category === 'Games'"
                 :result="result"
                 :imgSrc="resultItem.background_image"
-                :item="resultItem"
-                @onAdd="addToCollection(resultItem)"
+                @on-add="addToCollection(resultItem)"
             >
                 <p>{{ resultItem.name }}</p>
                 <p>
@@ -34,8 +32,7 @@
                 v-if="resultItem !== null && category === 'Shows'"
                 :result="result"
                 :imgSrc="resultItem.show.image && resultItem.show.image.original"
-                :item="resultItem"
-                @onAdd="addToCollection(resultItem)"
+                @on-add="addToCollection(resultItem)"
             >
                 <p>{{ resultItem.show.name }}</p>
                 <p>
@@ -54,8 +51,7 @@
                 v-if="collectionItem !== null && category === 'Books'"
                 :result="result"
                 :imgSrc="`http://covers.openlibrary.org/b/id/${collectionItem.cover_i}-L.jpg`"
-                :item="collectionItem"
-                @onRemove="removeFromCollection(collectionItem)"
+                @on-remove="removeFromCollection(collectionItem)"
             >
                 <p>{{ collectionItem.title }}</p>
                 <p>{{ collectionItem.author_name }}</p>
@@ -65,8 +61,7 @@
                 v-if="collectionItem !== null && category === 'Games'"
                 :result="result"
                 :imgSrc="collectionItem.background_image"
-                :item="collectionItem"
-                @onRemove="removeFromCollection(collectionItem)"
+                @on-remove="removeFromCollection(collectionItem)"
             >
                 <p>{{ collectionItem.name }}</p>
                 <p>
@@ -83,8 +78,7 @@
                 v-if="collectionItem !== null && category === 'Shows'"
                 :result="result"
                 :imgSrc="collectionItem.image_original"
-                :item="collectionItem"
-                @onRemove="removeFromCollection(collectionItem)"
+                @on-remove="removeFromCollection(collectionItem)"
             >
                 <p>{{ collectionItem.name }}</p>
                 <!-- <p>

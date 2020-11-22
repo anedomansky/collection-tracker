@@ -1,46 +1,51 @@
 <template>
     <router-link
-        :to="to"
+        :to="toRef"
         class="nav-icon"
     >
         <img
-            :class="additionalClassNames"
-            :src="require(`@/assets/icons/${icon}`)"
-            :alt="altText"
+            :class="additionalClassNamesRef"
+            :src="require(`@/assets/icons/${iconRef}`)"
+            :alt="altTextRef"
         >
     </router-link>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRef } from 'vue';
-
-interface Props {
-    icon: string;
-    altText: string;
-    to: string;
-    additionalClassNames: string;
-}
+import { defineComponent, toRefs } from 'vue';
 
 export default defineComponent({
     name: 'NavIcon',
     props: {
-        params: {
-            type: Object as PropType<Props>,
+        icon: {
+            type: String,
             required: true,
+        },
+        altText: {
+            type: String,
+            required: true,
+        },
+        to: {
+            type: String,
+            required: true,
+        },
+        additionalClassNames: {
+            type: String,
+            required: false,
         },
     },
     setup(props) {
-        const icon = toRef(props.params, 'icon');
-        const altText = toRef(props.params, 'altText');
-        const to = toRef(props.params, 'to');
-        const additionalClassNames = toRef(props.params, 'additionalClassNames');
+        const iconRef = toRefs(props).icon;
+        const altTextRef = toRefs(props).altText;
+        const toRef = toRefs(props).to;
+        const additionalClassNamesRef = toRefs(props).additionalClassNames;
 
         // expose to template
         return {
-            icon,
-            altText,
-            to,
-            additionalClassNames,
+            iconRef,
+            altTextRef,
+            toRef,
+            additionalClassNamesRef,
         };
     },
 });

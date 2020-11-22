@@ -1,39 +1,45 @@
 <template>
     <article class="search">
         <Button
-            :params="{ additionalClass: `search__tab tab-1 ${activeTab === 0 ? 'active': '' }` }"
-            @onClick="toggleTab(0)"
+            :additionalClass="`search__tab tab-1 ${state.activeTab === 0 ? 'active': '' }`"
+            @on-click="toggleTab(0)"
         >
             Books
         </button>
         <Button
-            :params="{ additionalClass: `search__tab tab-2 ${activeTab === 1 ? 'active' : ''}` }"
-            @onClick="toggleTab(1)"
+            :additionalClass="`search__tab tab-2 ${state.activeTab === 1 ? 'active' : ''}`"
+            @on-click="toggleTab(1)"
         >
             Games
         </button>
         <Button
-            :params="{ additionalClass: `search__tab tab-3 ${activeTab === 2 ? 'active' : ''}` }"
-            @onClick="toggleTab(2)"
+            :additionalClass="`search__tab tab-3 ${state.activeTab === 2 ? 'active' : ''}`"
+            @on-click="toggleTab(2)"
         >
             Shows
         </button>
         <div class="search__panels">
             <SearchPanel
-                :params="{ typeValues: ['Title', 'Genre', 'Author'], show: activeTab === 0, category: 'Books' }"
+                :typeValues="['Title', 'Genre', 'Author']"
+                :show="state.activeTab === 0"
+                category="Books"
             />
             <SearchPanel
-                :params="{ typeValues: ['Title', 'Genre', 'Developer'], show: activeTab === 1, category: 'Games' }"
+                :typeValues="['Title', 'Genre', 'Developer']"
+                :show="state.activeTab === 1"
+                category="Games"
             />
             <SearchPanel
-                :params="{ typeValues: ['Title'], show: activeTab === 2, category: 'Shows' }"
+                :typeValues="['Title']"
+                :show="state.activeTab === 2"
+                category="Shows"
             />
         </div>
     </article>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import Button from '@/components/Button.vue';
 import SearchPanel from '@/components/SearchPanel.vue';
 
@@ -47,13 +53,19 @@ export default defineComponent({
         SearchPanel,
         Button,
     },
-    data: (): State => ({
-        activeTab: 0,
-    }),
-    methods: {
-        toggleTab(tabNumber: number): void {
-            this.activeTab = tabNumber;
-        },
+    setup() {
+        const state: State = reactive({
+            activeTab: 0,
+        });
+
+        const toggleTab = (tabNumber: number): void => {
+            state.activeTab = tabNumber;
+        };
+
+        return {
+            state,
+            toggleTab,
+        };
     },
 });
 </script>
