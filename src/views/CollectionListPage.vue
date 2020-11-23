@@ -10,7 +10,7 @@
                     :size="loadingSpinnerSize"
                 />
             </div>
-            <div v-if="noResults">
+            <div v-if="state.noResults">
                 No Collection Items found!
             </div>
             <template v-if="typeRef === 'books'">
@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent, reactive, toRefs } from 'vue';
 import { BeatLoader } from '@saeris/vue-spinners';
 import { CollectionItem } from '@/types/CollectionItem';
 import Item from '@/components/Item.vue';
@@ -79,9 +79,6 @@ export default defineComponent({
             required: true,
         },
     },
-    data: (): State => ({
-        noResults: false,
-    }),
     mounted(): void {
         this.getEntries();
     },
@@ -132,9 +129,14 @@ export default defineComponent({
     setup(props) {
         const typeRef = toRefs(props).type;
 
+        const state: State = reactive({
+            noResults: false,
+        });
+
         // expose to template
         return {
             typeRef,
+            state,
         };
     },
 });

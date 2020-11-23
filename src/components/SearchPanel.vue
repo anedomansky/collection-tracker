@@ -6,10 +6,10 @@
         <select
             name="Type"
             id="type"
-            v-model="currentType"
+            v-model="state.currentType"
         >
             <option
-                v-for="type in typeValuesRef"
+                v-for="type in typeValuesRef.value"
                 :key="type"
                 :value="type"
             >
@@ -20,7 +20,7 @@
             <input
                 type="text"
                 placeholder="Enter a search term..."
-                v-model="term"
+                v-model="state.term"
             >
             <Button type="submit">
                 <img
@@ -33,7 +33,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRefs } from 'vue';
+import {
+    defineComponent,
+    getCurrentInstance,
+    PropType,
+    reactive,
+    toRefs,
+} from 'vue';
 import Button from '@/components/Button.vue';
 
 interface State {
@@ -60,26 +66,31 @@ export default defineComponent({
             required: true,
         },
     },
-    data: (props): State => ({
-        term: '',
-        currentType: props.typeValues[0],
-    }),
-    methods: {
-        submit(): void {
-            if (this.term.length === 0) return;
-            this.$router.push(`/result/list/${this.$props.category}/${this.currentType.toLowerCase()}/${this.term}`);
-        },
-    },
     setup(props) {
+        const instance = getCurrentInstance();
         const showRef = toRefs(props).show;
         const typeValuesRef = toRefs(props).typeValues;
         const categoryRef = toRefs(props).category;
+
+        const state: State = reactive({
+            term: '',
+            currentType: typeValuesRef.value[0],
+        });
+
+        const submit = () => {
+            if (state.term.length === 0) return;
+            if (instance && instance.proxy) {
+                instance.proxy.$router.push(`/result/list/${categoryRef}/${state.currentType.toLowerCase()}/${state.term}`);
+            }
+        };
 
         // expose to template
         return {
             showRef,
             typeValuesRef,
             categoryRef,
+            state,
+            submit,
         };
     },
 });

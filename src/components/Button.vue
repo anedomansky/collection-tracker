@@ -26,6 +26,10 @@ export default defineComponent({
     },
     methods: {
         onClick(): void {
+            console.log(this.$store.state.result);
+            console.log(this.$store.getters['result/currentUpdatingData']);
+            // this.$store.dispatch('yourModuleName/doSomething') - action
+            // this.$store.commit('yourModuleName/doSomething') - mutation
             this.$emit('on-click');
         },
     },

@@ -7,10 +7,10 @@
             >
                 <BeatLoader
                     color="#ffffff"
-                    :size="loadingSpinnerSize"
+                    :size="state.loadingSpinnerSize"
                 />
             </div>
-            <div v-if="noResults">
+            <div v-if="state.noResults">
                 No Results
             </div>
             <Item
@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent, reactive, toRefs } from 'vue';
 import { BeatLoader } from '@saeris/vue-spinners';
 import { CollectionItem } from '@/types/CollectionItem';
 import Item from '@/components/Item.vue';
@@ -223,11 +223,17 @@ export default defineComponent({
         const typeRef = toRefs(props).type;
         const termRef = toRefs(props).term;
 
+        const state: State = reactive({
+            noResults: false,
+            loadingSpinnerSize: 32,
+        });
+
         // expose to template
         return {
             categoryRef,
             typeRef,
             termRef,
+            state,
         };
     },
 });
