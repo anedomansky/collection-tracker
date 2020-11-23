@@ -13,7 +13,7 @@
             <div v-if="noResults">
                 No Collection Items found!
             </div>
-            <template v-if="type === 'books'">
+            <template v-if="typeRef === 'books'">
                 <Item
                     v-for="book in store.currentBooks"
                     :key="book.cover_i"
@@ -24,7 +24,7 @@
                     :result="false"
                 />
             </template>
-            <template v-if="type === 'games'">
+            <template v-if="typeRef === 'games'">
                 <Item
                     v-for="game in store.currentGames"
                     :key="game.id"
@@ -35,7 +35,7 @@
                     :result="false"
                 />
             </template>
-            <template v-if="type === 'shows'">
+            <template v-if="typeRef === 'shows'">
                 <Item
                     v-for="show in store.currentShows"
                     :key="show.id"
@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRef } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 import { BeatLoader } from '@saeris/vue-spinners';
 import { CollectionItem } from '@/types/CollectionItem';
 import Item from '@/components/Item.vue';
@@ -62,10 +62,6 @@ import { RemoveRequest } from '@/interfaces/RemoveRequest';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ipcRenderer } = window.require('electron');
-
-interface Props {
-    type: string;
-}
 
 interface State {
     noResults: boolean;
@@ -78,8 +74,8 @@ export default defineComponent({
         BeatLoader,
     },
     props: {
-        params: {
-            type: Object as PropType<Props>,
+        type: {
+            type: String,
             required: true,
         },
     },
@@ -134,11 +130,11 @@ export default defineComponent({
         },
     },
     setup(props) {
-        const type = toRef(props.params, 'type');
+        const typeRef = toRefs(props).type;
 
         // expose to template
         return {
-            type,
+            typeRef,
         };
     },
 });

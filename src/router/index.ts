@@ -39,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
         ),
         component: import(/* webpackChunkName: "CollectionDetailsPage" */ '../views/DetailsPage.vue'),
     },
+    {
+        path: '/result/list/:category/:type/:term',
+        props: true,
+        component: import(/* webpackChunkName: "SearchResultPage" */ '../views/SearchResultPage.vue'),
+    },
 ];
 
 const router = createRouter({

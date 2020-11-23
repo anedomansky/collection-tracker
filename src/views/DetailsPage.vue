@@ -1,9 +1,9 @@
 <template>
     <article class="details-page">
-        <template v-if="result">
+        <template v-if="resultRef">
             <Details
-                v-if="resultItem !== null && category === 'Books'"
-                :result="result"
+                v-if="resultItem !== null && categoryRef === 'Books'"
+                :result="resultRef"
                 :imgSrc="`http://covers.openlibrary.org/b/id/${resultItem.cover_i}-L.jpg`"
                 @on-add="addToCollection(resultItem)"
             >
@@ -13,7 +13,7 @@
             </Details>
             <Details
                 v-if="resultItem !== null && category === 'Games'"
-                :result="result"
+                :result="resultRef"
                 :imgSrc="resultItem.background_image"
                 @on-add="addToCollection(resultItem)"
             >
@@ -29,8 +29,8 @@
                 <p>{{ resultItem.released }}</p>
             </Details>
             <Details
-                v-if="resultItem !== null && category === 'Shows'"
-                :result="result"
+                v-if="resultItem !== null && categoryRef === 'Shows'"
+                :result="resultRef"
                 :imgSrc="resultItem.show.image && resultItem.show.image.original"
                 @on-add="addToCollection(resultItem)"
             >
@@ -48,8 +48,8 @@
         </template>
         <template v-else>
             <Details
-                v-if="collectionItem !== null && category === 'Books'"
-                :result="result"
+                v-if="collectionItem !== null && categoryRef === 'Books'"
+                :result="resultRef"
                 :imgSrc="`http://covers.openlibrary.org/b/id/${collectionItem.cover_i}-L.jpg`"
                 @on-remove="removeFromCollection(collectionItem)"
             >
@@ -58,8 +58,8 @@
                 <p>{{ collectionItem.first_publish_year }}</p>
             </Details>
             <Details
-                v-if="collectionItem !== null && category === 'Games'"
-                :result="result"
+                v-if="collectionItem !== null && categoryRef === 'Games'"
+                :result="resultRef"
                 :imgSrc="collectionItem.background_image"
                 @on-remove="removeFromCollection(collectionItem)"
             >
@@ -75,8 +75,8 @@
                 <p>{{ collectionItem.released }}</p>
             </Details>
             <Details
-                v-if="collectionItem !== null && category === 'Shows'"
-                :result="result"
+                v-if="collectionItem !== null && categoryRef === 'Shows'"
+                :result="resultRef"
                 :imgSrc="collectionItem.image_original"
                 @on-remove="removeFromCollection(collectionItem)"
             >
@@ -93,7 +93,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRef } from 'vue';
+import { defineComponent, PropType, toRefs } from 'vue';
 import Details from '@/components/Details.vue';
 import { BookResult } from '../interfaces/BookResult';
 import { ResultItem } from '../types/ResultItem';
@@ -107,20 +107,22 @@ import { EntryRequest } from '../interfaces/EntryRequest';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ipcRenderer } = window.require('electron');
 
-interface Props {
-    category: string | string[];
-    title: string | string[];
-    result: boolean;
-}
-
 export default defineComponent({
     name: 'DetailsPage',
     components: {
         Details,
     },
     props: {
-        params: {
-            type: Object as PropType<Props>,
+        category: {
+            type: Object as PropType<string | string[]>,
+            required: true,
+        },
+        title: {
+            type: Object as PropType<string | string[]>,
+            required: true,
+        },
+        result: {
+            type: Boolean,
             required: true,
         },
     },
@@ -224,15 +226,15 @@ export default defineComponent({
         },
     },
     setup(props) {
-        const category = toRef(props.params, 'category');
-        const title = toRef(props.params, 'title');
-        const result = toRef(props.params, 'result');
+        const categoryRef = toRefs(props).category;
+        const titleRef = toRefs(props).title;
+        const resultRef = toRefs(props).result;
 
         // expose to template
         return {
-            category,
-            title,
-            result,
+            categoryRef,
+            titleRef,
+            resultRef,
         };
     },
 });
