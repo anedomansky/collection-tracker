@@ -127,7 +127,6 @@ export default defineComponent({
         },
     },
     mounted(): void {
-        console.log(this.$store);
         // if (this.$props.params.result) {
         //     this.resultItem = this.resultStore.getResult(this.$props.params.category, this.$props.params.title);
         // } else {

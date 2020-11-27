@@ -1,111 +1,76 @@
-import { ActionContext } from 'vuex';
+import { reactive } from 'vue';
 import { BookCollectionItem } from '../interfaces/BookCollectionItem';
-import { CollectionStoreState } from '../interfaces/CollectionStoreState';
 import { GameCollectionItem } from '../interfaces/GameCollectionItem';
 import { ShowCollectionItem } from '../interfaces/ShowCollectionItem';
 import { CollectionItem } from '../types/CollectionItem';
 
-interface GetCollectionItemPayload {
-    category: string;
-    title: string;
-}
-
-interface RemoveCollectionItemPayload {
-    category: string;
-    item: CollectionItem;
+interface State {
+    updatingData: boolean;
+    errorOccurred: boolean;
+    books: BookCollectionItem[] | null;
+    shows: ShowCollectionItem[] | null;
+    games: GameCollectionItem[] | null;
+    collectionItem: CollectionItem;
 }
 
 const CollectionStore = {
-    namespaced: true, // disables global scope
-    state: () => ({
+    state: reactive({
         updatingData: false,
         errorOccurred: false,
         books: null,
         shows: null,
         games: null,
         collectionItem: null,
-    } as CollectionStoreState),
-    mutations: {
-        setUpdatingData(state: CollectionStoreState, payload: boolean) {
-            state.updatingData = payload;
-        },
-        setErrorOccurred(state: CollectionStoreState, payload: boolean) {
-            state.errorOccurred = payload;
-        },
-        setBooks(state: CollectionStoreState, payload: BookCollectionItem[] | null) {
-            state.books = payload;
-        },
-        setShows(state: CollectionStoreState, payload: ShowCollectionItem[] | null) {
-            state.shows = payload;
-        },
-        setGames(state: CollectionStoreState, payload: GameCollectionItem[] | null) {
-            state.games = payload;
-        },
-        setCollectionItem(state: CollectionStoreState, payload: CollectionItem) {
-            state.collectionItem = payload;
-        },
+    } as State),
+    setUpdatingData(payload: boolean) {
+        this.state.updatingData = payload;
     },
-    actions: {
-        reset({ commit }: ActionContext<CollectionStoreState, {}>) {
-            commit('setBooks', null);
-            commit('setShows', null);
-            commit('setGames', null);
-        },
-        getCollectionItem({ commit, state }: ActionContext<CollectionStoreState, {}>, payload: GetCollectionItemPayload) {
-            const { category, title } = payload;
-            let result;
-            if (category.toLowerCase() === 'books') {
-                result = state.books?.find((book) => book.title === title);
-            }
-            if (category.toLowerCase() === 'games') {
-                result = state.games?.find((game) => game.name === title);
-            }
-            if (category.toLowerCase() === 'shows') {
-                result = state.shows?.find((show) => show.name === title);
-            }
-            commit('setCollectionItem', result);
-        },
-        removeCollectionItem({ commit, state }: ActionContext<CollectionStoreState, {}>, payload: RemoveCollectionItemPayload) {
-            const { category, item } = payload;
-            if (category.toLowerCase() === 'books') {
-                const newBooks = state.books?.filter((book) => book.id !== item?.id);
-                if (newBooks) {
-                    commit('setBooks', newBooks);
-                }
-            }
-            if (category.toLowerCase() === 'games') {
-                const newGames = state.games?.filter((game) => game.id !== item?.id);
-                if (newGames) {
-                    commit('setGames', newGames);
-                }
-            }
-            if (category.toLowerCase() === 'shows') {
-                const newShows = state.shows?.filter((show) => show.id !== item?.id);
-                if (newShows) {
-                    commit('setShows', newShows);
-                }
-            }
-        },
+    setErrorOccurred(payload: boolean) {
+        this.state.errorOccurred = payload;
     },
-    getters: {
-        currentUpdatingData(state: CollectionStoreState) {
-            return state.updatingData;
-        },
-        currentErrorOccurred(state: CollectionStoreState) {
-            return state.errorOccurred;
-        },
-        currentBooks(state: CollectionStoreState) {
-            return state.books;
-        },
-        currentShows(state: CollectionStoreState) {
-            return state.shows;
-        },
-        currentGames(state: CollectionStoreState) {
-            return state.games;
-        },
-        currentCollectionItem(state: CollectionStoreState) {
-            return state.collectionItem;
-        },
+    setBooks(payload: BookCollectionItem[] | null) {
+        this.state.books = payload;
+    },
+    setShows(payload: ShowCollectionItem[] | null) {
+        this.state.shows = payload;
+    },
+    setGames(payload: GameCollectionItem[] | null) {
+        this.state.games = payload;
+    },
+    setCollectionItem(payload: CollectionItem) {
+        this.state.collectionItem = payload;
+    },
+    reset() {
+        this.state.books = null;
+        this.state.shows = null;
+        this.state.games = null;
+    },
+    findCollectionItem(category: string, title: string) {
+        let result = null;
+        if (category.toLowerCase() === 'books') {
+            result = this.state.books?.find((book) => book.title === title) || null;
+        }
+        if (category.toLowerCase() === 'games') {
+            result = this.state.games?.find((game) => game.name === title) || null;
+        }
+        if (category.toLowerCase() === 'shows') {
+            result = this.state.shows?.find((show) => show.name === title) || null;
+        }
+        this.state.collectionItem = result;
+    },
+    removeCollectionItem(category: string, item: CollectionItem) {
+        if (category.toLowerCase() === 'books') {
+            const newBooks = this.state.books?.filter((book) => book.id !== item?.id) || null;
+            this.state.books = newBooks;
+        }
+        if (category.toLowerCase() === 'games') {
+            const newGames = this.state.games?.filter((game) => game.id !== item?.id) || null;
+            this.state.games = newGames;
+        }
+        if (category.toLowerCase() === 'shows') {
+            const newShows = this.state.shows?.filter((show) => show.id !== item?.id) || null;
+            this.state.shows = newShows;
+        }
     },
 };
 

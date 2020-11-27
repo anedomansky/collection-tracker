@@ -84,7 +84,6 @@ export default defineComponent({
     },
     methods: {
         getEntries(): void {
-            console.log(this.$store);
             // this.$store.reset();
             // this.noResults = false;
             // this.$store.setUpdatingData(true);
