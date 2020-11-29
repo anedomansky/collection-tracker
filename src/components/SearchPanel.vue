@@ -9,7 +9,7 @@
             v-model="state.currentType"
         >
             <option
-                v-for="type in typeValuesRef.value"
+                v-for="type in typeValuesRef"
                 :key="type"
                 :value="type"
             >
@@ -69,18 +69,18 @@ export default defineComponent({
     setup(props) {
         const instance = getCurrentInstance();
         const showRef = toRefs(props).show;
-        const typeValuesRef = toRefs(props).typeValues;
+        const typeValuesRef = toRefs(props).typeValues.value;
         const categoryRef = toRefs(props).category;
 
         const state: State = reactive({
             term: '',
-            currentType: typeValuesRef.value[0],
+            currentType: typeValuesRef[0],
         });
 
         const submit = () => {
             if (state.term.length === 0) return;
             if (instance && instance.proxy) {
-                instance.proxy.$router.push(`/result/list/${categoryRef}/${state.currentType.toLowerCase()}/${state.term}`);
+                instance.proxy.$router.push(`/result/list/${categoryRef.value}/${state.currentType.toLowerCase()}/${state.term}`);
             }
         };
 

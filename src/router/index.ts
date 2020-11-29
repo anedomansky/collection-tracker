@@ -37,12 +37,12 @@ const routes: Array<RouteRecordRaw> = [
                 result: false,
             }
         ),
-        component: import(/* webpackChunkName: "CollectionDetailsPage" */ '../views/DetailsPage.vue'),
+        component: () => import(/* webpackChunkName: "CollectionDetailsPage" */ '../views/DetailsPage.vue'),
     },
     {
         path: '/result/list/:category/:type/:term',
         props: true,
-        component: import(/* webpackChunkName: "SearchResultPage" */ '../views/SearchResultPage.vue'),
+        component: () => import(/* webpackChunkName: "SearchResultPage" */ '../views/SearchResultPage.vue'),
     },
 ];
 

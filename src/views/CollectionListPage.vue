@@ -5,10 +5,7 @@
                 class="loading"
                 v-if="store.currentUpdatingData"
             >
-                <BeatLoader
-                    color="#ffffff"
-                    :size="loadingSpinnerSize"
-                />
+                Loading ...
             </div>
             <div v-if="state.noResults">
                 No Collection Items found!
@@ -52,7 +49,6 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue';
-import { BeatLoader } from '@saeris/vue-spinners';
 import { CollectionItem } from '@/types/CollectionItem';
 import Item from '@/components/Item.vue';
 import { BookCollectionItem } from '@/interfaces/BookCollectionItem';
@@ -71,7 +67,6 @@ export default defineComponent({
     name: 'CollectionListPage',
     components: {
         Item,
-        BeatLoader,
     },
     props: {
         type: {

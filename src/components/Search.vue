@@ -16,7 +16,7 @@
             :additionalClass="`search__tab tab-3 ${state.activeTab === 2 ? 'active' : ''}`"
             @on-click="toggleTab(2)"
         >
-            Shows {{ collectionStore.state.errorOccurred }}
+            Shows
         </button>
         <div class="search__panels">
             <SearchPanel
@@ -39,10 +39,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import Button from '@/components/Button.vue';
 import SearchPanel from '@/components/SearchPanel.vue';
-import CollectionStore from '../store/CollectionStore';
 
 interface State {
     activeTab: number;
@@ -55,25 +54,17 @@ export default defineComponent({
         Button,
     },
     setup() {
-        const collectionStore = CollectionStore;
-
-        onMounted(() => {
-            collectionStore.setErrorOccurred(true);
-        });
-
         const state: State = reactive({
             activeTab: 0,
         });
 
         const toggleTab = (tabNumber: number): void => {
             state.activeTab = tabNumber;
-            collectionStore.setErrorOccurred(!collectionStore.state.errorOccurred);
         };
 
         return {
             state,
             toggleTab,
-            collectionStore,
         };
     },
 });

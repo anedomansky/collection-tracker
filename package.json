@@ -16,7 +16,6 @@
   },
   "main": "./dist/electron.js",
   "dependencies": {
-    "@saeris/vue-spinners": "^1.0.8",
     "@types/sqlite3": "^3.1.6",
     "core-js": "^3.6.5",
     "electron": "^10.1.3",

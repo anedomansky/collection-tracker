@@ -3,18 +3,15 @@
         <div class="search-result-page__content">
             <div
                 class="loading"
-                v-if="resultStore.currentUpdatingData"
+                v-if="resultStore.state.updatingData"
             >
-                <BeatLoader
-                    color="#ffffff"
-                    :size="state.loadingSpinnerSize"
-                />
+                Loading ...
             </div>
             <div v-if="state.noResults">
                 No Results
             </div>
             <Item
-                v-for="book in resultStore.currentBooks"
+                v-for="book in resultStore.state.books"
                 :key="book.cover_i"
                 :imageSrc="`http://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`"
                 category="Books"
@@ -23,7 +20,7 @@
                 :result="true"
             />
             <Item
-                v-for="game in resultStore.currentGames"
+                v-for="game in resultStore.state.games"
                 :key="game.id"
                 :imageSrc="game.background_image"
                 category="Games"
@@ -32,7 +29,7 @@
                 :result="true"
             />
             <Item
-                v-for="show in resultStore.currentShows"
+                v-for="show in resultStore.state.shows"
                 :key="show.show.id"
                 :imageSrc="show.show.image && show.show.image.medium"
                 category="Shows"
@@ -48,8 +45,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
-import { BeatLoader } from '@saeris/vue-spinners';
+import {
+    defineComponent,
+    onMounted,
+    reactive,
+    toRefs,
+} from 'vue';
 import { CollectionItem } from '@/types/CollectionItem';
 import Item from '@/components/Item.vue';
 import Search from '@/components/Search.vue';
@@ -57,8 +58,14 @@ import { BookCollectionItem } from '@/interfaces/BookCollectionItem';
 import { ShowCollectionItem } from '@/interfaces/ShowCollectionItem';
 import { GameCollectionItem } from '@/interfaces/GameCollectionItem';
 import { RemoveRequest } from '@/interfaces/RemoveRequest';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+import { NavigationGuardNext, onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router';
 import { ResultItem } from '../types/ResultItem';
+import ResultStore from '../store/ResultStore';
+import { ResultInfo } from '../interfaces/ResultInfo';
+import Categories from '../enums/Categories';
+import { BookResult } from '../interfaces/BookResult';
+import { GameResult } from '../interfaces/GameResult';
+import { ShowResponse } from '../interfaces/ShowResponse';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ipcRenderer } = window.require('electron');
@@ -73,7 +80,6 @@ export default defineComponent({
     components: {
         Search,
         Item,
-        BeatLoader,
     },
     props: {
         category: {
@@ -89,65 +95,65 @@ export default defineComponent({
             required: true,
         },
     },
-    data: (): State => ({
-        noResults: false,
-        loadingSpinnerSize: 32,
-    }),
-    mounted(): void {
-        this.getResults(this.$props.category, this.$props.type, this.$props.term);
-    },
-    beforeRouteUpdate(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-        this.getResults(to.params.category, to.params.type, to.params.term);
-        next();
-    },
-    methods: {
-        getResults(category: string | string[], type: string | string[], term: string | string[]): void {
-            // this.resultStore.reset();
-            // this.resultStore.setUpdatingData(true);
-            // this.noResults = false;
-            // const resultInfo: IResultInfo = {
-            //     type,
-            //     term,
-            // };
-            // if (category === Categories.BOOKS) {
-            //     ipcRenderer.invoke(`/get${category}`, resultInfo)
-            //         .then((results: IBookResult[]) => {
-            //             this.resultStore.setUpdatingData(false);
-            //             this.resultStore.setBooks(results);
-            //         })
-            //         .catch((error: Error) => {
-            //             this.resultStore.setUpdatingData(false);
-            //             this.noResults = true;
-            //             console.error(error);
-            //         });
-            // }
-            // if (category === Categories.GAMES) {
-            //     ipcRenderer.invoke(`/get${category}`, resultInfo)
-            //         .then((results: IGameResult[]) => {
-            //             this.resultStore.setUpdatingData(false);
-            //             this.resultStore.setGames(results);
-            //         })
-            //         .catch((error: Error) => {
-            //             this.resultStore.setUpdatingData(false);
-            //             this.noResults = true;
-            //             console.error(error);
-            //         });
-            // }
-            // if (category === Categories.SHOWS) {
-            //     ipcRenderer.invoke(`/get${category}`, resultInfo)
-            //         .then((results: IShowResponse[]) => {
-            //             this.resultStore.setUpdatingData(false);
-            //             this.resultStore.setShows(results);
-            //         })
-            //         .catch((error: Error) => {
-            //             this.resultStore.setUpdatingData(false);
-            //             this.noResults = true;
-            //             console.error(error);
-            //         });
-            // }
-        },
-        addToCollection(resultItem: ResultItem): void {
-            // console.log('Added item');
+    setup(props) {
+        const categoryRef = toRefs(props).category;
+        const typeRef = toRefs(props).type;
+        const termRef = toRefs(props).term;
+
+        const state: State = reactive({
+            noResults: false,
+            loadingSpinnerSize: 32,
+        });
+
+        const resultStore = ResultStore;
+
+        const getResults = (): void => {
+            console.log('CATEGORY:', categoryRef.value);
+            resultStore.reset();
+            resultStore.setUpdatingData(true);
+            state.noResults = false;
+            const resultInfo: ResultInfo = {
+                type: typeRef.value,
+                term: termRef.value,
+            };
+            if (categoryRef.value === Categories.BOOKS) {
+                ipcRenderer.invoke(`/get${categoryRef.value}`, resultInfo)
+                    .then((results: BookResult[]) => {
+                        resultStore.setUpdatingData(false);
+                        resultStore.setBooks(results);
+                    })
+                    .catch((error: Error) => {
+                        resultStore.setUpdatingData(false);
+                        state.noResults = true;
+                        console.error(error);
+                    });
+            } else if (categoryRef.value === Categories.GAMES) {
+                ipcRenderer.invoke(`/get${categoryRef.value}`, resultInfo)
+                    .then((results: GameResult[]) => {
+                        resultStore.setUpdatingData(false);
+                        resultStore.setGames(results);
+                    })
+                    .catch((error: Error) => {
+                        resultStore.setUpdatingData(false);
+                        state.noResults = true;
+                        console.error(error);
+                    });
+            } else {
+                ipcRenderer.invoke(`/get${categoryRef.value}`, resultInfo)
+                    .then((results: ShowResponse[]) => {
+                        resultStore.setUpdatingData(false);
+                        resultStore.setShows(results);
+                    })
+                    .catch((error: Error) => {
+                        resultStore.setUpdatingData(false);
+                        state.noResults = true;
+                        console.error(error);
+                    });
+            }
+        };
+
+        const addToCollection = (resultItem: ResultItem): void => {
+            console.log('Added item', resultItem);
             // let entry: CollectionItem;
             // if (this.type === 'books') {
             //     const bookEntry = resultItem as IBookResult;
@@ -216,16 +222,15 @@ export default defineComponent({
             //             console.error(error);
             //         });
             // }
-        },
-    },
-    setup(props) {
-        const categoryRef = toRefs(props).category;
-        const typeRef = toRefs(props).type;
-        const termRef = toRefs(props).term;
+        };
 
-        const state: State = reactive({
-            noResults: false,
-            loadingSpinnerSize: 32,
+        onMounted(() => {
+            getResults();
+        });
+
+        onBeforeRouteUpdate((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+            getResults();
+            next();
         });
 
         // expose to template
@@ -234,6 +239,8 @@ export default defineComponent({
             typeRef,
             termRef,
             state,
+            resultStore,
+            addToCollection,
         };
     },
 });
