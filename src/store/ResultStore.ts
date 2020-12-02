@@ -38,9 +38,6 @@ const ResultStore = {
     setGames(payload: GameResult[] | null) {
         this.state.games = payload;
     },
-    setCollectionItem(payload: ResultItem) {
-        this.state.resultItem = payload;
-    },
     reset() {
         this.state.books = null;
         this.state.shows = null;

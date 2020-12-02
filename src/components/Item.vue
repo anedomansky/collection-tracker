@@ -44,7 +44,7 @@ export default defineComponent({
     props: {
         imageSrc: {
             type: String,
-            required: true,
+            required: false,
         },
         category: {
             type: String,

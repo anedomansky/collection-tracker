@@ -12,7 +12,7 @@ import { IRemoveRequest } from '../interfaces/IRemoveRequest';
 
 ipcMain.handle('/getBooks', async (event, resultInfo: IResultInfo) => {
     try {
-        console.log(Colors.fgYellow, '/getBooks', Colors.fgReset);
+        console.log(Colors.fgYellow, `/getBooks ${resultInfo.type} ${resultInfo.term}`, Colors.fgReset);
 
         const results: IBookResponse = await ApiService.getInstance().getBooks(resultInfo);
         return results.docs;
@@ -24,7 +24,7 @@ ipcMain.handle('/getBooks', async (event, resultInfo: IResultInfo) => {
 
 ipcMain.handle('/getShows', async (event, resultInfo: IResultInfo) => {
     try {
-        console.log(Colors.fgYellow, '/getShows', Colors.fgReset);
+        console.log(Colors.fgYellow, `/getShows ${resultInfo.type} ${resultInfo.term}`, Colors.fgReset);
 
         const results: IShowResponse[] = await ApiService.getInstance().getShows(resultInfo);
         return results;
@@ -36,7 +36,7 @@ ipcMain.handle('/getShows', async (event, resultInfo: IResultInfo) => {
 
 ipcMain.handle('/getGames', async (event, resultInfo: IResultInfo) => {
     try {
-        console.log(Colors.fgYellow, '/getGames', Colors.fgReset);
+        console.log(Colors.fgYellow, `/getGames ${resultInfo.type} ${resultInfo.term}`, Colors.fgReset);
 
         const response: IGameResponse = await ApiService.getInstance().getGames(resultInfo);
         return response.results;

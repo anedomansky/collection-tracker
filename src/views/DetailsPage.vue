@@ -2,48 +2,48 @@
     <article class="details-page">
         <template v-if="resultRef">
             <Details
-                v-if="resultItem !== null && categoryRef === 'Books'"
+                v-if="resultStore.state.resultItem !== null && categoryRef === 'Books'"
                 :result="resultRef"
-                :imgSrc="`http://covers.openlibrary.org/b/id/${resultItem.cover_i}-L.jpg`"
-                @on-add="addToCollection(resultItem)"
+                :imgSrc="`http://covers.openlibrary.org/b/id/${resultStore.state.resultItem.cover_i}-L.jpg`"
+                @on-add="addToCollection(resultStore.state.resultItem)"
             >
-                <p>{{ resultItem.title }}</p>
-                <p>{{ resultItem.author_name[0] }}</p>
-                <p>{{ resultItem.first_publish_year }}</p>
+                <p>{{ resultStore.state.resultItem.title }}</p>
+                <p>{{ resultStore.state.resultItem.author_name[0] }}</p>
+                <p>{{ resultStore.state.resultItem.first_publish_year }}</p>
             </Details>
             <Details
-                v-if="resultItem !== null && category === 'Games'"
+                v-if="resultStore.state.resultItem !== null && categoryRef === 'Games'"
                 :result="resultRef"
-                :imgSrc="resultItem.background_image"
-                @on-add="addToCollection(resultItem)"
+                :imgSrc="resultStore.state.resultItem.background_image"
+                @on-add="addToCollection(resultStore.state.resultItem)"
             >
-                <p>{{ resultItem.name }}</p>
+                <p>{{ resultStore.state.resultItem.name }}</p>
                 <p>
                     <span
-                        v-for="(genre, index) in resultItem.genres"
+                        v-for="(genre, index) in resultStore.state.resultItem.genres"
                         :key="index"
                     >
                         {{ genre.name }}
                     </span>
                 </p>
-                <p>{{ resultItem.released }}</p>
+                <p>{{ resultStore.state.resultItem.released }}</p>
             </Details>
             <Details
-                v-if="resultItem !== null && categoryRef === 'Shows'"
+                v-if="resultStore.state.resultItem !== null && categoryRef === 'Shows'"
                 :result="resultRef"
-                :imgSrc="resultItem.show.image && resultItem.show.image.original"
-                @on-add="addToCollection(resultItem)"
+                :imgSrc="resultStore.state.resultItem.show.image && resultStore.state.resultItem.show.image.original"
+                @on-add="addToCollection(resultStore.state.resultItem)"
             >
-                <p>{{ resultItem.show.name }}</p>
+                <p>{{ resultStore.state.resultItem.show.name }}</p>
                 <p>
                     <span
-                        v-for="(genre, index) in resultItem.show.genres"
+                        v-for="(genre, index) in resultStore.state.resultItem.show.genres"
                         :key="index"
                     >
                         {{ genre }}
                     </span>
                 </p>
-                <p>{{ resultItem.show.premiered }}</p>
+                <p>{{ resultStore.state.resultItem.show.premiered }}</p>
             </Details>
         </template>
         <template v-else>
@@ -93,7 +93,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRefs } from 'vue';
+import { defineComponent, onMounted, toRefs } from 'vue';
 import Details from '@/components/Details.vue';
 import { BookResult } from '../interfaces/BookResult';
 import { ResultItem } from '../types/ResultItem';
@@ -103,6 +103,7 @@ import { ShowResponse } from '../interfaces/ShowResponse';
 import { GameResult } from '../interfaces/GameResult';
 import { RemoveRequest } from '../interfaces/RemoveRequest';
 import { EntryRequest } from '../interfaces/EntryRequest';
+import ResultStore from '../store/ResultStore';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ipcRenderer } = window.require('electron');
@@ -114,11 +115,11 @@ export default defineComponent({
     },
     props: {
         category: {
-            type: Object as PropType<string | string[]>,
+            type: String,
             required: true,
         },
         title: {
-            type: Object as PropType<string | string[]>,
+            type: String,
             required: true,
         },
         result: {
@@ -126,17 +127,7 @@ export default defineComponent({
             required: true,
         },
     },
-    mounted(): void {
-        // if (this.$props.params.result) {
-        //     this.resultItem = this.resultStore.getResult(this.$props.params.category, this.$props.params.title);
-        // } else {
-        //     this.collectionItem = this.collectionStore.getCollectionItem(this.$props.params.category, this.$props.params.title);
-        // }
-    },
     methods: {
-        backToResults(): void {
-            this.$router.back();
-        },
         addToCollection(resultItem: ResultItem): void {
             // let entry: CollectionItem;
             // if (this.$props.params.category.toLowerCase() === 'books') {
@@ -229,11 +220,20 @@ export default defineComponent({
         const titleRef = toRefs(props).title;
         const resultRef = toRefs(props).result;
 
+        const resultStore = ResultStore;
+
+        onMounted(() => {
+            if (resultRef.value) {
+                resultStore.findResult(categoryRef.value, titleRef.value);
+            }
+        });
+
         // expose to template
         return {
             categoryRef,
             titleRef,
             resultRef,
+            resultStore,
         };
     },
 });

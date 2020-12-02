@@ -107,17 +107,16 @@ export default defineComponent({
 
         const resultStore = ResultStore;
 
-        const getResults = (): void => {
-            console.log('CATEGORY:', categoryRef.value);
+        const getResults = (category: string, type: string, term: string): void => {
             resultStore.reset();
             resultStore.setUpdatingData(true);
             state.noResults = false;
             const resultInfo: ResultInfo = {
-                type: typeRef.value,
-                term: termRef.value,
+                type,
+                term,
             };
-            if (categoryRef.value === Categories.BOOKS) {
-                ipcRenderer.invoke(`/get${categoryRef.value}`, resultInfo)
+            if (category === Categories.BOOKS) {
+                ipcRenderer.invoke(`/get${category}`, resultInfo)
                     .then((results: BookResult[]) => {
                         resultStore.setUpdatingData(false);
                         resultStore.setBooks(results);
@@ -127,8 +126,8 @@ export default defineComponent({
                         state.noResults = true;
                         console.error(error);
                     });
-            } else if (categoryRef.value === Categories.GAMES) {
-                ipcRenderer.invoke(`/get${categoryRef.value}`, resultInfo)
+            } else if (category === Categories.GAMES) {
+                ipcRenderer.invoke(`/get${category}`, resultInfo)
                     .then((results: GameResult[]) => {
                         resultStore.setUpdatingData(false);
                         resultStore.setGames(results);
@@ -139,7 +138,7 @@ export default defineComponent({
                         console.error(error);
                     });
             } else {
-                ipcRenderer.invoke(`/get${categoryRef.value}`, resultInfo)
+                ipcRenderer.invoke(`/get${category}`, resultInfo)
                     .then((results: ShowResponse[]) => {
                         resultStore.setUpdatingData(false);
                         resultStore.setShows(results);
@@ -225,11 +224,14 @@ export default defineComponent({
         };
 
         onMounted(() => {
-            getResults();
+            getResults(props.category, props.type, props.term);
         });
 
         onBeforeRouteUpdate((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-            getResults();
+            const category = to.params.category as string;
+            const type = to.params.type as string;
+            const term = to.params.term as string;
+            getResults(category, type, term);
             next();
         });
 
