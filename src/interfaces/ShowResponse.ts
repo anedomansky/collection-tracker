@@ -6,7 +6,7 @@ interface ShowImage {
 interface ShowResult {
     id: number;
     name: string;
-    premiered: Date;
+    premiered: string;
     officialSite: string;
     status: string;
     summary: string;

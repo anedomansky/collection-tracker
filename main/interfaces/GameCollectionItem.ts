@@ -1,4 +1,4 @@
-export interface IGameCollectionItem {
+export interface GameCollectionItem {
     id?: number;
     name: string;
     background_image: string;

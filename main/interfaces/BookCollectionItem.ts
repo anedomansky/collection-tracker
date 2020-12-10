@@ -1,4 +1,4 @@
-export interface IBookCollectionItem {
+export interface BookCollectionItem {
     id?: number;
     author_name: string;
     cover_i: number;

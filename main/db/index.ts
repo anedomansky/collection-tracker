@@ -3,7 +3,7 @@ import Colors from '../config/Colors';
 
 sqlite3.verbose();
 
-const dbFilename = '../db.sqlite3';
+const dbFilename = './db.sqlite3';
 
 const db = new sqlite3.Database(dbFilename, (error): void => {
     if (error) {

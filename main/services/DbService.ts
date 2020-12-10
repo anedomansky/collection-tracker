@@ -1,22 +1,11 @@
 import sqlite3 from 'sqlite3';
 import dbFilename from '../db';
-import { IDbService } from '../interfaces/IDbService';
-import { IEntryRequest } from '../interfaces/IEntryRequest';
-import { IRemoveRequest } from '../interfaces/IRemoveRequest';
+import { EntryRequest } from '../interfaces/EntryRequest';
+import { RemoveRequest } from '../interfaces/RemoveRequest';
 import { CollectionItem } from '../types/CollectionItem';
 
-class DbService implements IDbService {
-    private static instance: DbService;
-
-    public static getInstance(): DbService {
-        if (!DbService.instance) {
-            DbService.instance = new DbService();
-        }
-
-        return DbService.instance;
-    }
-
-    public addEntry(request: IEntryRequest): void {
+class DbService {
+    public static addEntry(request: EntryRequest): void {
         const db = new sqlite3.Database(dbFilename, sqlite3.OPEN_READWRITE);
         const values: unknown = Object.values(request.entry);
         let sql: sqlite3.Statement;
@@ -32,11 +21,11 @@ class DbService implements IDbService {
         db.close();
     }
 
-    public getEntries(type: string): CollectionItem[] {
+    public static getEntries(category: string): CollectionItem[] {
         const db = new sqlite3.Database(dbFilename, sqlite3.OPEN_READONLY);
         const sql = 'SELECT * from ?';
         let items: CollectionItem[] = [];
-        db.all(sql, type, (error, rows: CollectionItem[]) => {
+        db.all(sql, category, (error, rows: CollectionItem[]) => {
             console.table(rows);
             items = rows;
         });
@@ -44,7 +33,7 @@ class DbService implements IDbService {
         return items;
     }
 
-    public removeEntry(request: IRemoveRequest): void {
+    public static removeEntry(request: RemoveRequest): void {
         const db = new sqlite3.Database(dbFilename, sqlite3.OPEN_READWRITE);
         const values: unknown = Object.values(request);
         const sql = db.prepare('DELETE from ? WHERE id = ?');

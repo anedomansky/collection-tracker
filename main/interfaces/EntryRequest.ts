@@ -1,6 +1,6 @@
 import { CollectionItem } from '../types/CollectionItem';
 
-export interface IEntryRequest {
+export interface EntryRequest {
     type: string;
     entry: CollectionItem;
 }

@@ -1,4 +1,4 @@
-export interface IGameResult {
+export interface GameResult {
     id: number;
     name: string;
     background_image: string;
@@ -7,6 +7,6 @@ export interface IGameResult {
     rating_top: number;
 }
 
-export interface IGameResponse {
-    results: IGameResult[];
+export interface GameResponse {
+    results: GameResult[];
 }

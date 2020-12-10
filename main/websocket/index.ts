@@ -1,20 +1,20 @@
 import { ipcMain } from 'electron';
 import 'isomorphic-fetch';
-import { IResultInfo } from '../interfaces/IResultInfo';
-import { IBookResponse } from '../interfaces/IBookResponse';
-import { IShowResponse } from '../interfaces/IShowResponse';
-import { IGameResponse } from '../interfaces/IGameResponse';
+import { ResultInfo } from '../interfaces/ResultInfo';
+import { BookResponse } from '../interfaces/BookResponse';
+import { ShowResponse } from '../interfaces/ShowResponse';
+import { GameResponse } from '../interfaces/GameResponse';
 import Colors from '../config/Colors';
 import ApiService from '../services/ApiService';
-import { IEntryRequest } from '../interfaces/IEntryRequest';
+import { EntryRequest } from '../interfaces/EntryRequest';
 import DbService from '../services/DbService';
-import { IRemoveRequest } from '../interfaces/IRemoveRequest';
+import { RemoveRequest } from '../interfaces/RemoveRequest';
 
-ipcMain.handle('/getBooks', async (event, resultInfo: IResultInfo) => {
+ipcMain.handle('/getBooks', async (event, resultInfo: ResultInfo) => {
     try {
         console.log(Colors.fgYellow, `/getBooks ${resultInfo.type} ${resultInfo.term}`, Colors.fgReset);
 
-        const results: IBookResponse = await ApiService.getInstance().getBooks(resultInfo);
+        const results: BookResponse = await ApiService.getBooks(resultInfo);
         return results.docs;
     } catch (error) {
         console.trace(Colors.fgRed, error, Colors.fgReset);
@@ -22,11 +22,11 @@ ipcMain.handle('/getBooks', async (event, resultInfo: IResultInfo) => {
     }
 });
 
-ipcMain.handle('/getShows', async (event, resultInfo: IResultInfo) => {
+ipcMain.handle('/getShows', async (event, resultInfo: ResultInfo) => {
     try {
         console.log(Colors.fgYellow, `/getShows ${resultInfo.type} ${resultInfo.term}`, Colors.fgReset);
 
-        const results: IShowResponse[] = await ApiService.getInstance().getShows(resultInfo);
+        const results: ShowResponse[] = await ApiService.getShows(resultInfo);
         return results;
     } catch (error) {
         console.trace(Colors.fgRed, error, Colors.fgReset);
@@ -34,11 +34,11 @@ ipcMain.handle('/getShows', async (event, resultInfo: IResultInfo) => {
     }
 });
 
-ipcMain.handle('/getGames', async (event, resultInfo: IResultInfo) => {
+ipcMain.handle('/getGames', async (event, resultInfo: ResultInfo) => {
     try {
         console.log(Colors.fgYellow, `/getGames ${resultInfo.type} ${resultInfo.term}`, Colors.fgReset);
 
-        const response: IGameResponse = await ApiService.getInstance().getGames(resultInfo);
+        const response: GameResponse = await ApiService.getGames(resultInfo);
         return response.results;
     } catch (error) {
         console.trace(Colors.fgRed, error, Colors.fgReset);
@@ -46,9 +46,11 @@ ipcMain.handle('/getGames', async (event, resultInfo: IResultInfo) => {
     }
 });
 
-ipcMain.handle('/addEntry', (event, request: IEntryRequest) => {
+ipcMain.handle('/addEntry', (event, request: EntryRequest) => {
     try {
-        DbService.getInstance().addEntry(request);
+        console.log(Colors.fgYellow, `/addEntry ${request.type}`, Colors.fgReset);
+
+        DbService.addEntry(request);
         return 'SUCCESS';
     } catch (error) {
         console.trace(Colors.fgRed, error, Colors.fgReset);
@@ -56,9 +58,11 @@ ipcMain.handle('/addEntry', (event, request: IEntryRequest) => {
     }
 });
 
-ipcMain.handle('/getEntries', (event, type: string) => {
+ipcMain.handle('/getEntries', (event, category: string) => {
     try {
-        const results = DbService.getInstance().getEntries(type);
+        console.log(Colors.fgYellow, `/getEntries ${category}`, Colors.fgReset);
+
+        const results = DbService.getEntries(category);
         return results;
     } catch (error) {
         console.trace(Colors.fgRed, error, Colors.fgReset);
@@ -66,9 +70,11 @@ ipcMain.handle('/getEntries', (event, type: string) => {
     }
 });
 
-ipcMain.handle('/removeEntry', (event, request: IRemoveRequest) => {
+ipcMain.handle('/removeEntry', (event, request: RemoveRequest) => {
     try {
-        DbService.getInstance().removeEntry(request);
+        console.log(Colors.fgYellow, `/removeEntry ${request.type}`, Colors.fgReset);
+
+        DbService.removeEntry(request);
         return 'SUCCESS';
     } catch (error) {
         console.trace(Colors.fgRed, error, Colors.fgReset);

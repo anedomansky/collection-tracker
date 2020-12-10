@@ -1,4 +1,4 @@
-export interface IResultInfo {
+export interface ResultInfo {
     type: string;
     term: string;
 }

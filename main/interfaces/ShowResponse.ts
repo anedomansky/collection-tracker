@@ -3,7 +3,7 @@ interface ShowImage {
     original: string;
 }
 
-export interface IShowResult {
+export interface ShowResult {
     id: number;
     name: string;
     premiered: Date;
@@ -13,6 +13,6 @@ export interface IShowResult {
     image: ShowImage;
 }
 
-export interface IShowResponse {
-    show: IShowResult;
+export interface ShowResponse {
+    show: ShowResult;
 }

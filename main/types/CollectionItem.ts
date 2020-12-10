@@ -1,5 +1,5 @@
-import { IBookCollectionItem } from '../interfaces/IBookCollectionItem';
-import { IGameCollectionItem } from '../interfaces/IGameCollectionItem';
-import { IShowCollectionItem } from '../interfaces/IShowCollectionItem';
+import { BookCollectionItem } from '../interfaces/BookCollectionItem';
+import { GameCollectionItem } from '../interfaces/GameCollectionItem';
+import { ShowCollectionItem } from '../interfaces/ShowCollectionItem';
 
-export type CollectionItem = IBookCollectionItem | IShowCollectionItem | IGameCollectionItem;
+export type CollectionItem = BookCollectionItem | ShowCollectionItem | GameCollectionItem;

@@ -9,7 +9,7 @@ const routes: Array<RouteRecordRaw> = [
         component: LandingPage,
     },
     {
-        path: '/collection/list/:type',
+        path: '/collection/list/:category',
         name: 'CollectionListPage',
         props: true,
         // route level code-splitting

@@ -66,6 +66,8 @@ import Categories from '../enums/Categories';
 import { BookResult } from '../interfaces/BookResult';
 import { GameResult } from '../interfaces/GameResult';
 import { ShowResponse } from '../interfaces/ShowResponse';
+import { EntryRequest } from '../interfaces/EntryRequest';
+import CollectionStore from '../store/CollectionStore';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ipcRenderer } = window.require('electron');
@@ -106,6 +108,7 @@ export default defineComponent({
         });
 
         const resultStore = ResultStore;
+        const collectionStore = CollectionStore;
 
         const getResults = (category: string, type: string, term: string): void => {
             resultStore.reset();
@@ -152,75 +155,75 @@ export default defineComponent({
         };
 
         const addToCollection = (resultItem: ResultItem): void => {
-            console.log('Added item', resultItem);
-            // let entry: CollectionItem;
-            // if (this.type === 'books') {
-            //     const bookEntry = resultItem as IBookResult;
-            //     entry = {
-            //         author_name: bookEntry.author_name[0],
-            //         cover_i: bookEntry.cover_i,
-            //         title: bookEntry.title,
-            //         first_publish_year: bookEntry.first_publish_year,
-            //     } as IBookCollectionItem;
-            //     ipcRenderer.invoke('/addEntry', {
-            //         type: this.type,
-            //         entry,
-            //     } as IEntryRequest)
-            //         .then((message: string) => {
-            //             console.log(message);
-            //             this.collectionStore.setUpdatingData(false);
-            //         })
-            //         .catch((error: Error) => {
-            //             this.collectionStore.setUpdatingData(false);
-            //             console.error(error);
-            //         });
-            // }
-            // if (this.type === 'shows') {
-            //     const showEntry = resultItem as IShowResponse;
-            //     entry = {
-            //         name: showEntry.show.name,
-            //         premiered: showEntry.show.premiered.toLocaleDateString(),
-            //         officialSite: showEntry.show.officialSite,
-            //         status: showEntry.show.status,
-            //         summary: showEntry.show.summary,
-            //         image_medium: showEntry.show.image.medium || '',
-            //         image_original: showEntry.show.image.original || '',
-            //     };
-            //     ipcRenderer.invoke('/addEntry', {
-            //         type: this.type,
-            //         entry,
-            //     } as IEntryRequest)
-            //         .then((message: string) => {
-            //             console.log(message);
-            //             this.collectionStore.setUpdatingData(false);
-            //         })
-            //         .catch((error: Error) => {
-            //             this.collectionStore.setUpdatingData(false);
-            //             console.error(error);
-            //         });
-            // }
-            // if (this.type === 'games') {
-            //     const gameEntry = resultItem as IGameResult;
-            //     entry = {
-            //         name: gameEntry.name,
-            //         background_image: gameEntry.background_image,
-            //         released: gameEntry.released.toLocaleDateString(),
-            //         rating: gameEntry.rating,
-            //         rating_top: gameEntry.rating_top,
-            //     };
-            //     ipcRenderer.invoke('/addEntry', {
-            //         type: this.type,
-            //         entry,
-            //     } as IEntryRequest)
-            //         .then((message: string) => {
-            //             console.log(message);
-            //             this.collectionStore.setUpdatingData(false);
-            //         })
-            //         .catch((error: Error) => {
-            //             this.collectionStore.setUpdatingData(false);
-            //             console.error(error);
-            //         });
-            // }
+            console.log('Added item', resultItem, props.category);
+            let entry: CollectionItem;
+            if (props.category === Categories.BOOKS) {
+                const bookEntry = resultItem as BookResult;
+                entry = {
+                    author_name: bookEntry.author_name[0],
+                    cover_i: bookEntry.cover_i,
+                    title: bookEntry.title,
+                    first_publish_year: bookEntry.first_publish_year,
+                } as BookCollectionItem;
+                ipcRenderer.invoke('/addEntry', {
+                    type: props.type.toLowerCase(),
+                    entry,
+                } as EntryRequest)
+                    .then((message: string) => {
+                        console.log(message);
+                        collectionStore.setUpdatingData(false);
+                    })
+                    .catch((error: Error) => {
+                        collectionStore.setUpdatingData(false);
+                        console.error(error);
+                    });
+            }
+            if (props.category === Categories.SHOWS) {
+                const showEntry = resultItem as ShowResponse;
+                entry = {
+                    name: showEntry.show.name,
+                    premiered: new Date(showEntry.show.premiered).toLocaleDateString(),
+                    officialSite: showEntry.show.officialSite,
+                    status: showEntry.show.status,
+                    summary: showEntry.show.summary,
+                    image_medium: showEntry.show.image.medium || '',
+                    image_original: showEntry.show.image.original || '',
+                };
+                ipcRenderer.invoke('/addEntry', {
+                    type: props.type.toLowerCase(),
+                    entry,
+                } as EntryRequest)
+                    .then((message: string) => {
+                        console.log(message);
+                        collectionStore.setUpdatingData(false);
+                    })
+                    .catch((error: Error) => {
+                        collectionStore.setUpdatingData(false);
+                        console.error(error);
+                    });
+            }
+            if (props.category === Categories.GAMES) {
+                const gameEntry = resultItem as GameResult;
+                entry = {
+                    name: gameEntry.name,
+                    background_image: gameEntry.background_image,
+                    released: new Date(gameEntry.released).toLocaleDateString(),
+                    rating: gameEntry.rating,
+                    rating_top: gameEntry.rating_top,
+                };
+                ipcRenderer.invoke('/addEntry', {
+                    type: props.type.toLowerCase(),
+                    entry,
+                } as EntryRequest)
+                    .then((message: string) => {
+                        console.log(message);
+                        collectionStore.setUpdatingData(false);
+                    })
+                    .catch((error: Error) => {
+                        collectionStore.setUpdatingData(false);
+                        console.error(error);
+                    });
+            }
         };
 
         onMounted(() => {

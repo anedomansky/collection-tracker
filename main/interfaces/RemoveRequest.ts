@@ -1,4 +1,4 @@
-export interface IRemoveRequest {
+export interface RemoveRequest {
     type: string;
     id: number;
 }

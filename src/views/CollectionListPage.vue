@@ -3,16 +3,16 @@
         <div class="collection-list-page__content">
             <div
                 class="loading"
-                v-if="store.currentUpdatingData"
+                v-if="collectionStore.state.updatingData"
             >
                 Loading ...
             </div>
             <div v-if="state.noResults">
                 No Collection Items found!
             </div>
-            <template v-if="typeRef === 'books'">
+            <template v-if="categoryRef === 'books'">
                 <Item
-                    v-for="book in store.currentBooks"
+                    v-for="book in collectionStore.state.books"
                     :key="book.cover_i"
                     :imageSrc="`http://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`"
                     category="Books"
@@ -21,9 +21,9 @@
                     :result="false"
                 />
             </template>
-            <template v-if="typeRef === 'games'">
+            <template v-if="categoryRef === 'games'">
                 <Item
-                    v-for="game in store.currentGames"
+                    v-for="game in collectionStore.state.games"
                     :key="game.id"
                     :imageSrc="game.background_image"
                     category="Games"
@@ -32,9 +32,9 @@
                     :result="false"
                 />
             </template>
-            <template v-if="typeRef === 'shows'">
+            <template v-if="categoryRef === 'shows'">
                 <Item
-                    v-for="show in store.currentShows"
+                    v-for="show in collectionStore.state.shows"
                     :key="show.id"
                     :imageSrc="show.image && show.image.medium"
                     category="Shows"
@@ -48,13 +48,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import {
+    defineComponent, onMounted, reactive, toRefs,
+} from 'vue';
 import { CollectionItem } from '@/types/CollectionItem';
 import Item from '@/components/Item.vue';
 import { BookCollectionItem } from '@/interfaces/BookCollectionItem';
 import { ShowCollectionItem } from '@/interfaces/ShowCollectionItem';
 import { GameCollectionItem } from '@/interfaces/GameCollectionItem';
 import { RemoveRequest } from '@/interfaces/RemoveRequest';
+import CollectionStore from '../store/CollectionStore';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ipcRenderer } = window.require('electron');
@@ -69,41 +72,47 @@ export default defineComponent({
         Item,
     },
     props: {
-        type: {
+        category: {
             type: String,
             required: true,
         },
     },
-    mounted(): void {
-        this.getEntries();
-    },
-    methods: {
-        getEntries(): void {
-            // this.$store.reset();
-            // this.noResults = false;
-            // this.$store.setUpdatingData(true);
-            // ipcRenderer.invoke('/getEntries', this.params.type)
-            //     .then((entries: CollectionItem[]) => {
-            //         if (this.params.type === 'books') {
-            //             const books = entries as BookCollectionItem[];
-            //             this.$store.setBooks(books);
-            //         }
-            //         if (this.params.type === 'shows') {
-            //             const shows = entries as ShowCollectionItem[];
-            //             this.store.setShows(shows);
-            //         }
-            //         if (this.params.type === 'games') {
-            //             const games = entries as GameCollectionItem[];
-            //             this.store.setGames(games);
-            //         }
-            //     }).catch((error: Error) => {
-            //         this.noResults = true;
-            //         console.error(error);
-            //     }).finally(() => {
-            //         this.store.setUpdatingData(false);
-            //     });
-        },
-        removeFromCollection(item: CollectionItem): void {
+    setup(props) {
+        const categoryRef = toRefs(props).category;
+
+        const state: State = reactive({
+            noResults: false,
+        });
+
+        const collectionStore = CollectionStore;
+
+        const getEntries = (): void => {
+            console.log('TEST', props.category);
+            state.noResults = false;
+            collectionStore.setUpdatingData(true);
+            ipcRenderer.invoke('/getEntries', props.category)
+                .then((entries: CollectionItem[]) => {
+                    if (props.category === 'books') {
+                        const books = entries as BookCollectionItem[];
+                        collectionStore.setBooks(books);
+                    }
+                    if (props.category === 'shows') {
+                        const shows = entries as ShowCollectionItem[];
+                        collectionStore.setShows(shows);
+                    }
+                    if (props.category === 'games') {
+                        const games = entries as GameCollectionItem[];
+                        collectionStore.setGames(games);
+                    }
+                }).catch((error: Error) => {
+                    state.noResults = true;
+                    console.error(error);
+                }).finally(() => {
+                    collectionStore.setUpdatingData(false);
+                });
+        };
+
+        const removeFromCollection = (item: CollectionItem): void => {
             // this.store.setUpdatingData(true);
             // ipcRenderer.invoke('/removeEntry', {
             //     type: this.params.type,
@@ -118,19 +127,17 @@ export default defineComponent({
             //         console.error(error);
             //         this.store.setUpdatingData(false);
             //     });
-        },
-    },
-    setup(props) {
-        const typeRef = toRefs(props).type;
+        };
 
-        const state: State = reactive({
-            noResults: false,
+        onMounted(() => {
+            getEntries();
         });
 
         // expose to template
         return {
-            typeRef,
+            categoryRef,
             state,
+            collectionStore,
         };
     },
 });
