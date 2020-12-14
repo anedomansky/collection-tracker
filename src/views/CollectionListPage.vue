@@ -10,39 +10,33 @@
             <div v-if="state.noResults">
                 No Collection Items found!
             </div>
-            <template v-if="categoryRef === 'books'">
-                <Item
-                    v-for="book in collectionStore.state.books"
-                    :key="book.cover_i"
-                    :imageSrc="`http://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`"
-                    category="Books"
-                    :title="book.title"
-                    @on-remove="removeFromCollection(book)"
-                    :result="false"
-                />
-            </template>
-            <template v-if="categoryRef === 'games'">
-                <Item
-                    v-for="game in collectionStore.state.games"
-                    :key="game.id"
-                    :imageSrc="game.background_image"
-                    category="Games"
-                    :title="game.name"
-                    @on-remove="removeFromCollection(game)"
-                    :result="false"
-                />
-            </template>
-            <template v-if="categoryRef === 'shows'">
-                <Item
-                    v-for="show in collectionStore.state.shows"
-                    :key="show.id"
-                    :imageSrc="show.image && show.image.medium"
-                    category="Shows"
-                    :title="show.name"
-                    @on-remove="removeFromCollection(show)"
-                    :result="false"
-                />
-            </template>
+            <Item
+                v-for="book in collectionStore.state.books"
+                :key="book.cover_i"
+                :imageSrc="`http://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`"
+                category="Books"
+                :title="book.title"
+                @on-remove="removeFromCollection(book)"
+                :result="false"
+            />
+            <Item
+                v-for="game in collectionStore.state.games"
+                :key="game.id"
+                :imageSrc="game.background_image"
+                category="Games"
+                :title="game.name"
+                @on-remove="removeFromCollection(game)"
+                :result="false"
+            />
+            <Item
+                v-for="show in collectionStore.state.shows"
+                :key="show.id"
+                :imageSrc="show.image && show.image.medium"
+                category="Shows"
+                :title="show.name"
+                @on-remove="removeFromCollection(show)"
+                :result="false"
+            />
         </div>
     </article>
 </template>
@@ -87,7 +81,6 @@ export default defineComponent({
         const collectionStore = CollectionStore;
 
         const getEntries = (): void => {
-            console.log('TEST', props.category);
             state.noResults = false;
             collectionStore.setUpdatingData(true);
             ipcRenderer.invoke('/getEntries', props.category)
@@ -113,20 +106,20 @@ export default defineComponent({
         };
 
         const removeFromCollection = (item: CollectionItem): void => {
-            // this.store.setUpdatingData(true);
-            // ipcRenderer.invoke('/removeEntry', {
-            //     type: this.params.type,
-            //     id: item?.id,
-            // } as RemoveRequest)
-            //     .then((message: string) => {
-            //         console.log(message);
-            //         this.store.removeCollectionItem(this.params.type, item);
-            //         this.store.setUpdatingData(false);
-            //     })
-            //     .catch((error: Error) => {
-            //         console.error(error);
-            //         this.store.setUpdatingData(false);
-            //     });
+            collectionStore.setUpdatingData(true);
+            ipcRenderer.invoke('/removeEntry', {
+                type: props.category,
+                id: item?.id,
+            } as RemoveRequest)
+                .then((message: string) => {
+                    console.log(message);
+                    collectionStore.removeCollectionItem(props.category, item);
+                    collectionStore.setUpdatingData(false);
+                })
+                .catch((error: Error) => {
+                    console.error(error);
+                    collectionStore.setUpdatingData(false);
+                });
         };
 
         onMounted(() => {
@@ -138,6 +131,7 @@ export default defineComponent({
             categoryRef,
             state,
             collectionStore,
+            removeFromCollection,
         };
     },
 });

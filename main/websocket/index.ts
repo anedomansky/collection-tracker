@@ -46,11 +46,11 @@ ipcMain.handle('/getGames', async (event, resultInfo: ResultInfo) => {
     }
 });
 
-ipcMain.handle('/addEntry', (event, request: EntryRequest) => {
+ipcMain.handle('/addEntry', async (event, request: EntryRequest) => {
     try {
         console.log(Colors.fgYellow, `/addEntry ${request.type}`, Colors.fgReset);
 
-        DbService.addEntry(request);
+        await DbService.addEntry(request);
         return 'SUCCESS';
     } catch (error) {
         console.trace(Colors.fgRed, error, Colors.fgReset);
@@ -58,11 +58,12 @@ ipcMain.handle('/addEntry', (event, request: EntryRequest) => {
     }
 });
 
-ipcMain.handle('/getEntries', (event, category: string) => {
+ipcMain.handle('/getEntries', async (event, category: string) => {
     try {
         console.log(Colors.fgYellow, `/getEntries ${category}`, Colors.fgReset);
 
-        const results = DbService.getEntries(category);
+        const results = await DbService.getEntries(category);
+        console.table(results);
         return results;
     } catch (error) {
         console.trace(Colors.fgRed, error, Colors.fgReset);
@@ -70,11 +71,11 @@ ipcMain.handle('/getEntries', (event, category: string) => {
     }
 });
 
-ipcMain.handle('/removeEntry', (event, request: RemoveRequest) => {
+ipcMain.handle('/removeEntry', async (event, request: RemoveRequest) => {
     try {
         console.log(Colors.fgYellow, `/removeEntry ${request.type}`, Colors.fgReset);
 
-        DbService.removeEntry(request);
+        await DbService.removeEntry(request);
         return 'SUCCESS';
     } catch (error) {
         console.trace(Colors.fgRed, error, Colors.fgReset);

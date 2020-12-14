@@ -166,7 +166,7 @@ export default defineComponent({
                     first_publish_year: bookEntry.first_publish_year,
                 } as BookCollectionItem;
                 ipcRenderer.invoke('/addEntry', {
-                    type: props.type.toLowerCase(),
+                    type: props.category.toLowerCase(),
                     entry,
                 } as EntryRequest)
                     .then((message: string) => {
@@ -190,7 +190,7 @@ export default defineComponent({
                     image_original: showEntry.show.image.original || '',
                 };
                 ipcRenderer.invoke('/addEntry', {
-                    type: props.type.toLowerCase(),
+                    type: props.category.toLowerCase(),
                     entry,
                 } as EntryRequest)
                     .then((message: string) => {
@@ -212,7 +212,7 @@ export default defineComponent({
                     rating_top: gameEntry.rating_top,
                 };
                 ipcRenderer.invoke('/addEntry', {
-                    type: props.type.toLowerCase(),
+                    type: props.category.toLowerCase(),
                     entry,
                 } as EntryRequest)
                     .then((message: string) => {
