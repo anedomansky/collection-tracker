@@ -48,45 +48,45 @@
         </template>
         <template v-else>
             <Details
-                v-if="collectionItem !== null && categoryRef === 'Books'"
+                v-if="collectionStore.state.collectionItem !== null && categoryRef === 'Books'"
                 :result="resultRef"
-                :imgSrc="`http://covers.openlibrary.org/b/id/${collectionItem.cover_i}-L.jpg`"
-                @on-remove="removeFromCollection(collectionItem)"
+                :imgSrc="`http://covers.openlibrary.org/b/id/${collectionStore.state.collectionItem.cover_i}-L.jpg`"
+                @on-remove="removeFromCollection(collectionStore.state.collectionItem)"
             >
-                <p>{{ collectionItem.title }}</p>
-                <p>{{ collectionItem.author_name }}</p>
-                <p>{{ collectionItem.first_publish_year }}</p>
+                <p>{{ collectionStore.state.collectionItem.title }}</p>
+                <p>{{ collectionStore.state.collectionItem.author_name }}</p>
+                <p>{{ collectionStore.state.collectionItem.first_publish_year }}</p>
             </Details>
             <Details
-                v-if="collectionItem !== null && categoryRef === 'Games'"
+                v-if="collectionStore.state.collectionItem !== null && categoryRef === 'Games'"
                 :result="resultRef"
-                :imgSrc="collectionItem.background_image"
-                @on-remove="removeFromCollection(collectionItem)"
+                :imgSrc="collectionStore.state.collectionItem.background_image"
+                @on-remove="removeFromCollection(collectionStore.state.collectionItem)"
             >
-                <p>{{ collectionItem.name }}</p>
+                <p>{{ collectionStore.state.collectionItem.name }}</p>
                 <p>
                     <span
-                        v-for="(genre, index) in collectionItem.genres"
+                        v-for="(genre, index) in collectionStore.state.collectionItem.genres"
                         :key="index"
                     >
                         {{ genre.name }}
                     </span>
                 </p>
-                <p>{{ collectionItem.released }}</p>
+                <p>{{ collectionStore.state.collectionItem.released }}</p>
             </Details>
             <Details
-                v-if="collectionItem !== null && categoryRef === 'Shows'"
+                v-if="collectionStore.state.collectionItem !== null && categoryRef === 'Shows'"
                 :result="resultRef"
-                :imgSrc="collectionItem.image_original"
-                @on-remove="removeFromCollection(collectionItem)"
+                :imgSrc="collectionStore.state.collectionItem.image_original"
+                @on-remove="removeFromCollection(collectionStore.state.collectionItem)"
             >
-                <p>{{ collectionItem.name }}</p>
+                <p>{{ collectionStore.state.collectionItem.name }}</p>
                 <!-- <p>
                     <span v-for="(genre, index) in collectionItem.genres" :key="index">
                         {{ genre }}
                     </span>
                 </p> -->
-                <p>{{ collectionItem.premiered }}</p>
+                <p>{{ collectionStore.state.collectionItem.premiered }}</p>
             </Details>
         </template>
     </article>
@@ -104,6 +104,8 @@ import { GameResult } from '../interfaces/GameResult';
 import { RemoveRequest } from '../interfaces/RemoveRequest';
 import { EntryRequest } from '../interfaces/EntryRequest';
 import ResultStore from '../store/ResultStore';
+import CollectionStore from '../store/CollectionStore';
+import Categories from '../enums/Categories';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { ipcRenderer } = window.require('electron');
@@ -127,106 +129,109 @@ export default defineComponent({
             required: true,
         },
     },
-    methods: {
-        addToCollection(resultItem: ResultItem): void {
-            // let entry: CollectionItem;
-            // if (this.$props.params.category.toLowerCase() === 'books') {
-            //     const bookEntry = resultItem as BookResult;
-            //     entry = {
-            //         author_name: bookEntry.author_name[0],
-            //         cover_i: bookEntry.cover_i,
-            //         title: bookEntry.title,
-            //         first_publish_year: bookEntry.first_publish_year,
-            //     } as BookCollectionItem;
-            //     ipcRenderer.invoke('/addEntry', {
-            //         type: this.$props.params.category.toLowerCase(),
-            //         entry,
-            //     } as EntryRequest)
-            //         .then((message: string) => {
-            //             console.log(message);
-            //             this.collectionStore.setUpdatingData(false);
-            //         })
-            //         .catch((error: Error) => {
-            //             this.collectionStore.setUpdatingData(false);
-            //             console.error(error);
-            //         });
-            // }
-            // if (this.$props.params.category.toLowerCase() === 'shows') {
-            //     const showEntry = resultItem as ShowResponse;
-            //     entry = {
-            //         name: showEntry.show.name,
-            //         premiered: showEntry.show.premiered.toLocaleDateString(),
-            //         officialSite: showEntry.show.officialSite,
-            //         status: showEntry.show.status,
-            //         summary: showEntry.show.summary,
-            //         image_medium: showEntry.show.image.medium || '',
-            //         image_original: showEntry.show.image.original || '',
-            //     };
-            //     ipcRenderer.invoke('/addEntry', {
-            //         type: this.category.toLowerCase(),
-            //         entry,
-            //     } as EntryRequest)
-            //         .then((message: string) => {
-            //             console.log(message);
-            //             this.collectionStore.setUpdatingData(false);
-            //         })
-            //         .catch((error: Error) => {
-            //             this.collectionStore.setUpdatingData(false);
-            //             console.error(error);
-            //         });
-            // }
-            // if (this.$props.params.category.toLowerCase() === 'games') {
-            //     const gameEntry = resultItem as GameResult;
-            //     entry = {
-            //         name: gameEntry.name,
-            //         background_image: gameEntry.background_image,
-            //         released: gameEntry.released.toLocaleDateString(),
-            //         rating: gameEntry.rating,
-            //         rating_top: gameEntry.rating_top,
-            //     };
-            //     ipcRenderer.invoke('/addEntry', {
-            //         type: this.$props.params.category.toLowerCase(),
-            //         entry,
-            //     } as EntryRequest)
-            //         .then((message: string) => {
-            //             console.log(message);
-            //             this.collectionStore.setUpdatingData(false);
-            //         })
-            //         .catch((error: Error) => {
-            //             this.collectionStore.setUpdatingData(false);
-            //             console.error(error);
-            //         });
-            // }
-        },
-        removeFromCollection(item: CollectionItem): void {
-            // this.collectionStore.setUpdatingData(true);
-            // ipcRenderer.invoke('/removeEntry', {
-            //     type: this.$props.params.category.toLowerCase(),
-            //     id: item?.id,
-            // } as RemoveRequest)
-            //     .then((message: string) => {
-            //         console.log(message);
-            //         this.collectionStore.removeCollectionItem(this.$props.params.category.toLowerCase(), item);
-            //         this.collectionStore.setUpdatingData(false);
-            //     })
-            //     .catch((error: Error) => {
-            //         console.error(error);
-            //         this.collectionStore.setUpdatingData(false);
-            //     });
-        },
-    },
     setup(props) {
         const categoryRef = toRefs(props).category;
         const titleRef = toRefs(props).title;
         const resultRef = toRefs(props).result;
 
         const resultStore = ResultStore;
+        const collectionStore = CollectionStore;
 
         onMounted(() => {
             if (resultRef.value) {
-                resultStore.findResult(categoryRef.value, titleRef.value);
+                resultStore.findResult(props.category, props.title);
+            } else {
+                collectionStore.findCollectionItem(props.category, props.title);
             }
         });
+
+        const addToCollection = (resultItem: ResultItem): void => {
+            console.log('Added item', resultItem, props.category);
+            let entry: CollectionItem;
+            if (props.category === Categories.BOOKS) {
+                const bookEntry = resultItem as BookResult;
+                entry = {
+                    author_name: bookEntry.author_name[0],
+                    cover_i: bookEntry.cover_i,
+                    title: bookEntry.title,
+                    first_publish_year: bookEntry.first_publish_year,
+                } as BookCollectionItem;
+                ipcRenderer.invoke('/addEntry', {
+                    type: props.category.toLowerCase(),
+                    entry,
+                } as EntryRequest)
+                    .then((message: string) => {
+                        console.log(message);
+                        collectionStore.setUpdatingData(false);
+                    })
+                    .catch((error: Error) => {
+                        collectionStore.setUpdatingData(false);
+                        console.error(error);
+                    });
+            }
+            if (props.category === Categories.SHOWS) {
+                const showEntry = resultItem as ShowResponse;
+                entry = {
+                    name: showEntry.show.name,
+                    premiered: new Date(showEntry.show.premiered).toLocaleDateString(),
+                    officialSite: showEntry.show.officialSite,
+                    status: showEntry.show.status,
+                    summary: showEntry.show.summary,
+                    image_medium: showEntry.show.image.medium || '',
+                    image_original: showEntry.show.image.original || '',
+                };
+                ipcRenderer.invoke('/addEntry', {
+                    type: props.category.toLowerCase(),
+                    entry,
+                } as EntryRequest)
+                    .then((message: string) => {
+                        console.log(message);
+                        collectionStore.setUpdatingData(false);
+                    })
+                    .catch((error: Error) => {
+                        collectionStore.setUpdatingData(false);
+                        console.error(error);
+                    });
+            }
+            if (props.category === Categories.GAMES) {
+                const gameEntry = resultItem as GameResult;
+                entry = {
+                    name: gameEntry.name,
+                    background_image: gameEntry.background_image,
+                    released: new Date(gameEntry.released).toLocaleDateString(),
+                    rating: gameEntry.rating,
+                    rating_top: gameEntry.rating_top,
+                };
+                ipcRenderer.invoke('/addEntry', {
+                    type: props.category.toLowerCase(),
+                    entry,
+                } as EntryRequest)
+                    .then((message: string) => {
+                        console.log(message);
+                        collectionStore.setUpdatingData(false);
+                    })
+                    .catch((error: Error) => {
+                        collectionStore.setUpdatingData(false);
+                        console.error(error);
+                    });
+            }
+        };
+
+        const removeFromCollection = (item: CollectionItem): void => {
+            collectionStore.setUpdatingData(true);
+            ipcRenderer.invoke('/removeEntry', {
+                type: props.category,
+                id: item?.id,
+            } as RemoveRequest)
+                .then(() => {
+                    collectionStore.removeCollectionItem(props.category, item);
+                    collectionStore.setUpdatingData(false);
+                })
+                .catch((error: Error) => {
+                    console.error(error);
+                    collectionStore.setUpdatingData(false);
+                });
+        };
 
         // expose to template
         return {
@@ -234,6 +239,9 @@ export default defineComponent({
             titleRef,
             resultRef,
             resultStore,
+            collectionStore,
+            addToCollection,
+            removeFromCollection,
         };
     },
 });

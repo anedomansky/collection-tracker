@@ -155,7 +155,6 @@ export default defineComponent({
         };
 
         const addToCollection = (resultItem: ResultItem): void => {
-            console.log('Added item', resultItem, props.category);
             let entry: CollectionItem;
             if (props.category === Categories.BOOKS) {
                 const bookEntry = resultItem as BookResult;
@@ -169,8 +168,7 @@ export default defineComponent({
                     type: props.category.toLowerCase(),
                     entry,
                 } as EntryRequest)
-                    .then((message: string) => {
-                        console.log(message);
+                    .then(() => {
                         collectionStore.setUpdatingData(false);
                     })
                     .catch((error: Error) => {
@@ -193,8 +191,7 @@ export default defineComponent({
                     type: props.category.toLowerCase(),
                     entry,
                 } as EntryRequest)
-                    .then((message: string) => {
-                        console.log(message);
+                    .then(() => {
                         collectionStore.setUpdatingData(false);
                     })
                     .catch((error: Error) => {
@@ -215,8 +212,7 @@ export default defineComponent({
                     type: props.category.toLowerCase(),
                     entry,
                 } as EntryRequest)
-                    .then((message: string) => {
-                        console.log(message);
+                    .then(() => {
                         collectionStore.setUpdatingData(false);
                     })
                     .catch((error: Error) => {

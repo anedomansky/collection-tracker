@@ -44,10 +44,9 @@ class DbService {
 
     public static async removeEntry(request: RemoveRequest): Promise<void> {
         const db = new sqlite3.Database(dbFilename, sqlite3.OPEN_READWRITE);
-        const values: unknown = Object.values(request);
         return new Promise((resolve, reject) => {
             const sql = db.prepare(`DELETE from ${request.type} WHERE id = ${request.id}`);
-            sql.run(values);
+            sql.run();
             sql.finalize();
             db.close();
             resolve();
