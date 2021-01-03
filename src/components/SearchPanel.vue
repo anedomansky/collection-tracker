@@ -5,7 +5,7 @@
     >
         <select
             name="Type"
-            id="type"
+            class="type"
             v-model="state.currentType"
         >
             <option
