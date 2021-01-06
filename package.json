@@ -1,6 +1,6 @@
 {
   "name": "collection-tracker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "author": "Alexander Nedomansky <anedomansky@googlemail.com>",
   "description": "Electron, Vue, SQLite app",
