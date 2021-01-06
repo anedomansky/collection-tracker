@@ -63,7 +63,7 @@ ipcMain.handle('/getEntries', async (event, category: string) => {
         console.log(Colors.fgYellow, `/getEntries ${category}`, Colors.fgReset);
 
         const results = await DbService.getEntries(category);
-        console.table(results);
+        console.log(results);
         return results;
     } catch (error) {
         console.trace(Colors.fgRed, error, Colors.fgReset);
