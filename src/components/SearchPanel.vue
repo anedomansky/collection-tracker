@@ -1,43 +1,99 @@
 <template>
-    <div class="search__panel" v-show="show">
-        <select name="Type" id="type" v-model="currentType">
-            <option v-for="type in typeValues" :key="type" :value="type">{{ type }}</option>
+    <div
+        class="search__panel"
+        v-show="showRef"
+    >
+        <select
+            name="Type"
+            class="type"
+            v-model="state.currentType"
+        >
+            <option
+                v-for="type in typeValuesRef"
+                :key="type"
+                :value="type"
+            >
+                {{ type }}
+            </option>
         </select>
         <form @submit.prevent="submit">
-            <input type="text" placeholder="Enter a search term..." v-model="term" />
-            <button type="submit" tabindex="0">
-                <img :src="'/assets/icons/search.svg'" alt="Search">
-            </button>
+            <input
+                type="text"
+                placeholder="Enter a search term..."
+                v-model="state.term"
+            >
+            <Button type="submit">
+                <img
+                    :src="require('@/assets/icons/search.svg')"
+                    alt="Search"
+                >
+            </Button>
         </form>
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import {
+    defineComponent,
+    getCurrentInstance,
+    PropType,
+    reactive,
+    toRefs,
+} from 'vue';
+import Button from '@/components/Button.vue';
 
-@Component
-export default class SearchPanel extends Vue {
-    @Prop() private typeValues!: string[];
-
-    @Prop() private show!: boolean;
-
-    @Prop() private category!: string;
-
+interface State {
     term: string;
-
     currentType: string;
-
-    constructor() {
-        super();
-        this.term = '';
-        this.currentType = this.typeValues[0];
-    }
-
-    submit(): void {
-        if (this.term.length === 0) return;
-        this.$router.replace(`/result/list/${this.category}/${this.currentType.toLowerCase()}/${this.term}`);
-    }
 }
+
+export default defineComponent({
+    name: 'SearchPanel',
+    components: {
+        Button,
+    },
+    props: {
+        typeValues: {
+            type: Array as PropType<string[]>,
+            required: true,
+        },
+        show: {
+            type: Boolean,
+            required: true,
+        },
+        category: {
+            type: String,
+            required: true,
+        },
+    },
+    setup(props) {
+        const instance = getCurrentInstance();
+        const showRef = toRefs(props).show;
+        const typeValuesRef = toRefs(props).typeValues.value;
+        const categoryRef = toRefs(props).category;
+
+        const state: State = reactive({
+            term: '',
+            currentType: typeValuesRef[0],
+        });
+
+        const submit = () => {
+            if (state.term.length === 0) return;
+            if (instance && instance.proxy) {
+                instance.proxy.$router.push(`/result/list/${categoryRef.value}/${state.currentType.toLowerCase()}/${state.term}`);
+            }
+        };
+
+        // expose to template
+        return {
+            showRef,
+            typeValuesRef,
+            categoryRef,
+            state,
+            submit,
+        };
+    },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -85,9 +141,6 @@ export default class SearchPanel extends Vue {
 
         & button {
             grid-area: search;
-            border: none;
-            background: none;
-            cursor: pointer;
 
             & img {
                 height: auto;

@@ -1,32 +1,73 @@
 <template>
     <article class="search">
-        <button type="button" tabindex="0" class="search__tab tab-1" :class="{ active: activeTab === 0 }" @click="toggleTab(0)">Books</button>
-        <button type="button" tabindex="0" class="search__tab tab-2" :class="{ active: activeTab === 1 }" @click="toggleTab(1)">Games</button>
-        <button type="button" tabindex="0" class="search__tab tab-3" :class="{ active: activeTab === 2 }" @click="toggleTab(2)">Shows</button>
+        <Button
+            :additionalClass="`search__tab tab-1 ${state.activeTab === 0 ? 'active': '' }`"
+            @on-click="toggleTab(0)"
+        >
+            Books
+        </button>
+        <Button
+            :additionalClass="`search__tab tab-2 ${state.activeTab === 1 ? 'active' : ''}`"
+            @on-click="toggleTab(1)"
+        >
+            Games
+        </button>
+        <Button
+            :additionalClass="`search__tab tab-3 ${state.activeTab === 2 ? 'active' : ''}`"
+            @on-click="toggleTab(2)"
+        >
+            Shows
+        </button>
         <div class="search__panels">
-            <SearchPanel :typeValues="['Title', 'Genre', 'Author']" :show="activeTab === 0" :category="'Books'" />
-            <SearchPanel :typeValues="['Title', 'Genre', 'Developer']" :show="activeTab === 1" :category="'Games'" />
-            <SearchPanel :typeValues="['Title', 'Person']" :show="activeTab === 2" :category="'Shows'" />
+            <SearchPanel
+                :typeValues="['Title', 'Genre', 'Author']"
+                :show="state.activeTab === 0"
+                category="Books"
+            />
+            <SearchPanel
+                :typeValues="['Title', 'Genre', 'Developer']"
+                :show="state.activeTab === 1"
+                category="Games"
+            />
+            <SearchPanel
+                :typeValues="['Title']"
+                :show="state.activeTab === 2"
+                category="Shows"
+            />
         </div>
     </article>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import SearchPanel from './SearchPanel.vue';
+import { defineComponent, reactive } from 'vue';
+import Button from '@/components/Button.vue';
+import SearchPanel from '@/components/SearchPanel.vue';
 
-@Component({
+interface State {
+    activeTab: number;
+}
+
+export default defineComponent({
+    name: 'Search',
     components: {
         SearchPanel,
+        Button,
     },
-})
-export default class Search extends Vue {
-    activeTab = 0;
+    setup() {
+        const state: State = reactive({
+            activeTab: 0,
+        });
 
-    toggleTab(tabNumber: number): void {
-        this.activeTab = tabNumber;
-    }
-}
+        const toggleTab = (tabNumber: number): void => {
+            state.activeTab = tabNumber;
+        };
+
+        return {
+            state,
+            toggleTab,
+        };
+    },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -47,9 +88,8 @@ export default class Search extends Vue {
 
     & .search__tab {
         font-size: inherit;
-        border: none;
-        cursor: pointer;
         padding: 1rem 2rem;
+        border-radius: 0;
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
     }

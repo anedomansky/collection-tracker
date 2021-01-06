@@ -1,87 +1,84 @@
 import { ipcMain } from 'electron';
 import 'isomorphic-fetch';
-import { IResultInfo } from '../interfaces/IResultInfo';
-import { IBookResponse } from '../interfaces/IBookResponse';
-import { IShowResponse } from '../interfaces/IShowResponse';
-import GameTypes from '../enums/GameTypes';
-import { IPeopleResponse } from '../interfaces/IPeopleResponse';
-import { IDeveloperResponse, IGenreResponse } from '../interfaces/IResponse';
-import { IGameResponse } from '../interfaces/IGameResponse';
+import { ResultInfo } from '../interfaces/ResultInfo';
+import { BookResponse } from '../interfaces/BookResponse';
+import { ShowResponse } from '../interfaces/ShowResponse';
+import { GameResponse } from '../interfaces/GameResponse';
+import Colors from '../config/Colors';
+import ApiService from '../services/ApiService';
+import { EntryRequest } from '../interfaces/EntryRequest';
+import DbService from '../services/DbService';
+import { RemoveRequest } from '../interfaces/RemoveRequest';
 
-ipcMain.on('/getBooks', async (event, resultInfo: IResultInfo) => {
+ipcMain.handle('/getBooks', async (event, resultInfo: ResultInfo) => {
     try {
-        console.log('/getBooks');
+        console.log(Colors.fgYellow, `/getBooks ${resultInfo.type} ${resultInfo.term}`, Colors.fgReset);
 
-        const resultsResponse = await fetch(`http://openlibrary.org/search.json?${resultInfo.type === 'genre' ? 'subject' : resultInfo.type}=${resultInfo.term}`);
-        const results: IBookResponse = await resultsResponse.json();
-
-        event.sender.send('BOOK_RESULT_DATA', results.docs);
+        const results: BookResponse = await ApiService.getBooks(resultInfo);
+        return results.docs;
     } catch (error) {
-        console.trace(error);
-        event.sender.send('NO_DATA', `No data available: ${error}`);
+        console.trace(Colors.fgRed, error, Colors.fgReset);
+        throw new Error(error);
     }
 });
 
-ipcMain.on('/getShows', async (event, resultInfo: IResultInfo) => {
+ipcMain.handle('/getShows', async (event, resultInfo: ResultInfo) => {
     try {
-        console.log('/getShows');
+        console.log(Colors.fgYellow, `/getShows ${resultInfo.type} ${resultInfo.term}`, Colors.fgReset);
 
-        if (resultInfo.type === 'Title') {
-            const resultsResponse = await fetch(`http://api.tvmaze.com/search/shows?q=${resultInfo.term}`);
-            const results: IShowResponse[] = await resultsResponse.json();
-            event.sender.send('SHOW_RESULT_DATA', results);
-        }
-        if (resultInfo.type === 'Person') {
-            const resultsResponse = await fetch(`http://api.tvmaze.com/search/people?q=${resultInfo.term}`);
-            const results: IPeopleResponse[] = await resultsResponse.json();
-            event.sender.send('PEOPLE_RESULT_DATA', results);
-        }
+        const results: ShowResponse[] = await ApiService.getShows(resultInfo);
+        return results;
     } catch (error) {
-        console.trace(error);
-        event.sender.send('NO_DATA', `No data available: ${error}`);
+        console.trace(Colors.fgRed, error, Colors.fgReset);
+        throw new Error(error);
     }
 });
 
-ipcMain.on('/getGames', async (event, resultInfo: IResultInfo) => {
+ipcMain.handle('/getGames', async (event, resultInfo: ResultInfo) => {
     try {
-        console.log('/getGames');
+        console.log(Colors.fgYellow, `/getGames ${resultInfo.type} ${resultInfo.term}`, Colors.fgReset);
 
-        let response: IGameResponse;
-
-        switch (resultInfo.type) {
-        case GameTypes.DEVELOPER: {
-            const developerResponse = await fetch(`https://api.rawg.io/api/developers?search=${resultInfo.term}&page_size=1`);
-            const developerResults: IDeveloperResponse = await developerResponse.json();
-            const developerId = developerResults.results[0].id;
-            const responseRaw = await fetch(`https://api.rawg.io/api/games?ordering=-rating&developers=${developerId}`);
-            response = await responseRaw.json();
-            break;
-        }
-        case GameTypes.GENRE: {
-            const genreResponse = await fetch(`https://api.rawg.io/api/genres?search=${resultInfo.term}`);
-            const genreResults: IGenreResponse = await genreResponse.json();
-            const genre = genreResults.results.find((result) => result.name.toLowerCase() === resultInfo.term.toLowerCase());
-            if (genre) {
-                const responseRaw = await fetch(`https://api.rawg.io/api/games?ordering=-rating&genres=${genre.id}`);
-                response = await responseRaw.json();
-            }
-            break;
-        }
-        case GameTypes.TITLE: {
-            const titleResponse = await fetch(`https://api.rawg.io/api/games?search=${resultInfo.term}`);
-            const titleResults: IGameResponse = await titleResponse.json();
-            const titleId = titleResults.results[0].id;
-            const responseRaw = await fetch(`https://api.rawg.io/api/games/${titleId}/suggested`);
-            response = await responseRaw.json();
-            break;
-        }
-        default:
-            break;
-        }
-
-        event.sender.send('GAME_RESULT_DATA', response.results);
+        const response: GameResponse = await ApiService.getGames(resultInfo);
+        return response.results;
     } catch (error) {
-        console.trace(error);
-        event.sender.send('NO_DATA', `No data available: ${error}`);
+        console.trace(Colors.fgRed, error, Colors.fgReset);
+        throw new Error(error);
+    }
+});
+
+ipcMain.handle('/addEntry', async (event, request: EntryRequest) => {
+    try {
+        console.log(Colors.fgYellow, `/addEntry ${request.type}`, Colors.fgReset);
+
+        await DbService.addEntry(request);
+        return 'SUCCESS';
+    } catch (error) {
+        console.trace(Colors.fgRed, error, Colors.fgReset);
+        throw new Error(error);
+    }
+});
+
+ipcMain.handle('/getEntries', async (event, category: string) => {
+    try {
+        console.log(Colors.fgYellow, `/getEntries ${category}`, Colors.fgReset);
+
+        const results = await DbService.getEntries(category);
+        console.log(results);
+        return results;
+    } catch (error) {
+        console.trace(Colors.fgRed, error, Colors.fgReset);
+        throw new Error(error);
+    }
+});
+
+ipcMain.handle('/removeEntry', async (event, request: RemoveRequest) => {
+    try {
+        console.log(Colors.fgYellow, `/removeEntry ${request.type}`, Colors.fgReset);
+
+        await DbService.removeEntry(request);
+        return 'SUCCESS';
+    } catch (error) {
+        console.trace(Colors.fgRed, error, Colors.fgReset);
+        throw new Error(error);
     }
 });

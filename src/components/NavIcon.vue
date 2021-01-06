@@ -1,22 +1,54 @@
 <template>
-    <router-link :to="to" class="nav-icon">
-        <img :class="additionalClassNames" :src="`/assets/icons/${icon}`" :alt="altText"  />
+    <router-link
+        :to="toRef"
+        class="nav-icon"
+    >
+        <img
+            :class="additionalClassNamesRef"
+            :src="require(`@/assets/icons/${iconRef}`)"
+            :alt="altTextRef"
+        >
     </router-link>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { defineComponent, toRefs } from 'vue';
 
-@Component
-export default class NavIcon extends Vue {
-    @Prop() private icon!: string;
+export default defineComponent({
+    name: 'NavIcon',
+    props: {
+        icon: {
+            type: String,
+            required: true,
+        },
+        altText: {
+            type: String,
+            required: true,
+        },
+        to: {
+            type: String,
+            required: true,
+        },
+        additionalClassNames: {
+            type: String,
+            required: false,
+        },
+    },
+    setup(props) {
+        const iconRef = toRefs(props).icon;
+        const altTextRef = toRefs(props).altText;
+        const toRef = toRefs(props).to;
+        const additionalClassNamesRef = toRefs(props).additionalClassNames;
 
-    @Prop() private altText!: string;
-
-    @Prop() private to!: string;
-
-    @Prop() private additionalClassNames?: string;
-}
+        // expose to template
+        return {
+            iconRef,
+            altTextRef,
+            toRef,
+            additionalClassNamesRef,
+        };
+    },
+});
 </script>
 
 <style lang="scss" scoped>

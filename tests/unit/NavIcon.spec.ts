@@ -1,15 +1,17 @@
 import { shallowMount } from '@vue/test-utils';
-import NavIcon from '../../src/components/NavIcon.vue';
+import NavIcon from '@/components/NavIcon.vue';
 
-describe('NavIcon', () => {
-    test('is a Vue instance', () => {
+describe('NavIcon.vue', () => {
+    it('renders props.altText when passed', () => {
         const wrapper = shallowMount(NavIcon, {
-            propsData: {
+            props: {
                 icon: 'home.svg',
-                altText: 'Home',
-                to: '/',
+                altText: 'testAltText',
+                to: 'testTo',
             },
-            stubs: ['router-link'],
+            global: {
+                stubs: ['router-link'],
+            },
         });
         expect(wrapper).toBeTruthy();
     });

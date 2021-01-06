@@ -1,76 +1,28 @@
 # collection-tracker
 
-## Project setup
-```
-yarn install
-```
+![Node.js CI](https://github.com/anedomansky/weather-app/workflows/Node.js%20CI/badge.svg)  ![Build/release](https://github.com/anedomansky/weather-app/workflows/Build/release/badge.svg)  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+This is a collection-tracker for keeping track of all your games, shows and books! Made with the help of [Electron](https://github.com/electron/electron) and [Vue 3](https://v3.vuejs.org/).
 
-### Compiles and minifies for production
-```
-yarn build
-```
+The API data is provided by: 
 
-### Run your unit tests
-```
-yarn test:unit
-```
+- [RAWG](https://rawg.io/apidocs)
+- [TVMaze](http://www.tvmaze.com/api)
+- [Open Library](https://openlibrary.org/dev/docs/api/search)
 
-### Lints and fixes files
-```
-yarn lint
-```
+## Installation
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Either get the latest installation file from the [releases section](https://github.com/anedomansky/collection-tracker/releases) or follow these steps in order to build your installation file manually:
 
-Books:
+### Requirements
 
-Author:
+- Node (at least v12.18.3)
+- npm (at least 6.14.6)
 
-http://openlibrary.org/search.json?author=tolkien
+### Build your own installation file
 
-Title:
-
-http://openlibrary.org/search.json?title=the+lord+of+the+rings
-
-Subject/Genre:
-
-https://openlibrary.org/search.json?subject=horror
-
-Covers:
-
-http://covers.openlibrary.org/b/id/9255566-L.jpg - cover_i + 'M' for list, cover_i + 'L' for details
-
-Games:
-
-Developer:
-
-get id: https://api.rawg.io/api/developers?search=Electronic%20Arts&page_size=1 - field "id"
-get the games from the developer (ordered by rating): https://api.rawg.io/api/games?ordering=-rating&developers=109
-
-Title:
-
-get by title: https://api.rawg.io/api/games?search=nioh - get results[0].id
-get similar games: https://api.rawg.io/api/games/results[0].id/suggested - can be a very long list
-
-Genre:
-
-get the genre id: https://api.rawg.io/api/genres?search=action - results[] - search name === 'action' -> "id"
-get the games (ordered by rating): https://api.rawg.io/api/games?ordering=-rating&genres=4
-
-Image:
-
-results[i].background_image
-
-Shows:
-
-http://api.tvmaze.com/search/shows?q=twin - search term "twin" - finds similar shows
-
-http://api.tvmaze.com/search/people?q=lauren - search term "lauren" - finds similar actors
-
-Images: image.medium - for list, image.original - for details
+1. `git clone` the repository
+2. `npm install`
+3. Use `npm run build` in order to bundle the project files
+4. Finally use `npm run dist` in order to create your platform specific installation files
+5. Now you can find your files in the `release`-folder

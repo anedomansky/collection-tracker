@@ -1,8 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
-import Nav from '../../src/components/Nav.vue';
+import Nav from '@/components/Nav.vue';
 
-describe('Nav', () => {
-    test('is a Vue instance', () => {
+describe('Nav.vue', () => {
+    it('renders when passed', () => {
         const wrapper = shallowMount(Nav);
         expect(wrapper).toBeTruthy();
     });

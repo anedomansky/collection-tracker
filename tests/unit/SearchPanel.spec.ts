@@ -1,15 +1,16 @@
 import { shallowMount } from '@vue/test-utils';
-import SearchPanel from '../../src/components/SearchPanel.vue';
+import SearchPanel from '@/components/SearchPanel.vue';
 
-describe('SearchPanel', () => {
-    test('is a Vue instance', () => {
+describe('SearchPanel.vue', () => {
+    it('renders correct type when passed', () => {
+        const testType = 'Title';
         const wrapper = shallowMount(SearchPanel, {
-            propsData: {
-                typeValues: ['Title', 'Genre', 'Author'],
+            props: {
+                typeValues: ['Title'],
                 show: true,
-                category: 'books',
+                category: 'testCategory',
             },
         });
-        expect(wrapper).toBeTruthy();
+        expect(wrapper.find('.type').find('option').text()).toMatch(testType);
     });
 });
